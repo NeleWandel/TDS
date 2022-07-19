@@ -8,6 +8,7 @@ While this project was optimised for the *TDS7404B* it should work with every os
    This library is fully based on `PyVisa <https://pyvisa.readthedocs.io/en/latest/>`_ so please make sure to properly install PyVisa to your device before using this library.
 
 Please take a look at :doc:`General Information` for further information about setting up the devices and library.
+You can find an overview of all valid commands and their variables in :doc:`API` .
 
 Contents
 --------
