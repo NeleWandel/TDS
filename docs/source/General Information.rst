@@ -11,12 +11,19 @@ Device Set Up
 |
 | You can make sure that your devices are properly connected with a quick testing code:
 
-| ``import pyvisa``
-| ``rm = pyvisa.ResourceManager()``
-| ``print(rm.list_resources())``
-| Now you should get a list of resources, eg: ('GPIB0::1::INSTR') - copy the one that corrolates with the oscilloscope and insert it into the next code.
+.. code-block:: console
 
-| ``tds = rm.open_resource('GPIB0::1::INSTR')``
-| ``print(tds.query("*IDN?"))``
+   import pyvisa
+   rm = pyvisa.ResourceManager()
+   print(rm.list_resources())
+
+| Now you should get a list of resources, eg: ('GPIB0::1::INSTR') - copy the one that corrolates with the oscilloscope and insert it into the next code.
+.. code-block:: console
+
+    tds = rm.open_resource('GPIB0::1::INSTR')
+    print(tds.query("*IDN?"))
 | 
-| If you get an answer from the device, everything is ready. Otherwise there might still be a problem with the driver of your converter. Try redownloading a driver from National Instruments. If you work with an older GPIB to USB converter you might need to install an older version of NI-VISA.
+| If you get an answer from the device, everything is ready. Otherwise there might still be a problem with the driver of your converter. Try redownloading a driver from National Instruments. 
+| In case you work with an older GPIB to USB converter you might need to install an older version of NI-VISA.
+
+
