@@ -1,6 +1,6 @@
 General Information
 ===================
-
+.. _installation:
 Device Set Up
 -------------
 | In order for this library to work you need to connect your oscilloscope to your device via GPIB to USB converter. 
