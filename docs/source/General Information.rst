@@ -9,9 +9,9 @@ General Information
 | In case your device doesn't recognise the oscilloscope or the GPIB to USB converter, you need to download or create a fitting driver on the `National Instruments website. <https://www.ni.com/>`_
 |
 | You can make sure that your devices are properly connected with a quick testing code:
-``import pyvisa
-rm = pyvisa.ResourceManager()
-print(rm.list_resources())``
+| ``import pyvisa``
+| ``rm = pyvisa.ResourceManager()``
+| ``print(rm.list_resources())``
 | Now you should get a list of resources, eg: ('GPIB0::1::INSTR') - copy the one that corrolates with the oscilloscope and insert it into the next code.
-``tds = rm.open_resource('GPIB0::1::INSTR')
-print(tds.query("*IDN?"))``
+| ``tds = rm.open_resource('GPIB0::1::INSTR')``
+| ``print(tds.query("*IDN?"))``
