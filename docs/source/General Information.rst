@@ -1,6 +1,5 @@
 General Information
 ===================
-.. _installation:
 
 Device Set Up
 -------------
