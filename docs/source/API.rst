@@ -50,74 +50,39 @@ Acquisition
 
 Calibration
 -----------
+.. method:: Calibration()
+| Starts the auto calibration. 
+.. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
 Hard Copy and Export
 --------------------
-
+.. method:: Export()
+.. method:: ExportFileFormat(ff)
+.. method:: ExportFilePath(path)
+.. method:: Print()
+.. method:: PrintFilePath(path)
 Mask
 ----
-
 .. method:: AutoAdjustMaskOff()
 | Turns off automatic optimising of the mask.
 .. method:: AutoAdjustMaskOn()
 | Turns on automatic optimising of the mask. This feature shifts the mask horizontally and vertically in order to minimise the signal hits.
+
 Math
 -----
-Measurement
------------
-Trigger
--------
-.. method:: DefineTrigger(trigger)
-| Defines the actions that are taken upon trigger. The ``trigger`` can be any amount of commands, seperated by semicolons, up to 80 characters.
-.. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
-.. method:: Trigger()
-| Immediately executes all actions defined by :meth:`DefineTrigger`.
-.. method:: TriggerLogic(logic)
-.. method:: TriggerSetHoldoffTime(time)
-Waveform Transfer
------------------
-
-Miscellaneous
--------------
-
-.. method:: AutoSet()
-| Automatically adjusts the vertical, horizontal and trigger controls in order to privide a stable display of the waveform on the oscilloscope.
-| These changes can be undone by using the :meth:`Undo` command.
-.. method:: Undo()
-| Reverses all changes done by :meth:`AutoSet`. 
-.. method:: Busy()
-| Returns :const:`0` if the oscilloscope is currently not running the :meth:`StartAcquisition` command. Returns :const:`1` if the oscilloscope is acquiring data. 
-.. method:: Calibration()
-| Starts the auto calibration. 
-.. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
-.. method:: Channel(channelnumber)
-| Sets the standard channel for all future commands. ``channelnumber`` may only be 1, 2, 3 or 4.
-| Default value is ::const::`1`.
-.. method:: ChannelAsSource()
-| Sets the channel as source for all acquisitions. The channel can be set by :meth:`Channel`
-| Other options are: :meth:`MathAsSource`, :meth:`RefAsSource` and :meth:`HistogramAsSource`
-.. method:: ChannelOffset(offsetinmV)
-.. method:: Clear()
-| Clears the ``event queue``, ``standard event status register`` and the ``status byte register``. Does not affect the output queue. 
-.. method:: ClockPolarityFall()
-.. method:: ClockPolarityRise()
-.. method:: CMIPulseFormExeDiagram()
-.. method:: CMIPulseFormMinusOne()
-.. method:: CMIPulseFormPlusOne()
-.. method:: CMIPulseFormZero()
-
-.. method:: CountMeasures(x)
-.. method:: Date()
 .. method:: DefineMath(equation)
 .. method:: DefineMathVariable(varnumber, varvalue)
-.. method:: DefineTrigger(trigger)
+.. method:: MathDefinition()
+.. method:: SetMathPos(y)
+.. method:: SetMathScale(x)
+.. method:: SetMathStorage(number)
+.. method:: ShowMathPos()
+.. method:: ShowMathScale()
+Measurement
+-----------
+.. method:: CountMeasures(x)
 .. method:: DisableCalcAndDisplay()
 .. method:: EnableCalcAndDisplay()
-.. method:: Export()
-.. method:: ExportFileFormat(ff)
-.. method:: ExportFilePath(path)
 .. method:: HistogramAsSource()
-.. method:: Identify()
-| Prints information and the identifaction code of the oscilloscope.
 .. method:: ImmediateChannelAsSource()
 .. method:: ImmediateHistogramAsSource()
 .. method:: ImmediateMathAsSource()
@@ -132,10 +97,7 @@ Miscellaneous
 .. method:: ImmediateSetMidRefPercent(percent)
 .. method:: ImmediateUnit()
 .. method:: ImmediateValue()
-.. method:: Level()
-.. method:: Lock()
 .. method:: MathAsSource()
-.. method:: MathDefinition()
 .. method:: Maximum()
 .. method:: Mean()
 .. method:: MeasDealayEdge2(edge)
@@ -145,51 +107,90 @@ Miscellaneous
 .. method:: MeasImmediateDelayEdge(edge)
 .. method:: MeasImmediateDelayEdge2(edge)
 .. method:: Minimum()
-.. method:: Print()
-.. method:: PrintFilePath(path)
-.. method:: PulseFormExeDiagram()
-.. method:: PulseFormMinusOne()
-.. method:: PulseFormPlusOne()
-.. method:: Recall(storagelocation)
-| Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
-| ``storagelocation`` must range from 1 through 10.
 .. method:: RefAsSource(waveform)
 .. method:: RefIsAbsolute()
 .. method:: RefIsPercent()
 .. method:: ResetStatistics()
+.. method:: ShowAllMeasPara()
+.. method:: ShowImmediateMeasPara()
+.. method:: ShowMeasurementPara(x)
+.. method:: SetHighRefAbsolute(volt)
+.. method:: SetHighRefPercent(percent)
+.. method:: SetImmediateMeasType(argument)
+.. method:: SetLowRefAbsolute(volt)
+.. method:: SetLowRefPercent(percent)
+.. method:: SetMeasType()
+.. method:: SetMidRefAbsolute(volt)
+.. method:: SetMidRefPercent(percent)
+.. method:: StanDeviation()
+.. method:: Unit()
+.. method:: Value()
+
+Trigger
+-------
+.. method:: ClockPolarityFall()
+.. method:: ClockPolarityRise()
+.. method:: CMIPulseFormExeDiagram()
+.. method:: CMIPulseFormMinusOne()
+.. method:: CMIPulseFormPlusOne()
+.. method:: CMIPulseFormZero()
+.. method:: DefineTrigger(trigger)
+| Defines the actions that are taken upon trigger. The ``trigger`` can be any amount of commands, seperated by semicolons, up to 80 characters.
+.. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
+.. method:: Level()
+.. method:: PulseFormExeDiagram()
+.. method:: PulseFormMinusOne()
+.. method:: PulseFormPlusOne()
+.. method:: SetBitrate(rate)
+.. method:: SetThresholdHigh(volt)
+.. method:: SetThresholdLow(volt)
+.. method:: Trigger()
+| Immediately executes all actions defined by :meth:`DefineTrigger`.
+.. method:: TriggerLogic(logic)
+.. method:: TriggerSetHoldoffTime(time)
+.. method:: WaitForTrigger()
+Vertical
+--------
+.. method:: ChannelOffset(offset)
+| Sets the vertical offset for the channel specified by :meth:`Channel`. ``offset`` needs to be written in mV.
+| Depending on the vertical scale factor the range of the channel offset can be either ±100V, ±10V or ±1V.
+
+Waveform Transfer
+-----------------
+
+Miscellaneous
+-------------
+
+.. method:: AutoSet()
+| Automatically adjusts the vertical, horizontal and trigger controls in order to privide a stable display of the waveform on the oscilloscope.
+| These changes can be undone by using the :meth:`Undo` command.
+.. method:: Undo()
+| Reverses all changes done by :meth:`AutoSet`. 
+.. method:: Busy()
+| Returns :const:`0` if the oscilloscope is currently not running the :meth:`StartAcquisition` command. Returns :const:`1` if the oscilloscope is acquiring data. 
+.. method:: Channel(channelnumber)
+| Sets the standard channel for all future commands. ``channelnumber`` may only be 1, 2, 3 or 4.
+| Default value is ::const::`1`.
+.. method:: ChannelAsSource()
+| Sets the channel as source for all acquisitions. The channel can be set by :meth:`Channel`
+| Other options are: :meth:`MathAsSource`, :meth:`RefAsSource` and :meth:`HistogramAsSource`
+.. method:: Clear()
+| Clears the ``event queue``, ``standard event status register`` and the ``status byte register``. Does not affect the output queue. 
+.. method:: Date()
+| Returns the current date of the oscilloscope. 
+| The date can be adjusted by using :meth:`SetDate`
+.. method:: Identify()
+| Prints information and the identifaction code of the oscilloscope.
+.. method:: Lock()
+.. method:: Recall(storagelocation)
+| Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
+| ``storagelocation`` must range from 1 through 10.
 .. method:: ResetToFactorySettings()
 | Resets the oscilloscope to the default settings. 
 .. method:: Save(storagelocation)
 | Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall`command.
 | ``storagelocation`` must range from 1 through 10.
-.. method:: SedLowRefPercent(percent)
-.. method:: SetBitrate(rate)
 .. method:: SetDate(day, month, year)
-.. method:: SetHighRefAbsolute(volt)
-.. method:: SetHighRefPercent(percent)
-.. method:: SetImmediateMeasType(argument)
-
-.. method:: SetLowRefAbsolute(volt)
-.. method:: SetMathPos(y)
-.. method:: SetMathScale(x)
-.. method:: SetMathStorage(number)
-.. method:: SetMeasType()
-.. method:: SetMidRefAbsolute(volt)
-.. method:: SetMidRefPercent(percent)
-
-.. method:: SetThresholdHigh(volt)
-.. method:: SetThresholdLow(volt)
-.. method:: ShowAllMeasPara()
-.. method:: ShowImmediateMeasPara()
-.. method:: ShowMathPos()
-.. method:: ShowMathScale()
-.. method:: ShowMeasurementPara(x)
-
-.. method:: StanDeviation()
-
-.. method:: Unit()
+| Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
 .. method:: Unlock()
 .. method:: UseMeasurement(x)
-.. method:: Value()
-
-.. method:: WaitForTrigger()
