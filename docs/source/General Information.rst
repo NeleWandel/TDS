@@ -1,6 +1,10 @@
 General Information
 ===================
-.. _installation:
+
+.. toctree::
+
+   General Information
+
 Device Set Up
 -------------
 | In order for this library to work you need to connect your oscilloscope to your device via GPIB to USB converter. 
