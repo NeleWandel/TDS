@@ -51,3 +51,6 @@ A
 .. method:: AutoSet()
 | Automatically adjusts the vertical, horizontal and trigger controls in order to privide a stable display of the waveform on the oscilloscope.
 | These changes can be undone by using the ``Undo()`` command.
+
+.. method:: SetSampleSize(amount)
+| Sets the amount of samples that will be acquired during one acquisition period. 
