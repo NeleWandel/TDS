@@ -25,22 +25,22 @@ A
 .. method:: ActivateHiRes()
 | *This command can be used before or during the data acquisition.*
 | Enables the *Hi Res acquisition mode*. In this mode the oscilloscope creates a value by averaging all acquired data points from one waveform.
-| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize(amount)`.
+| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
 | 
 .. method:: ActivatePeakDetect()
 | *This command can be used before or during the data acquisition.*
 | Enables the *peak detect acquisition mode*. In this mode the oscilloscope creates a vertical column that show off the highest and lowest value of all acquired data points from one waveform.
-| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize(amount)`.
+| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
 | 
 .. method:: ActivateSampleMode()
 | *This command can be used before or during the data acquisition.*
 | Enables the *sample acquisition mode*. In this mode the oscilloscope creates a waveform with the acquired data points from one waveform.
-| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize(amount)`.
+| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
 | 
 .. method:: ActivateWFMDBMode()
 | *This command can be used before or during the data acquisition.*
 | Enables the *waveform database mode*. In this mode the oscilloscope acquires threedimensional data from a waveform (amplitude, time, count). The count-value keeps track on how often a specific data point (amplitude + time) has been acquired. The data acquisition starts with a trigger and works the same as *sample mode*, but it compares multiple samples with each other.
-| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize(amount)`.
+| The ammount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
 | 
 .. method:: AutoAdjustMaskOff()
 | Turns off automatic optimising of the mask.
