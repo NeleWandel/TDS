@@ -5,7 +5,6 @@ API
 
    API
 
-
 Acquisition
 ---------
 
@@ -45,6 +44,12 @@ Acquisition
 .. method:: SetSampleSize(amount)
 | Sets the amount of samples that will be acquired during one acquisition period. 
 | 
+
+Calibration
+-----------
+Hard Copy and Export
+--------------------
+
 Mask
 ----
 
@@ -54,7 +59,16 @@ Mask
 .. method:: AutoAdjustMaskOn()
 | Turns on automatic optimising of the mask. This feature shifts the mask horizontally and vertically in order to minimise the signal hits.
 | 
-Miscellanious
+Math
+-----
+Measurement
+-----------
+Trigger
+-------
+Waveform Transfer
+-----------------
+
+Miscellaneous
 -------------
 
 .. method:: AutoSet()
