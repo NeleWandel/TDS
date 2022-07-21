@@ -7,6 +7,7 @@ API
 
 Acquisition
 ---------
+| With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
 .. method:: ActivateAveraging(WaveformAmount)
 | Enables the *averaging acquisition mode*. In this mode the oscilloscope averages all acquired values from multiple waveforms and create a waveform based on the averaged values. 
@@ -29,13 +30,13 @@ Acquisition
 .. method:: Continually()
 | Sets the aquisition type to continuous. In this state the acquisition continues until it is stopped by :meth:`StopAcquisition`.
 .. method:: ModeInfo()
-| Returns the current acquisition mode in the style: ``:ACQuire:MODe AVERAGE`` or ``ACQuire:MODe SAMPLE``
+| Returns the current acquisition mode in the style: ``:ACQuire:MODe AVERAGE`` or ``:ACQuire:MODe SAMPLE``
 .. method:: SetEquivalentTimeSampling()
-| 
+| Sets the sampling method to equivalent time.
 .. method:: SetInterpolatedSampling()
-| 
+| Sets the sampling method to interpolated time.
 .. method:: SetRealTimeSampling()
-| 
+| Sets the sampling method to real time.
 .. method:: SetSampleSize(amount)
 | Sets the amount of samples that will be acquired during one acquisition period. 
 .. method:: Single()
@@ -50,18 +51,33 @@ Acquisition
 
 Calibration
 -----------
+| With the commands of the calibration group it is possible to perform self-calibrations as well as probe-calibrations.
+
 .. method:: Calibration()
 | Starts the auto calibration. 
 .. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
+
 Hard Copy and Export
 --------------------
+| The commands of the hard copy and export group allow the creation of data file copies. Export commands can format waveforms as data files.
+
 .. method:: Export()
 .. method:: ExportFileFormat(ff)
 .. method:: ExportFilePath(path)
 .. method:: Print()
 .. method:: PrintFilePath(path)
+
+Histogram
+---------
+
+Horizontal
+----------
+
+
 Mask
 ----
+| Commands in the mask group allow for comparison of incoming waveforms with standard or user-defined masks. It is possible to set actions that the oscilloscope takes in case the waveform falls inside or outside the mask limits.
+
 .. method:: AutoAdjustMaskOff()
 | Turns off automatic optimising of the mask.
 .. method:: AutoAdjustMaskOn()
@@ -69,14 +85,35 @@ Mask
 
 Math
 -----
+| Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be displayed at the same time.
+
 .. method:: DefineMath(equation)
+| Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. The equation will be saved to the place defined by :meth:`SetMathStorage`.
+| Changes to any of the operands lead to changes of the output.
+| Examples:
+- DefineMath(Ch1+Ch2)
+- DefineMath((Ch1-Meas1)/Meas2)
+- DefineMath(Intg(Ch1-Avg(Ch1))
 .. method:: DefineMathVariable(varnumber, varvalue)
+| Defines a variable that can be used in :meth:`DefineMath`.
+| `varnumber` must be a number ranging from 1 through 8 and defines the storage place of the variable.
+| `varvalue` can be any value.
 .. method:: MathDefinition()
+| Returns the current definition for the math waveform stored in the storage selected by :meth:`SetMathStorage`
 .. method:: SetMathPos(y)
+| Sets the vertical position of the waveform defined by :meth:`DefineMath`. `y` can be either positive or negative and is given in divisions.
+| Please make sure to leave a time of at least 0.5 seconds between computing the math definition and changing the vertical positioning, as autoscaling occurs directly after computing. Autoscaling will override any position changes. 
 .. method:: SetMathScale(x)
+| Sets the horizontal scale of the waveform defined by :meth:`DefineMath`. `x` can be either positive or negative and is given in volt, amper or watt per divisions.
+| Viable ranges are from 100.0E-36 through 100.0E+36.
+| Please make sure to leave a time of at least 0.5 seconds between computing the math definition and changing the vertical positioning, as autoscaling occurs directly after computing. Autoscaling will override any position changes. 
 .. method:: SetMathStorage(number)
+| Sets the storage number for every command in the math group. `number` must be either 1, 2, 3 or 4.
 .. method:: ShowMathPos()
+| Returns the current position set by :meth:`SetMathPos`.
 .. method:: ShowMathScale()
+| Returns the current scale set by :meth:`SetMathScale`.
+
 Measurement
 -----------
 .. method:: CountMeasures(x)
