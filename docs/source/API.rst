@@ -62,10 +62,22 @@ Hard Copy and Export
 | The commands of the hard copy and export group allow the creation of data file copies. Export commands can format waveforms as data files.
 
 .. method:: Export()
+| Copies a waveform to a file.
 .. method:: ExportFileFormat(ff)
+| Changes the file format in which :meth:`Export` will save the waveform.
+| Valid formats for ``ff`` are:
+- BMP
+- JPEG
+- PNG
 .. method:: ExportFilePath(path)
-.. method:: Print()
-.. method:: PrintFilePath(path)
+| Sets the directory and file name under which the file will be saved.
+| If ``path`` is only the file name the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
+.. method:: Screenshot()
+| Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen to the directory chosen by :meth:`ScreenshotFilePath`.
+| The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between screenshots is recommended.
+.. method:: ScreenshotFilePath(path)
+| Sets the directory and file name under which the file will be saved.
+| If ``path`` is only the file name the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 
 Histogram
 ---------
@@ -85,7 +97,7 @@ Mask
 
 Math
 -----
-| Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be displayed at the same time.
+| Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be stored and displayed at the same time. :meth:`SetMathStorage` regulates which of the four possible math storages will be used by the other commands in the math group.
 
 .. method:: DefineMath(equation)
 | Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. The equation will be saved to the place defined by :meth:`SetMathStorage`.
@@ -108,7 +120,8 @@ Math
 | Viable ranges are from 100.0E-36 through 100.0E+36.
 | Please make sure to leave a time of at least 0.5 seconds between computing the math definition and changing the vertical positioning, as autoscaling occurs directly after computing. Autoscaling will override any position changes. 
 .. method:: SetMathStorage(number)
-| Sets the storage number for every command in the math group. `number` must be either 1, 2, 3 or 4.
+| Sets the storage number for every command in the math group. ``number`` must be either 1, 2, 3 or 4.
+| Default storage is 1.
 .. method:: ShowMathPos()
 | Returns the current position set by :meth:`SetMathPos`.
 .. method:: ShowMathScale()
@@ -116,7 +129,8 @@ Math
 
 Measurement
 -----------
-.. method:: CountMeasures(x)
+.. method:: CountMeasures()
+| Returns the number of valid values accumulated by the measurement since the last statistical reset.
 .. method:: DisableCalcAndDisplay()
 .. method:: EnableCalcAndDisplay()
 .. method:: HistogramAsSource()
@@ -161,6 +175,9 @@ Measurement
 .. method:: SetMidRefPercent(percent)
 .. method:: StanDeviation()
 .. method:: Unit()
+.. method:: UseMeasurement(x)
+| Sets the storage number for every command in the measurement group. ``x`` must range from 1 through 8.
+| Default storage is 1.
 .. method:: Value()
 
 Trigger
@@ -219,6 +236,8 @@ Miscellaneous
 .. method:: Identify()
 | Prints information and the identifaction code of the oscilloscope.
 .. method:: Lock()
+| Disables all frontpanel buttons and knobs on the oscilloscope, including the touchscreen.
+| The command :meth:`Unlock` enables them again.
 .. method:: Recall(storagelocation)
 | Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
 | ``storagelocation`` must range from 1 through 10.
@@ -230,4 +249,4 @@ Miscellaneous
 .. method:: SetDate(day, month, year)
 | Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
 .. method:: Unlock()
-.. method:: UseMeasurement(x)
+| Enables all frontpanel buttons and knobs on the oscilloscope, after they have been locked by :meth:`Lock`
