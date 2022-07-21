@@ -183,26 +183,43 @@ Measurement
 Trigger
 -------
 .. method:: ClockPolarityFall()
+| Sets the trigger to activate on the falling/negative edge of a signal.
 .. method:: ClockPolarityRise()
-.. method:: CMIPulseFormExeDiagram()
+| Sets the trigger to activate on the rising/positive edge of a signal.
+.. method:: CMIPulseFormEyeDiagram()
+| Sets the trigger to construct an eye diagram.
 .. method:: CMIPulseFormMinusOne()
+| Sets the trigger to activate on a negative mark.
 .. method:: CMIPulseFormPlusOne()
+| Sets the trigger to activate on a positive mark.
 .. method:: CMIPulseFormZero()
+| Sets the trigger to activate on a bit representing zero.
 .. method:: DefineTrigger(trigger)
 | Defines the actions that are taken upon trigger. The ``trigger`` can be any amount of commands, seperated by semicolons, up to 80 characters.
 .. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
 .. method:: Level()
-.. method:: PulseFormExeDiagram()
+| Sets the trigger level to 50% of the max/min value of the trigger input signal. The trigger source must pass this level in order to activate a trigger event.
+.. method:: PulseFormEyeDiagram()
+| Sets the trigger to construct an eye diagram.
 .. method:: PulseFormMinusOne()
+| Corresponds to the Isolated +1 on the front panel.
 .. method:: PulseFormPlusOne()
+| Corresponds to the Isolated -1 on the front panel.
 .. method:: SetBitrate(rate)
+| Sets the bit rate.
+| ``rate`` is in bits per second and must be a positive number over one.
 .. method:: SetThresholdHigh(volt)
+| Sets the threshold high level. 
+| ``volt`` is the new threshold level and must be given in volt.
 .. method:: SetThresholdLow(volt)
+| Sets the threshold low level.
+| ``volt`` is the new threshold level and must be given in volt
 .. method:: Trigger()
 | Immediately executes all actions defined by :meth:`DefineTrigger`.
 .. method:: TriggerLogic(logic)
 .. method:: TriggerSetHoldoffTime(time)
 .. method:: WaitForTrigger()
+| Sets the trigger mode to ``normal``. In this mode a valid trigger event must occur before a trigger is generated.
 Vertical
 --------
 .. method:: ChannelOffset(offset)
@@ -244,7 +261,7 @@ Miscellaneous
 .. method:: ResetToFactorySettings()
 | Resets the oscilloscope to the default settings. 
 .. method:: Save(storagelocation)
-| Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall`command.
+| Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall` command.
 | ``storagelocation`` must range from 1 through 10.
 .. method:: SetDate(day, month, year)
 | Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
