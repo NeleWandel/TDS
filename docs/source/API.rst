@@ -132,12 +132,20 @@ Measurement
 .. method:: CountMeasures()
 | Returns the number of valid values accumulated by the measurement since the last statistical reset.
 .. method:: DisableCalcAndDisplay()
+| Disables the computing and display of the measurement selected by :meth:`UseMeasurement`.
 .. method:: EnableCalcAndDisplay()
+| Enables the computing and display of the measurement selected by :meth:`UseMeasurement`.
 .. method:: HistogramAsSource()
+| Selects a histogram as source for all single channel, delay and phase measurements.
 .. method:: ImmediateChannelAsSource()
+| Selects the channel defined by :meth:`Channel` as source for all immediate single channel, delay and phase measurements.
 .. method:: ImmediateHistogramAsSource()
+| Selects a histogram as source for all immediate single channel, delay and phase measurements.
 .. method:: ImmediateMathAsSource()
+| Selects the math definition defined by :meth:`SetMathStorage` as source for all immediate single channel, delay and phase measurements.
 .. method:: ImmediateRefAsSource(waveform)
+| Selects a reference waveform as source for all immediate single channel, delay and phase measurements.
+| ``waveform`` may range from 1 through 4.
 .. method:: ImmediateRefIsAbsolute()
 .. method:: ImmediateRefIsPercent()
 .. method:: ImmediateSetHighRefAbsolute(volt)
