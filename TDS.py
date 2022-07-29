@@ -61,7 +61,7 @@ def ResetToFactorySettings():
 def Trig():
     tds.write('*TRG')
     
-def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop=''):
+def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
     if acquiremode:
         if acquiremode == 'sampling':
             tds.write('ACQuire:MODe SAMple')
@@ -119,7 +119,7 @@ def Date():
 def SetDate(day='01', month='01', year='2000'):
     tds.write('DATE "' + str(year) + '-' + str(month) + '-' + str(day) +'"')
     
-def Export(filename='', fileformat=''):
+def Export(filename=None, fileformat=None):
     if filename:
         tds.query('EXPort:FILEName "' + str(path) + '"')
     if fileformat:
@@ -133,7 +133,7 @@ def Export(filename='', fileformat=''):
             raise TypeError('File format wrong. Please choose between BMP, JPEG and PNG')
     tds.write('EXPort STArt')
 
-def Screenshot(filename='', inksaver='', orientation='', fullscreen=''):
+def Screenshot(filename=None, inksaver=None, orientation=None, fullscreen=None):
     if orientation:
         if orientation == 1:
             tds.write('HARDCopy:LAYout PORTRait')
@@ -160,10 +160,10 @@ def Lock():
 def Unlock():
     tds.write('UNLock ALL')
 
-def Mask(start=True, mask='', source='CH1', display='ON', counting='', wfmamount='',
-         highlights='', inverted='', margin='', polatity='', stoponfailure='', failthreshold='', failscreen='', 
-         logfail='', logwfm='', repeat='', delay='', auto='', hdelta='', vdelta='', digitalfilter='', 
-         beep='', failbeep=''):
+def Mask(start=True, mask=None, source='CH1', display='ON', counting=None, wfmamount=None,
+         highlights=None, inverted=None, margin=None, polatity=None, stoponfailure=None, failthreshold=None, failscreen=None, 
+         logfail=None, logwfm=None, repeat=None, delay=None, auto=None, hdelta=None, vdelta=None, digitalfilter=None, 
+         beep=None, failbeep=None):
     if mask:
         tds.write('MASK:STANdard ' + str(mask))
     tds.write('MASK:SOUrce ' + str(source))
@@ -222,8 +222,8 @@ def Mask(start=True, mask='', source='CH1', display='ON', counting='', wfmamount
     else:
         tds.write('MASK:TESt:STATE OFF')
     
-def UserMask(seg='', p1='', p2='', p3='', p4='', amp='', bit='', hscale='', htrigpos='', patbits='', 
-             presampbits='', reclength='', serialtrig='', trigtosamp='', voffset='', vpos='', vscale='', width=''):
+def UserMask(seg=None, p1=None, p2=None, p3=None, p4=None, amp=None, bit=None, hscale=None, htrigpos=None, patbits=None, 
+             presampbits=None, reclength=None, serialtrig=None, trigtosamp=None, voffset=None, vpos=None, vscale=None, width=None):
     if seg:
         if p3 and p4:
             tds.write('MASK:USER:SEG' + str(seg) + ':POINTS ' + str(p1) + ', ' + str(p2) + ', ' + str(p3) + ', ' + str(p4))
@@ -256,7 +256,7 @@ def UserMask(seg='', p1='', p2='', p3='', p4='', amp='', bit='', hscale='', htri
     if width:
         tds.write('MASK:USER:WIDth' + str(width))
         
-def DeleteUserMaskSeg(seg=''):
+def DeleteUserMaskSeg(seg=None):
     if seg:
         tds.write('MASK:USER:SEG' + str(seg) + ' DELETE')
     
@@ -276,7 +276,7 @@ def MathVariable(varnumber, varvalue):
     else:
         raise ValueError('Variable Number can only range from 1 through 8.')
 
-def Math(math=mathvari, equation='', y='', x=''):
+def Math(math=mathvari, equation=None, y=None, x=None):
     if equation:
         tds.write('MATH' + str(math) + ':DEFine "' + str(equation) + '"')
     if y:
@@ -296,8 +296,8 @@ def ImmedValue():
 def ImmedUnit():
     tds.query('MEASUrement:IMMed:UNIts?')
     
-def ImmedMeasure(m=meas, statistics='', meastype='', source='', source2='', refmethod='', 
-            high='', low='', mid='', delay='', edge1='', edge2=''):
+def ImmedMeasure(m=meas, statistics=None, meastype=None, source=None, source2=None, refmethod=None, 
+            high=None, low=None, mid=None, delay=None, edge1=None, edge2=None):
     if source:
         tds.write('MEASUrement:IMMed:SOURCE[1] ' + str(source))
     if source2:
@@ -352,8 +352,8 @@ def Mean(m=meas):
 def Minimum(m=meas):
     tds.query('MEASUrement:MEAS' + str(m) + ':MINImum?')
     
-def Measure(m=meas, statistics='', weightvalue='', meastype='', state='', source='', source2='', refmethod='', 
-            high='', low='', mid='', delay='', edge1='', edge2=''):
+def Measure(m=meas, statistics=None, weightvalue=None, meastype=None, state=None, source=None, source2=None, refmethod=None, 
+            high=None, low=None, mid=None, delay=None, edge1=None, edge2=None):
     if source:
         tds.write('MEASUrement:MEAS' + str(m) + ':SOURCE[1] ' + str(source))
     if source2:
@@ -420,11 +420,11 @@ def ResetStatistics():
 def TrigLevel():
     tds.write('TRIGger:A SETLevel')
     
-def Trigger(triggertype='', mode='', holdhofftime='', triggerclass='', CH1='', CH2='', CH3='', CH4='', 
-            function='', triggerwhen='', logicmin='', logicmax='', source='', comm='', bitrate='', pulseform='', eyetype='', 
-            clock='', clocksource='', polarity='', clockthreshold='', setholdsource='', threshold='', 
-            settime='', holdtime='', width='', low='', high='', edgecoupling='', standard='', level='', 
-            CH1TH='', CH2TH='', CH3TH='', CH4TH='', dataformat='', datapattern='', timeout='', timeouttime='', deltatime='', transition=''):
+def Trigger(triggertype, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, 
+            function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, 
+            clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, 
+            settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, 
+            CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeout=None, timeouttime=None, deltatime=None, transition=None):
     if mode:
         if mode == 'auto':
             tds.query('TRIGger:A:MODe AUTo')
@@ -695,7 +695,7 @@ def ResetHistogram():
 def HistogramData():
     tds.query('HIStogram:DATa?')
         
-def Histogram(display='', source='', size='', function='', state='', box='', left='', top='', right='', bottom=''):
+def Histogram(display=None, source=None, size=None, function=None, state=None, box=None, left=None, top=None, right=None, bottom=None):
     if display:
         if str(display) == 'off':
             tds.write('HIStogram:DISplay OFF')
@@ -726,7 +726,7 @@ def Histogram(display='', source='', size='', function='', state='', box='', lef
     else:
         raise ValueError('Box argument needs left, top, right and bottom arguments.')
 
-def FastFrame(source='', count='', refframe='', length='', mode='', multiframes='', frameamount='', start=''):
+def FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, frameamount=None, start=None):
     if source:
         tds.write('HORizontal:FASTframe:REF:SOUrce ' + str(source))
     if count:
@@ -768,7 +768,7 @@ def TimeDelay(mode='seconds', time='0'):
     else:
         raise TypeError('There has been an error with the TimeDelay() function. Plesae check all variables.')
 
-def Horizontal(rate='', scale='', units='', position='', resolution='', roll=''):
+def Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, roll=None):
     if rate:
         tds.write('HORizontal:MAIn:SAMPLERate ' + str(rate))
     if scale:
@@ -782,7 +782,7 @@ def Horizontal(rate='', scale='', units='', position='', resolution='', roll='')
     if roll:
         tds.write('HORizontal:ROLL ' + str(roll))
 
-def ChannelSetup(channel=ch, coupling='', deskewtime='', offset='', position='', scale=''):
+def ChannelSetup(channel=ch, coupling=None, deskewtime=None, offset=None, position=None, scale=None):
     if coupling:
         tds.write('CH' + str(channel) + ':COUPling ' + str(coupling))
     if deskewtime:
