@@ -9,38 +9,40 @@ Acquisition
 ---------
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
-.. method:: ActivateAveraging(WaveformAmount)
-| Enables the *averaging acquisition mode*. In this mode the oscilloscope averages all acquired values from multiple waveforms and create a waveform based on the averaged values. 
-| The number of waveforms that will be analysed must be set by ``WaveformAmount``, with the smallest possible number being 1. The more waveforms shall be analysed the more accurate the result, but the longer the aquisition needs.
-.. method:: ActivateEnvelopeMode(WaveformAmount)
-| Enables the *envelope acquisition mode*. In this mode the oscilloscope creates a waveform by showing the peak range values of the data points from multiple waveform acquisitions.
-| The number of waveforms that will be analysed must be set by ``WaveformAmount``, with the smallest possible number being 1. The more waveforms shall be analysed the more accurate the result, but the longer the aquisition needs.
-.. method:: ActivateHiRes()
-| Enables the *Hi Res acquisition mode*. In this mode the oscilloscope creates a value by averaging all acquired data points from one waveform.
-| The amount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
-.. method:: ActivatePeakDetect()
-| Enables the *peak detect acquisition mode*. In this mode the oscilloscope creates a vertical column that show off the highest and lowest value of all acquired data points from one waveform.
-| The amount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
-.. method:: ActivateSampleMode()
-| Enables the *sample acquisition mode*. In this mode the oscilloscope creates a waveform with the acquired data points from one waveform.
-| The amount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
-.. method:: ActivateWFMDBMode()
-| Enables the *waveform database mode*. In this mode the oscilloscope acquires threedimensional data from a waveform (amplitude, time, count). The count-value keeps track on how often a specific data point (amplitude + time) has been acquired. The data acquisition starts with a trigger and works the same as *sample mode*, but it compares multiple samples with each other.
-| The amount of data points that are taken during the acquisition period can be set with the command :meth:`SetSampleSize`.
-.. method:: Continually()
-| Sets the aquisition type to continuous. In this state the acquisition continues until it is stopped by :meth:`StopAcquisition`.
-.. method:: ModeInfo()
-| Returns the current acquisition mode in the style: ``:ACQuire:MODe AVERAGE`` or ``:ACQuire:MODe SAMPLE``
-.. method:: SetEquivalentTimeSampling()
-| Sets the sampling method to equivalent time.
-.. method:: SetInterpolatedSampling()
-| Sets the sampling method to interpolated time.
-.. method:: SetRealTimeSampling()
-| Sets the sampling method to real time.
-.. method:: SetSampleSize(amount)
-| Sets the amount of samples that will be acquired during one acquisition period. 
-.. method:: Single()
-| Sets the aquisition type to single. In this state the aquisition stops automatically after one period.
+.. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
+| Sets all the options for the acquisition. While it is possible to change these parameters during an ongoing acquisition, it is adviced to change them before starting the acquisition. Starting and stopping an acquisition must be done by :meth:`StartAcquisition` and :meth:`StopAcquisition`.
+| 
+| **Arguments**
+| All arguments, except ``acquiremode`` are optional. 
+| ``acquiremode``
+| Enables the selected mode for aquiring data.
+| Valid arguments are:
+- sampling
+- peakdetect
+- hires
+- averaging
+- envelope
+- wfmdb
+|
+| ``mode``
+| Sets the wanted samplingmode to either real time, interpolated real time or equivalent time.
+| Valid arguments are:
+- RT
+- IT
+- ET
+| 
+| ``samplesize``
+| Sets the amount of waveform database points that the oscilloscope acquires for a single sequence acquisition. Must be a whole number.
+| 
+| ``WFamount``
+| Sets the amount of waveforms that will be acquired for averaging and enveloping. Must be a whole number.
+| If envelope mode is enabled, a waveform amount of 0 corresponds to infinitely acquisations.
+|
+| ``stop``
+| Defines whether the acquisition stops after a single sequence or repeats until stopped with :meth:`StopAcquisition`.
+| Valid arguments are:
+- repeat
+- single
 .. method:: StartAcquisition()
 | Starts acquiring data. 
 | While changes are possible during an acquisition, it is recommended that all acquisition settings are properly set before starting the acquisition.
@@ -56,28 +58,56 @@ Calibration
 .. method:: Calibration()
 | Starts the auto calibration. 
 .. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
+.. method:: ProbeCalibration(channel=ch)
+| Starts the auto calibration of the probe defined by ``channel``. The calibration can take up to a minutet and no other commands will be executed during that time.
+|  ``channel`` may range from 1 through 4. If no channel is given, the system will use either the default channel 1 or the channel selected by :meth:`Channel` if that command had been used during the session.
 
 Hard Copy and Export
 --------------------
 | The commands of the hard copy and export group allow the creation of data file copies. Export commands can format waveforms as data files.
 
-.. method:: Export()
-| Copies a waveform to a file.
-.. method:: ExportFileFormat(ff)
-| Changes the file format in which :meth:`Export` will save the waveform.
-| Valid formats for ``ff`` are:
+.. method:: Export(filename=None, fileformat=None, inksaver=None, palette=None, fullscreen=None)
+| Copies a waveform to a file that can be specified by ``filename``.
+| **Arguments**
+| All arguments are optional. Defining none of the arguments, exports with either the default settings or the settings used prior in that session.
+| If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
+| If ``filename`` is not specified the file will be saved in the default directory with the default name.
+| Valid formats for ``fileformat`` are:
 - BMP
 - JPEG
 - PNG
-.. method:: ExportFilePath(path)
-| Sets the directory and file name under which the file will be saved.
-| If ``path`` is only the file name the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
-.. method:: Screenshot()
+| ``inksaver`` has three valid variables:
+- 1, which corrolates to the normal mode
+- 2, which corrolates to the inksaver mode, which changes the background to white
+- 3, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
+| ``palette`` has three valid states:
+- color (displays everything in color)
+- gray (displays everything in grayscale)
+- baw (displays everything in black and white)
+| ``fullscreen`` has two valid variables:
+- 'off', hides all menu areas
+- 'on', shows all menu areas
+.. method:: Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None)
 | Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen to the directory chosen by :meth:`ScreenshotFilePath`.
 | The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between screenshots is recommended.
-.. method:: ScreenshotFilePath(path)
-| Sets the directory and file name under which the file will be saved.
-| If ``path`` is only the file name the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
+| **Arguments**
+| All arguments are optional. Defining none of the arguments, takes a screenshot with either the default settings or the settings used prior in that session.
+| If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
+| If ``filename`` is not specified the file will be saved in the default directory with the default name.
+| ``inksaver`` has three valid variables:
+- :var:`1`, which corrolates to the normal mode
+- :var:`2`, which corrolates to the inksaver mode, which changes the background to white
+- :var:`3`, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
+| ``palette`` has three valid states:
+- color (displays everything in color)
+- gray (displays everything in grayscale)
+- baw (displays everything in black and white)
+| ``orientation`` has two valid variables:
+- 1, which takes the screenshot in portrait mode
+- 2, which takes the screenshot in horizontal mode
+| ``fullscreen`` has two valid variables:
+- 'off', hides all menu areas
+- 'on', shows all menu areas
 
 Histogram
 ---------
