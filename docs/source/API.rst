@@ -17,32 +17,32 @@ Acquisition
 | ``acquiremode``
 | Enables the selected mode for aquiring data.
 | Valid arguments are:
-- sampling
-- peakdetect
-- hires
-- averaging
-- envelope
-- wfmdb
+- :const:`sampling`
+- :const:`peakdetect`
+- :const:`hires`
+- :const:`averaging`
+- :const:`envelope`
+- :const:`wfmdb`
 |
 | ``mode``
 | Sets the wanted samplingmode to either real time, interpolated real time or equivalent time.
 | Valid arguments are:
-- RT
-- IT
-- ET
+- :const:`RT`
+- :const:`IT`
+- :const:`ET`
 | 
 | ``samplesize``
 | Sets the amount of waveform database points that the oscilloscope acquires for a single sequence acquisition. Must be a whole number.
 | 
 | ``WFamount``
 | Sets the amount of waveforms that will be acquired for averaging and enveloping. Must be a whole number.
-| If envelope mode is enabled, a waveform amount of 0 corresponds to infinitely acquisations.
+| If envelope mode is enabled, a waveform amount of :const:`0` corresponds to infinitely acquisations.
 |
 | ``stop``
 | Defines whether the acquisition stops after a single sequence or repeats until stopped with :meth:`StopAcquisition`.
 | Valid arguments are:
-- repeat
-- single
+- :const:`repeat`
+- :const:`single`
 .. method:: StartAcquisition()
 | Starts acquiring data. 
 | While changes are possible during an acquisition, it is recommended that all acquisition settings are properly set before starting the acquisition.
@@ -60,7 +60,7 @@ Calibration
 .. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
 .. method:: ProbeCalibration(channel=ch)
 | Starts the auto calibration of the probe defined by ``channel``. The calibration can take up to a minutet and no other commands will be executed during that time.
-|  ``channel`` may range from 1 through 4. If no channel is given, the system will use either the default channel 1 or the channel selected by :meth:`Channel` if that command had been used during the session.
+|  ``channel`` may range from :const:`1` through :const:`4`. If no channel is given, the system will use either the default channel 1 or the channel selected by :meth:`Channel` if that command had been used during the session.
 
 Hard Copy and Export
 --------------------
@@ -73,20 +73,20 @@ Hard Copy and Export
 | If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
 | Valid formats for ``fileformat`` are:
-- BMP
-- JPEG
-- PNG
+- :const:`BMP`
+- :const:`JPEG`
+- :const:`PNG`
 | ``inksaver`` has three valid variables:
-- 1, which corrolates to the normal mode
-- 2, which corrolates to the inksaver mode, which changes the background to white
-- 3, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
+- :const:`1`, which corrolates to the normal mode
+- :const:`2`, which corrolates to the inksaver mode, which changes the background to white
+- :const:`3`, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
 | ``palette`` has three valid states:
 - color (displays everything in color)
 - gray (displays everything in grayscale)
 - baw (displays everything in black and white)
 | ``fullscreen`` has two valid variables:
-- 'off', hides all menu areas
-- 'on', shows all menu areas
+- :const:`off`, hides all menu areas
+- :const:`on`, shows all menu areas
 .. method:: Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None)
 | Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen.
 | The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between multiple screenshots is recommended.
@@ -103,11 +103,11 @@ Hard Copy and Export
 - gray (displays everything in grayscale)
 - baw (displays everything in black and white)
 | ``orientation`` has two valid variables:
-- 1, which takes the screenshot in portrait mode
-- 2, which takes the screenshot in horizontal mode
+- :const:`1`, which takes the screenshot in portrait mode
+- :const:`2`, which takes the screenshot in horizontal mode
 | ``fullscreen`` has two valid variables:
-- 'off', hides all menu areas
-- 'on', shows all menu areas
+- :const:`off`, hides all menu areas
+- :const:`on`, shows all menu areas
 
 Histogram
 ---------
