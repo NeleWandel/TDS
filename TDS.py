@@ -119,7 +119,7 @@ def Date():
 def SetDate(day='01', month='01', year='2000'):
     tds.write('DATE "' + str(year) + '-' + str(month) + '-' + str(day) +'"')
     
-def Export(filename=None, fileformat=None):
+def Export(filename=None, fileformat=None, inksaver=None, palette=None, fullscreen=None):
     if filename:
         tds.query('EXPort:FILEName "' + str(path) + '"')
     if fileformat:
@@ -131,6 +131,25 @@ def Export(filename=None, fileformat=None):
             tds.write('EXPort:FORMat PNG')
         else:
             raise TypeError('File format wrong. Please choose between BMP, JPEG and PNG')
+    if inksaver:
+        if inksaver == 1:
+            tds.write('EXPort:IMAGe NORMal')
+        elif inksaver == 2:
+            tds.write('EXPort:IMAGe INKSaver')
+        elif inksaver == 3:
+            tds.write('EXPort:IMAGe ENHANcedwfm')  
+    if palette:
+        if palette == 'color':
+            tds.write('EXPort:PALEtte COLOr')
+        elif palette == 'gray':
+            tds.write('EXPort:PALEtte GRAYscale')
+        elif palette == 'baw':
+            tds.write('EXPort:PALEtte BLACKANDWhite')
+    if fullscreen:
+        if fullscreen == 'off':
+            tds.write('EXPort:VIEW GRAticule')
+        elif fullscreen == 'on':
+            tds.write('EXPort:VIEW FULLSCREEN')        
     tds.write('EXPort STArt')
 
 def Screenshot(filename=None, inksaver=None, orientation=None, fullscreen=None):
@@ -146,6 +165,13 @@ def Screenshot(filename=None, inksaver=None, orientation=None, fullscreen=None):
             tds.write('HARDCopy:VIEW GRAticule')
         elif fullscreen == 'on':
             tds.write('HARDCopy:VIEW FULLSCREEN')
+    if palette:
+        if palette == 'color':
+            tds.write('HARDCopy:PALEtte COLOr')
+        elif palette == 'gray':
+            tds.write('HARDCopy:PALEtte GRAYscale')
+        elif palette == 'baw':
+            tds.write('HARDCopy:PALEtte BLACKANDWhite')
     if inksaver:
         if inksaver == 1:
             tds.write('HARDCopy:IMAGe NORMal')
