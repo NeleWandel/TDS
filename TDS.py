@@ -86,9 +86,9 @@ def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop=''):
     if samplesize:
         tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
     if stop:
-        if stop == 'sequence':
+        if stop == 'single':
             tds.query('ACQuire:STOPAfter SEQuence')
-        elif stop == 'single':
+        elif stop == 'repeat':
             tds.query('ACQuire:STOPAfter RUNSTop')  
 
 def StartFastAcquisition():
