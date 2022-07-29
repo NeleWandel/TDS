@@ -61,7 +61,7 @@ def ResetToFactorySettings():
 def Trig():
     tds.write('*TRG')
     
-def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop='', fast=''):
+def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop=''):
     if acquiremode:
         if acquiremode == 'sampling':
             tds.write('ACQuire:MODe SAMple')
@@ -90,14 +90,12 @@ def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop='', fa
             tds.query('ACQuire:STOPAfter SEQuence')
         elif stop == 'single':
             tds.query('ACQuire:STOPAfter RUNSTop')  
-    if fast:
-        if fast == 'on':
-            tds.write('FASTAcq:STATE ON')
-        elif fast == 'off':
-            tds.write('FASTAcq:STATE OFF')
-        else:
-            raise ValueError('fast argument can only be on or off.')
 
+def StartFastAcquisition():
+    tds.write('FASTAcq:STATE ON')
+def StopFFastAcquisition():
+    tds.write('FASTAcq:STATE OFF')
+    
 def StartAcquisition():
     tds.write('ACQuire:STATE RUN')
 
