@@ -152,7 +152,7 @@ def Export(filename=None, fileformat=None, inksaver=None, palette=None, fullscre
             tds.write('EXPort:VIEW FULLSCREEN')        
     tds.write('EXPort STArt')
 
-def Screenshot(filename=None, inksaver=None, orientation=None, fullscreen=None):
+def Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None):
     if orientation:
         if orientation == 1:
             tds.write('HARDCopy:LAYout PORTRait')
