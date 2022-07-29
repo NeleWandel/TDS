@@ -88,16 +88,16 @@ Hard Copy and Export
 - 'off', hides all menu areas
 - 'on', shows all menu areas
 .. method:: Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None)
-| Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen to the directory chosen by :meth:`ScreenshotFilePath`.
-| The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between screenshots is recommended.
+| Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen.
+| The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between multiple screenshots is recommended.
 | **Arguments**
 | All arguments are optional. Defining none of the arguments, takes a screenshot with either the default settings or the settings used prior in that session.
 | If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
 | ``inksaver`` has three valid variables:
-- :var:`1`, which corrolates to the normal mode
-- :var:`2`, which corrolates to the inksaver mode, which changes the background to white
-- :var:`3`, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
+- :const:`1`, which corrolates to the normal mode
+- :const:`2`, which corrolates to the inksaver mode, which changes the background to white
+- :const:`3`, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
 | ``palette`` has three valid states:
 - color (displays everything in color)
 - gray (displays everything in grayscale)
