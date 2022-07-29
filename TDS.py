@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-
 import pyvisa
 import time
 import sys
-
-rm = pyvisa.ResourceManager()
-print(rm.list_resources())
-tds = rm.open_resource('GPIB0::1::INSTR')
 
 ch = 1
 mathvari = 1
@@ -20,46 +14,32 @@ def Channel(channelnumber):
         return
     else:
         raise ValueError('Selected channel can only be 1, 2, 3 or 4.')
-        
-#returns oscilloscope identification code
+
 def Identify():
     print(tds.query("*IDN?"))
 
-#Auto adjusts vertical, horizontal and trigger controls
 def AutoSet():
     tds.write('AUTOSet EXECute')
-#tries to go back to state before AutoSet
+
 def Undo():
     tds.write('AUTOSet UNDo')
 
-#clears status
 def Clear():
     tds.write('*CLS')
 
-#returns 1 if all current operations are done
 def IsDone():
     #tds.query('*OPC')
     tds.query('*OPC?')
 
-
-#prevents osci from executing any further commands until all pending operations are done
 def Wait():
     tds.write('*WAI')
-
-
-#calibrates the system. needs at least 20 min warm up.
-#returns: -1 if calibration failed, 0 if calibration passed
-#3 if 20-min warmup has not completed and calibration is terminated
 
 def Calibration():
     print(tds.write('*CAL?'))
 
-#specifies a command/list of commands that are executed when the osci receives a Trigger command
 def DefineTrigger(trigger):
     tds.write('*DDT #O' + str(trigger))
 
-
-#resets to last Save command state
 def Recall(storagelocation):
     if storagelocation >= 0 and storagelocation <= 10:
         tds.write('*RCL ' + str(storagelocation))
@@ -67,8 +47,6 @@ def Recall(storagelocation):
     else:
         raise ValueError('Storage Location must range from 0 through 10.')
 
-
-#saves current state of osci to defined location
 def Save(storagelocation):
     if storagelocation >= 0 and storagelocation <= 10:
         tds.write('*SAV ' + str(storagelocation))
@@ -77,69 +55,32 @@ def Save(storagelocation):
     else:
         raise ValueError('Storage Location must range from 0 through 10.')
 
-
-#resets the osci to factory settings
 def ResetToFactorySettings():
     tds.write('*RST')
 
-
-#immediately executes all commands that have been definted by DefineTrigger
-def Trigger():
+def Trig():
     tds.write('*TRG')
-
-
-#sets the acquisition mode of the osci
-#allowed parameters: 
-#SAMple: specifies that the displayed data point value is 
-#simply the first sampled value that is taken during the interval
-
-#PEAKdetect: specifies the display of high-low range of the samples
-#displayed as a vertical column gthat extends fro mthe highest to lowest value
-
-#HIRes: specifies Hi Res mode - displayed data is avarage of all samples
-
-#AVErage: specifies avaraging mode - shows an avarage of SAMple data points
-#from seperate waveform acquisitions
-
-#ENVelope: specifies envelope mode, where resulting waveform shows the PEAKdetect
-#range of data points from severap seperate waveform acquisitions
-
-#WFMDB: specifies waveform database mode, where osci acquires source waveform data
-#in three dimensions. Aquires amplitude, timing and count information.
-#def ActivateSampleMode():
- #   tds.write('ACQuire:MODe SAMple')
-#def ActivatePeakDetect():
- #   tds.write('ACQuire:MODe PEAKdetect')
-#def ActivateHiRes():
- #   tds.write('ACQuire:MODe HIRes')
-#def ActivateAveraging(WFamount):
- #   tds.write('ACQuire:NUMAVg ' + str(WFamount))
-  #  tds.write('ACQuire:MODe AVErage')
-#def ActivateEnvelopeMode(WFamount):
- #   tds.write('ACQuire:NUMENv' + str(WFamount))
-  #  tds.write('ACQuire:MODe ENVelope')
-#def ActivateWFMDBMode():
- #   tds.write('ACQuire:MODE WFMDB')
     
 def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop='', fast=''):
-    if acquiremode == 'sampling':
-        tds.write('ACQuire:MODe SAMple')
-    elif acquiremode == 'peakdetect':
-        tds.write('ACQuire:MODe PEAKdetect') 
-    elif acquiremode == 'hires':
-        tds.write('ACQuire:MODe HIRes')
-    elif acquiremode == 'averaging':
-        tds.write('ACQuire:MODe AVErage')
-        if WFamount:
-            tds.write('ACQuire:NUMAVg ' + str(WFamount))
-    elif acquiremode == 'envelope':
-        tds.write('ACQuire:MODe ENVelope')
-        if WFamount:
-            tds.write('ACQuire:NUMENv' + str(WFamount))
-    elif acquiremode == 'wfmdb':
-        tds.write('ACQuire:MODE WFMDB')
-    else:
-        raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
+    if acquiremode:
+        if acquiremode == 'sampling':
+            tds.write('ACQuire:MODe SAMple')
+        elif acquiremode == 'peakdetect':
+            tds.write('ACQuire:MODe PEAKdetect') 
+        elif acquiremode == 'hires':
+            tds.write('ACQuire:MODe HIRes')
+        elif acquiremode == 'averaging':
+            tds.write('ACQuire:MODe AVErage')
+            if WFamount:
+                tds.write('ACQuire:NUMAVg ' + str(WFamount))
+        elif acquiremode == 'envelope':
+            tds.write('ACQuire:MODe ENVelope')
+            if WFamount:
+                tds.write('ACQuire:NUMENv' + str(WFamount))
+        elif acquiremode == 'wfmdb':
+            tds.write('ACQuire:MODE WFMDB')
+        else:
+            raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
     if mode:
         tds.write('ACQuire:SAMPlingmode ' + str(mode)) #RT, IT, ET
     if samplesize:
@@ -157,54 +98,23 @@ def Acquisition(acquiremode='', samplesize='', WFamount='', mode='', stop='', fa
         else:
             raise ValueError('fast argument can only be on or off.')
 
-    
-def WFMDB(mode='', stop=''):
-
-    if stop:
-        if stop == 'sequence':
-            tds.query('ACQuire:STOPAfter SEQuence')
-        elif stop == 'single':
-            tds.query('ACQuire:STOPAfter RUNSTop')     
-    
-#sets number of waveform database points the osci can acquire before stoping
-#a sequence or stops running a mask test
-#def SetSampleSize(pointamount):
- #   tds.query('ACQuire:NUMSAMples ' + str(pointamount))
-
-
-#sampling modes
-#def SetRealTimeSampling():
- #   tds.write('ACQuire:SAMPlingmode RT')
-
-#def SetInterpolatedSampling():
-  #  tds.write('ACQuire:SAMPlingmode IT')
-
-#def SetEquivalentTimeSampling():
- #   tds.write('ACQuire:SAMPlingmode ET')
-
-
-#start/stop acquisition
 def StartAcquisition():
     tds.write('ACQuire:STATE RUN')
 
 def StopAcquisition():
     tds.write('ACQuire:STATE STOP')
 
-#returns 1 if osci is busy and 0 if not busy
 def Busy():
     tds.query('BUSY?')
 
 def ProbeCalibration(channel=ch):
     tds.query('CALibrate:CALProbe:CH' + str(channel) + '?')
 
-
 def ChannelOffset(offsetinmV, channel=ch):
     offset = float(offsetinmV)
     off="{:.2f}".format(offset)
     tds.query('CH'+ str(channel)+ ':OFFSet ' + str(off) + 'E-03')
-    
 
-#returns the date of the osci  
 def Date():
     tds.query('DATE?')
     
@@ -224,8 +134,7 @@ def Export(filename='', fileformat=''):
         else:
             raise TypeError('File format wrong. Please choose between BMP, JPEG and PNG')
     tds.write('EXPort STArt')
-    
-#sends copy of screen as bitmap to filename
+
 def Screenshot(filename='', inksaver='', orientation='', fullscreen=''):
     if orientation:
         if orientation == 1:
@@ -252,7 +161,6 @@ def Lock():
     tds.write('LOCk ALL')  
 def Unlock():
     tds.write('UNLock ALL')
-
 
 def Mask(start=True, mask='', source='CH1', display='ON', counting='', wfmamount='',
          highlights='', inverted='', margin='', polatity='', stoponfailure='', failthreshold='', failscreen='', 
@@ -316,7 +224,6 @@ def Mask(start=True, mask='', source='CH1', display='ON', counting='', wfmamount
     else:
         tds.write('MASK:TESt:STATE OFF')
     
-    
 def UserMask(seg='', p1='', p2='', p3='', p4='', amp='', bit='', hscale='', htrigpos='', patbits='', 
              presampbits='', reclength='', serialtrig='', trigtosamp='', voffset='', vpos='', vscale='', width=''):
     if seg:
@@ -364,8 +271,6 @@ def ResetMaskHit():
 def SetMathStorage(number):
     global mathvari
     mathvari = number
-    print('All future Math commands will save in Math ' + str(mathvari))
-
     
 def MathVariable(varnumber, varvalue):
     if varnumber >= 1 or varnumber <= 8:
@@ -449,7 +354,6 @@ def Mean(m=meas):
 def Minimum(m=meas):
     tds.query('MEASUrement:MEAS' + str(m) + ':MINImum?')
     
-    
 def Measure(m=meas, statistics='', weightvalue='', meastype='', state='', source='', source2='', refmethod='', 
             high='', low='', mid='', delay='', edge1='', edge2=''):
     if source:
@@ -504,8 +408,6 @@ def Measure(m=meas, statistics='', weightvalue='', meastype='', state='', source
         elif state == 'on':
             tds.write('MEASUrement:MEAS' + str(m) + ':STATE ON')
 
-
-    
 def MeasValue():
     tds.query('MEASUrement:MEAS' + str(m) + ':VALue?')
 def MeasUnit():
@@ -520,7 +422,6 @@ def ResetStatistics():
 def TrigLevel():
     tds.write('TRIGger:A SETLevel')
     
-
 def Trigger(triggertype='', mode='', holdhofftime='', triggerclass='', CH1='', CH2='', CH3='', CH4='', 
             function='', triggerwhen='', logicmin='', logicmax='', source='', comm='', bitrate='', pulseform='', eyetype='', 
             clock='', clocksource='', polarity='', clockthreshold='', setholdsource='', threshold='', 
@@ -784,17 +685,9 @@ def Trigger(triggertype='', mode='', holdhofftime='', triggerclass='', CH1='', C
                 raise ValueError('Pulse trigger class can only be glitch, runt, width, transition or timeout.')
     else:
         raise TypeError('Triggertype may only be edge, logic, pulse, comm or serial.')
-   # elif triggertype == 'pulse':
+    if level:
+        tds.write('TRIGger:A:LEVel ' + str(level))
         
-    #if level:
-     #   tds.write('TRIGger:A:LEVel ' + str(level))
-    
-    
-        
-    
-    #histogram command group
-
-    #returns histo paras
 def HistogramParameter():
     tds.query('HIStogram?')
         
@@ -835,9 +728,6 @@ def Histogram(display='', source='', size='', function='', state='', box='', lef
     else:
         raise ValueError('Box argument needs left, top, right and bottom arguments.')
 
-
-#horizontal comand group
-
 def FastFrame(source='', count='', refframe='', length='', mode='', multiframes='', frameamount='', start=''):
     if source:
         tds.write('HORizontal:FASTframe:REF:SOUrce ' + str(source))
@@ -866,7 +756,6 @@ def FastFrameStart():
 def FastFrameStop():
     tds.write('HORizontal:FASTframe:STATE OFF')
         
-
 def TimeDelay(mode='seconds', time='0'):
     if time == '0':
         tds.write ('HORizontal:DELay:MODe OFF')
@@ -894,8 +783,6 @@ def Horizontal(rate='', scale='', units='', position='', resolution='', roll='')
         tds.write('HORizontal:RECOrdlength ' + str(resolution))
     if roll:
         tds.write('HORizontal:ROLL ' + str(roll))
-    
-#vertical
 
 def ChannelSetup(channel=ch, coupling='', deskewtime='', offset='', position='', scale=''):
     if coupling:
