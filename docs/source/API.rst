@@ -183,18 +183,30 @@ Horizontal
 | ``multiframes`` if turned :const:`on` the oscilloscope displays multiple overlaid frames. Turning on multiframe mode gives access to ``multisource``, ``frameamount`` and ``start``.
 | ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible. Valid sources are CH<x>, MATH<x> and REF<x> with <x> being an number ranging from 1 through 4.
 | ``frameamount`` defines the number of overlaying frames. 
-| ``start`` defines the starting frame
+| ``start`` defines the starting frame.
 .. method:: FastFrameStart()
 | Starts FastFrame acquisition.
 .. method:: FastFrameStop()
 | Stops FastFrame acquisition.
 .. method:: Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, roll=None)
-| 
+| Sets the horizontal parameters of the oscilloscope.
+| All arguments are optional.
+| **Arguments**
+| ``rate`` in samples for second. Sets the horizontal sample rate of the oscilloscope. Adjusting the rate leads to an automatic adjustment of the record length.
+| ``scale`` in seconds per devision. Sets the horizontal scale, range is 2E-10 to 40 (200ps to 40s).
+| ``units`` as a string. Sets the unit for the time base. 
+| ``position`` in percent. Positions the chosen amout of the waveform to the left of the center. 
+| ``resolution`` in data points per frame. The minimum is 500, maximum is 400000 if only one channel is in use, 200000 if two channels are in use and 100000 in case all four channels are in use.
+| ``roll`` changes the roll mode status. This can be usefull for observing data samples at slow speeds. It has three valid states:
+- :const:`AUTO`
+- :const:`OFF`
+- :const:`ON`
 .. method:: TimeDelay(mode='seconds', time='0')
+| Sets the horizontal time delay of the oscilloscope.
 | ``mode`` can be either :const:`percent` or :const:`seconds`. 
 | If ``mode`` is percent, time can be between :const:`1` and :const:`99`.
 | If ``mode`` is seconds, time can be any amount in seconds.
-| If ``time
+| If ``time`` is :const:`0` time delay is turned off.
 
 Mask
 ----
