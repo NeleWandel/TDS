@@ -10,39 +10,45 @@ Acquisition
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
 .. tabs::
-   .. tab:: Command
-      .. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
-   .. code-tab:: Code
+
+   .. tab:: command
+   
+      .. method:: 
+      
+         Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
+      
+   .. code-tab:: python code
+   
       def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
-    if acquiremode:
-        if acquiremode == 'sampling':
-            tds.write('ACQuire:MODe SAMple')
-        elif acquiremode == 'peakdetect':
-            tds.write('ACQuire:MODe PEAKdetect') 
-        elif acquiremode == 'hires':
-            tds.write('ACQuire:MODe HIRes')
-        elif acquiremode == 'averaging':
-            tds.write('ACQuire:MODe AVErage')
-            if WFamount:
-                tds.write('ACQuire:NUMAVg ' + str(WFamount))
-        elif acquiremode == 'envelope':
-            tds.write('ACQuire:MODe ENVelope')
-            if WFamount:
-                tds.write('ACQuire:NUMENv' + str(WFamount))
-        elif acquiremode == 'wfmdb':
-            tds.write('ACQuire:MODE WFMDB')
-        else:
-            raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
-    if mode:
-        tds.write('ACQuire:SAMPlingmode ' + str(mode)) #RT, IT, ET
-    if samplesize:
-        tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
-    if stop:
-        if stop == 'single':
-            tds.query('ACQuire:STOPAfter SEQuence')
-        elif stop == 'repeat':
-            tds.query('ACQuire:STOPAfter RUNSTop')  
-            
+       if acquiremode:
+           if acquiremode == 'sampling':
+               tds.write('ACQuire:MODe SAMple')
+           elif acquiremode == 'peakdetect':
+               tds.write('ACQuire:MODe PEAKdetect') 
+           elif acquiremode == 'hires':
+               tds.write('ACQuire:MODe HIRes')
+           elif acquiremode == 'averaging':
+               tds.write('ACQuire:MODe AVErage')
+               if WFamount:
+                   tds.write('ACQuire:NUMAVg ' + str(WFamount))
+           elif acquiremode == 'envelope':
+               tds.write('ACQuire:MODe ENVelope')
+               if WFamount:
+                   tds.write('ACQuire:NUMENv' + str(WFamount))
+           elif acquiremode == 'wfmdb':
+               tds.write('ACQuire:MODE WFMDB')
+           else:
+               raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
+       if mode:
+           tds.write('ACQuire:SAMPlingmode ' + str(mode))
+       if samplesize:
+           tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
+       if stop:
+           if stop == 'single':
+               tds.query('ACQuire:STOPAfter SEQuence')
+           elif stop == 'repeat':
+               tds.query('ACQuire:STOPAfter RUNSTop')  
+
 | Sets all the options for the acquisition. While it is possible to change these parameters during an ongoing acquisition, it is adviced to change them before starting the acquisition. Starting and stopping an acquisition must be done by :meth:`StartAcquisition` and :meth:`StopAcquisition`.
 | 
 | **Arguments**
