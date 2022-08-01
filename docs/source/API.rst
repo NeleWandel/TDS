@@ -9,7 +9,40 @@ Acquisition
 ---------
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
-.. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
+.. tabs::
+   .. tab:: Command
+      .. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
+   .. code-tab:: Code
+      def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
+    if acquiremode:
+        if acquiremode == 'sampling':
+            tds.write('ACQuire:MODe SAMple')
+        elif acquiremode == 'peakdetect':
+            tds.write('ACQuire:MODe PEAKdetect') 
+        elif acquiremode == 'hires':
+            tds.write('ACQuire:MODe HIRes')
+        elif acquiremode == 'averaging':
+            tds.write('ACQuire:MODe AVErage')
+            if WFamount:
+                tds.write('ACQuire:NUMAVg ' + str(WFamount))
+        elif acquiremode == 'envelope':
+            tds.write('ACQuire:MODe ENVelope')
+            if WFamount:
+                tds.write('ACQuire:NUMENv' + str(WFamount))
+        elif acquiremode == 'wfmdb':
+            tds.write('ACQuire:MODE WFMDB')
+        else:
+            raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
+    if mode:
+        tds.write('ACQuire:SAMPlingmode ' + str(mode)) #RT, IT, ET
+    if samplesize:
+        tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
+    if stop:
+        if stop == 'single':
+            tds.query('ACQuire:STOPAfter SEQuence')
+        elif stop == 'repeat':
+            tds.query('ACQuire:STOPAfter RUNSTop')  
+            
 | Sets all the options for the acquisition. While it is possible to change these parameters during an ongoing acquisition, it is adviced to change them before starting the acquisition. Starting and stopping an acquisition must be done by :meth:`StartAcquisition` and :meth:`StopAcquisition`.
 | 
 | **Arguments**
@@ -18,12 +51,17 @@ Acquisition
 | Enables the selected mode for aquiring data.
 | Valid arguments are:
 - :const:`sampling`
+   - Enanbles sampling mode
 - :const:`peakdetect`
+   - Enables peak detect mode
 - :const:`hires`
+   - Enables HiRes mode
 - :const:`averaging`
+   - Enables averaging mode
 - :const:`envelope`
+   - Enables envelope mode
 - :const:`wfmdb`
-|
+   - Enables WFMDB mode
 | ``mode``
 | Sets the wanted samplingmode to either real time, interpolated real time or equivalent time.
 | Valid arguments are:
@@ -43,6 +81,7 @@ Acquisition
 | Valid arguments are:
 - :const:`repeat`
 - :const:`single`
+| 
 .. method:: StartAcquisition()
 | Starts acquiring data. 
 | While changes are possible during an acquisition, it is recommended that all acquisition settings are properly set before starting the acquisition.
@@ -76,17 +115,25 @@ Hard Copy and Export
 - :const:`BMP`
 - :const:`JPEG`
 - :const:`PNG`
-| ``inksaver`` has three valid variables:
-- :const:`1`, which corrolates to the normal mode
-- :const:`2`, which corrolates to the inksaver mode, which changes the background to white
-- :const:`3`, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
+| ``inksaver`` has three valid states:
+- :const:`1`
+   - Displays the display in the usual colors
+- :const:`2`
+   - Changes the background to white
+- :const:`3`
+   - Chooses colors that are well visible on a white background
 | ``palette`` has three valid states:
-- color (displays everything in color)
-- gray (displays everything in grayscale)
-- baw (displays everything in black and white)
-| ``fullscreen`` has two valid variables:
-- :const:`off`, hides all menu areas
-- :const:`on`, shows all menu areas
+- :const:`color` 
+   - The exported file is in color
+- :const:`gray`
+   - The exported file is in grayscale
+- :const:`baw`
+   - The exported file is in black and white
+| ``fullscreen`` has two valid states:
+- :const:`off`
+   - Hides all menu areas
+- :const:`on`
+   - Shows all menu areas
 .. method:: Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None)
 | Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen.
 | The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between multiple screenshots is recommended.
@@ -94,23 +141,53 @@ Hard Copy and Export
 | All arguments are optional. Defining none of the arguments, takes a screenshot with either the default settings or the settings used prior in that session.
 | If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
-| ``inksaver`` has three valid variables:
-- :const:`1`, which corrolates to the normal mode
-- :const:`2`, which corrolates to the inksaver mode, which changes the background to white
-- :const:`3`, which corrolates to the enhaced waveform mode, which chooses colors that are well visible on a white background
+| ``inksaver`` has three valid states:
+- :const:`1`
+   - Displays the display in the usual colors
+- :const:`2`
+   - Changes the background to white
+- :const:`3`
+   - Chooses colors that are well visible on a white background
 | ``palette`` has three valid states:
-- color (displays everything in color)
-- gray (displays everything in grayscale)
-- baw (displays everything in black and white)
-| ``orientation`` has two valid variables:
-- :const:`1`, which takes the screenshot in portrait mode
-- :const:`2`, which takes the screenshot in horizontal mode
-| ``fullscreen`` has two valid variables:
-- :const:`off`, hides all menu areas
-- :const:`on`, shows all menu areas
+- :const:`color` 
+   - The screenshot is in color
+- :const:`gray`
+   - The screenshot is in grayscale
+- :const:`baw`
+   - The screenshot is in black and white
+| ``orientation`` has two valid states:
+- :const:`1`
+   - The screenshot will be captured in portrait mode
+- :const:`2`
+   - The screenshot will be captured in horizontal mode
+| ``fullscreen`` has two valid states:
+- :const:`off`
+   - Hides all menu areas
+- :const:`on`
+   - Shows all menu areas
 
 Histogram
 ---------
+
+.. method:: Histogram(display=None, source=None, size=None, function=None, state=None, box=None, left=None, top=None, right=None, bottom=None)
+| Sets up the histogram, defined by the arguments.
+| **Arguments**
+| All arguments are optional. Defining none of the arguments results in this command having no effect.
+| ``display`` has three valid states:
+- :const:`off`
+   - Disables the display of the histogram, data will still be collected
+- :const:`log`
+   - The histogram display is turned on and set to logarithmic format
+- :const:`lin`
+   - The histogram display is turned on and set to linear format
+| ``source`` sets the source for the histogram. The source may be either CH<x>, MATH<x> or REF<x>. 
+
+.. method:: HistogramData()
+| Returns all histogram data values as an ASCII list, separated by commas.
+| A vertical histogram returns 200 values, a horizontal histogram returns 500 values.
+
+.. method:: ResetHistogram()
+| Clears all counts and statistics for the histogram.
 
 Horizontal
 ----------
