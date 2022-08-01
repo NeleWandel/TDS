@@ -178,8 +178,8 @@ Horizontal
 | ``source`` defines the reference source. Valid sources are CH<x>, MATH<x> and REF<x> with <x> being an number ranging from 1 through 4.
 | ``count`` defines how many frames/segments the FastFrame mode acquires.
 | ``refframe`` defines the reference frame number which is then used to calculate the time differences for the frames.
-| `` length`` may range from 500 through 400000 and defines the record length to the number of data points in each frame.
-| `` mode`` can be either :const:`ALL` or :const:`LIVE`. In live mode adjusting a channel waveform leads to adjustment of all channel and math waveforms, as they get locked together. For example changing the reference frame from CH1 to frame 6 results in CH2, CH3, CH4, MATH1, MATH2, MATH3 and MATH 4 also using frame 6 as reference. All mode the same happens, but on top of that all REF waveforms also adjust to the selected frame.
+| ``length`` may range from :const`500` through :const:`400000` and defines the record length to the number of data points in each frame.
+| ``mode`` can be either :const:`ALL` or :const:`LIVE`. In live mode adjusting a channel waveform leads to adjustment of all channel and math waveforms, as they get locked together. For example changing the reference frame from CH1 to frame 6 results in CH2, CH3, CH4, MATH1, MATH2, MATH3 and MATH 4 also using frame 6 as reference. All mode the same happens, but on top of that all REF waveforms also adjust to the selected frame.
 | ``multiframes`` if turned :const:`on` the oscilloscope displays multiple overlaid frames. Turning on multiframe mode gives access to ``multisource``, ``frameamount`` and ``start``.
 | ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible. Valid sources are CH<x>, MATH<x> and REF<x> with <x> being an number ranging from 1 through 4.
 | ``frameamount`` defines the number of overlaying frames. 
