@@ -9,17 +9,10 @@ Acquisition
 ---------
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
-.. tabs::
+.. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
 
-   .. tab:: command
-   
-      .. method:: 
-      
-         Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
-      
-   .. code-tab:: python code
-   
-      def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
+.. code-tab:: python
+   def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
        if acquiremode:
            if acquiremode == 'sampling':
                tds.write('ACQuire:MODe SAMple')
