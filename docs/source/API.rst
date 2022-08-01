@@ -10,38 +10,6 @@ Acquisition
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
 .. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
-
-.. code-tab:: python
-   def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
-       if acquiremode:
-           if acquiremode == 'sampling':
-               tds.write('ACQuire:MODe SAMple')
-           elif acquiremode == 'peakdetect':
-               tds.write('ACQuire:MODe PEAKdetect') 
-           elif acquiremode == 'hires':
-               tds.write('ACQuire:MODe HIRes')
-           elif acquiremode == 'averaging':
-               tds.write('ACQuire:MODe AVErage')
-               if WFamount:
-                   tds.write('ACQuire:NUMAVg ' + str(WFamount))
-           elif acquiremode == 'envelope':
-               tds.write('ACQuire:MODe ENVelope')
-               if WFamount:
-                   tds.write('ACQuire:NUMENv' + str(WFamount))
-           elif acquiremode == 'wfmdb':
-               tds.write('ACQuire:MODE WFMDB')
-           else:
-               raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
-       if mode:
-           tds.write('ACQuire:SAMPlingmode ' + str(mode))
-       if samplesize:
-           tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
-       if stop:
-           if stop == 'single':
-               tds.query('ACQuire:STOPAfter SEQuence')
-           elif stop == 'repeat':
-               tds.query('ACQuire:STOPAfter RUNSTop')  
-
 | Sets all the options for the acquisition. While it is possible to change these parameters during an ongoing acquisition, it is adviced to change them before starting the acquisition. Starting and stopping an acquisition must be done by :meth:`StartAcquisition` and :meth:`StopAcquisition`.
 | 
 | **Arguments**
@@ -180,6 +148,19 @@ Histogram
 - :const:`lin`
    - The histogram display is turned on and set to linear format
 | ``source`` sets the source for the histogram. The source may be either CH<x>, MATH<x> or REF<x>. 
+| ``size`` is given in devisions and defines the size of the histogram. If the histogram is horizontal, the value may range from 0.1 to 8.0. In case the histogram is vertical, the range is 0.1 to 10.0.
+| ``function`` defines whether the histogram is horizontal or vertical. There are two valid states:
+- :const:`horizontal`
+- :const:`vertical`
+| ``state`` defines whether or not histogram calculations are activated. There are two valid states:
+- :const:`ON`
+- :const:`OFF`
+| ``box`` defines the boundaries of the histogram has two valid arguments:
+- :const:`coordinates`
+- :const:`percent`
+| If ``box`` is used ``left``, ``top``, ``right`` and ``bottom`` must be defined by either the waveform coordinates or the percentage coordinates. 
+.. warning::
+   Changing the histogram box results in a reset of the histogram data. Make sure to retrieve all wanted data with the :meth:`HistogramData` function before executing changes of the box.
 
 .. method:: HistogramData()
 | Returns all histogram data values as an ASCII list, separated by commas.
@@ -190,7 +171,30 @@ Histogram
 
 Horizontal
 ----------
-
+.. method:: FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None)
+| Sets up all FastFrame (also known as memory segmentation) parameters.
+| All arguments are optional. Not defining any of the arguments results in this command being useless.
+| **Arguments**
+| ``source`` defines the reference source. Valid sources are CH<x>, MATH<x> and REF<x> with <x> being an number ranging from 1 through 4.
+| ``count`` defines how many frames/segments the FastFrame mode acquires.
+| ``refframe`` defines the reference frame number which is then used to calculate the time differences for the frames.
+| `` length`` may range from 500 through 400000 and defines the record length to the number of data points in each frame.
+| `` mode`` can be either :const:`ALL` or :const:`LIVE`. In live mode adjusting a channel waveform leads to adjustment of all channel and math waveforms, as they get locked together. For example changing the reference frame from CH1 to frame 6 results in CH2, CH3, CH4, MATH1, MATH2, MATH3 and MATH 4 also using frame 6 as reference. All mode the same happens, but on top of that all REF waveforms also adjust to the selected frame.
+| ``multiframes`` if turned :const:`on` the oscilloscope displays multiple overlaid frames. Turning on multiframe mode gives access to ``multisource``, ``frameamount`` and ``start``.
+| ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible. Valid sources are CH<x>, MATH<x> and REF<x> with <x> being an number ranging from 1 through 4.
+| ``frameamount`` defines the number of overlaying frames. 
+| ``start`` defines the starting frame
+.. method:: FastFrameStart()
+| Starts FastFrame acquisition.
+.. method:: FastFrameStop()
+| Stops FastFrame acquisition.
+.. method:: Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, roll=None)
+| 
+.. method:: TimeDelay(mode='seconds', time='0')
+| ``mode`` can be either :const:`percent` or :const:`seconds`. 
+| If ``mode`` is percent, time can be between :const:`1` and :const:`99`.
+| If ``mode`` is seconds, time can be any amount in seconds.
+| If ``time
 
 Mask
 ----
@@ -200,7 +204,8 @@ Mask
 | Turns off automatic optimising of the mask.
 .. method:: AutoAdjustMaskOn()
 | Turns on automatic optimising of the mask. This feature shifts the mask horizontally and vertically in order to minimise the signal hits.
-
+.. method:: Mask(start=True, mask=None, source='CH1', display='ON', counting=None, wfmamount=None, highlights=None, inverted=None, margin=None, polatity=None, stoponfailure=None, failthreshold=None, failscreen=None, logfail=None, logwfm=None, repeat=None, delay=None, auto=None, hdelta=None, vdelta=None, digitalfilter=None, beep=None, failbeep=None)
+| The mask function controlls 
 Math
 -----
 | Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be stored and displayed at the same time. :meth:`SetMathStorage` regulates which of the four possible math storages will be used by the other commands in the math group.
