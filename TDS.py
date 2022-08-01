@@ -712,9 +712,6 @@ def Trigger(triggertype, mode=None, holdhofftime=None, triggerclass=None, CH1=No
     if level:
         tds.write('TRIGger:A:LEVel ' + str(level))
         
-def HistogramParameter():
-    tds.query('HIStogram?')
-        
 def ResetHistogram():
     tds.write('HIStogram:COUNt RESET')
     
@@ -752,7 +749,7 @@ def Histogram(display=None, source=None, size=None, function=None, state=None, b
     else:
         raise ValueError('Box argument needs left, top, right and bottom arguments.')
 
-def FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, frameamount=None, start=None):
+def FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None):
     if source:
         tds.write('HORizontal:FASTframe:REF:SOUrce ' + str(source))
     if count:
@@ -768,10 +765,11 @@ def FastFrame(source=None, count=None, refframe=None, length=None, mode=None, mu
             tds.write('HORizontal:FASTframe:MULtipleframes:MODE OFF')
         elif str(mode) == 'on':
             tds.write('HORizontal:FASTframe:MULTipleframes:MODE OVERlay')
-            if start:
-                tds.write('HORizontal:FASTframe:MULtipleframes:FRAMESTart:' + str(source) + ' ' + str(start))
-            if frameamount:
-                tds.write('HORizontal:FASTframe:MULTipleframes:NUMFRames:' + str(source) + ' '  + str(frameamount))
+            if multisource:
+                if frameamount:
+                    tds.write('HORizontal:FASTframe:MULTipleframes:NUMFRames:' + str(multisource) + ' '  + str(frameamount))
+                if start:
+                    tds.write('HORizontal:FASTframe:MULtipleframes:FRAMESTart:' + str(multisource) + ' ' + str(start))
         else:
             raise TypeError('Multiframes mode must be either off or on.')
                
@@ -785,14 +783,15 @@ def TimeDelay(mode='seconds', time='0'):
         tds.write ('HORizontal:DELay:MODe OFF')
     elif mode == 'percent':
         if time >= 1 and time <= 99:
-            tds.write('HORizontal:DELay:POSition ' + str(time))
             tds.write ('HORizontal:DELay:MODe ON')
+            tds.write('HORizontal:DELay:POSition ' + str(time))
         else:
             raise ValueError('Time delay position may only range from 0 to 99.')
     elif mode == 'seconds':
+        tds.write ('HORizontal:DELay:MODe ON')
         tds.write('HORizontal:DELay:TIMe ' + str(time))
     else:
-        raise TypeError('There has been an error with the TimeDelay() function. Plesae check all variables.')
+        raise TypeError('Time delay mode must be either seconds or percent. Alternatively time can be set to 0.')
 
 def Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, roll=None):
     if rate:
