@@ -321,7 +321,7 @@ Trigger
    
       | Turns the trigger type to logic. In this state the oscilloscope starts a trigger event in case a defined logical situation occurs.
       | ``CH1``, ``CH2`` and ``CH3`` sets the logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`. This specifies the logic that will be used when the trigger detects the trigger threshold level.
-      | :const:`HIGH`specifies the logic high
+      | :const:`HIGH` specifies the logic high
       | :const:`LOW` specifies the logic low
       | :const:`x` specifies that it doesn't matter
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
@@ -329,6 +329,8 @@ Trigger
       .. tabs::
          .. tab:: pattern
          
+            | With pattern class activated, the oscilloscope generates a trigger event when the logical combinations of channel 1-4 are met.
+            | 
             | ``CH4`` sets the logic input for channel 4. The logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`.
             | 
             | ``triggerwhen`` specifies the condition under which the trigger will be generated. 
@@ -342,9 +344,28 @@ Trigger
             | 
             | ``logicmin`` sets the duration in seconds that will be used as the time threshold for ``triggerwhen=more``
          .. tab:: state
-         
+            
+            | With state class activated, the oscilloscope generates a trigger event when the channel 4 condition is met first and all of channel 1 through 3 conditions are met afterwards.
+            | 
+            | ``CH4`` sets the slope for channel 4. This can be either :const:`rise` or :const:`fall`.
+            | 
+            | ``triggerwhen`` specifies whether the trigger occurs when channel 1 through 3 conditions are met (true) or not met (false). The options are :const:`false` and :const:`true`.
          
          .. tab:: sethold
+         
+            | With sethold class activated, the oscilloscope generates a trigger event when setup and hold between data source and clock source are violated. 
+            | 
+            | ``setholdsource`` defines the channel that is used as the sethold data source and must be either :const:`1`, :const:`2`, :const:`3` or :const:`4`.
+            | 
+            | ``clocksource`` defines the channel that is used as the source of the clock and must be either :const:`1`, :const:`2`, :const:`3` or :const:`4`.
+            | 
+            | ``clockthreshold`` in Volt, defines the voltage threshold for the clock. 
+            | 
+            | ``threshold`` in Volt, defines the voltage threshold for the sethold data source.
+            | 
+            | ``settime`` in seconds, specifies the setup time for sethold violation triggering.
+            | 
+            | ``holdtime`` in seconds, specifies the hold time for sethold violation triggering.
          
          
    .. tab:: communication
