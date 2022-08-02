@@ -15,12 +15,12 @@ Acquisition
 | All arguments, except ``acquiremode`` are optional. 
 | ``acquiremode`` enables the selected mode for aquiring data.
 | Valid arguments are:
-   :const:`sampling` (Enanbles sampling mode)
-   :const:`peakdetect` (Enables peak detect mode)
-   :const:`hires` (Enables HiRes mode)
-   :const:`averaging` (Enables averaging mode)
-   :const:`envelope` (Enables envelope mode)
-   :const:`wfmdb` (Enables WFMDB mode)
+      | :const:`sampling` (Enanbles sampling mode)
+      | :const:`peakdetect` (Enables peak detect mode)
+      | :const:`hires` (Enables HiRes mode)
+      | :const:`averaging` (Enables averaging mode)
+      | :const:`envelope` (Enables envelope mode)
+      | :const:`wfmdb` (Enables WFMDB mode)
 | 
 | ``mode`` sets the wanted samplingmode to either real time (:const:`RT`), interpolated real time (:const:`IT`) or equivalent time (:const:`ET`).
 | 
