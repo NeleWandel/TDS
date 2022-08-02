@@ -66,7 +66,7 @@ Calibration
 .. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
 .. method:: ProbeCalibration(channel=ch)
 | Starts the auto calibration of the probe defined by ``channel``. The calibration can take up to a minutet and no other commands will be executed during that time.
-|  ``channel`` may range from :const:`1` through :const:`4`. If no channel is given, the system will use either the default channel 1 or the channel selected by :meth:`Channel` if that command had been used during the session.
+| ``channel`` may range from :const:`1` through :const:`4`. If no channel is given, the system will use either the default channel 1 or the channel selected by :meth:`Channel` if that command had been used during the session.
 
 Hard Copy and Export
 --------------------
@@ -313,45 +313,23 @@ Measurement
 
 Trigger
 -------
-.. method:: ClockPolarityFall()
-| Sets the trigger to activate on the falling/negative edge of a signal.
-.. method:: ClockPolarityRise()
-| Sets the trigger to activate on the rising/positive edge of a signal.
-.. method:: CMIPulseFormEyeDiagram()
-| Sets the trigger to construct an eye diagram.
-.. method:: CMIPulseFormMinusOne()
-| Sets the trigger to activate on a negative mark.
-.. method:: CMIPulseFormPlusOne()
-| Sets the trigger to activate on a positive mark.
-.. method:: CMIPulseFormZero()
-| Sets the trigger to activate on a bit representing zero.
-.. method:: DefineTrigger(trigger)
-| Defines the actions that are taken upon trigger. The ``trigger`` can be any amount of commands, seperated by semicolons, up to 80 characters.
+.. method:: Trigger(triggertype, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeout=None, timeouttime=None, deltatime=None, transition=None):
+
+| Allows full controll of the trigger settings. All arguments are optional and not every argument is needed for every
+.. tabs::
+   .. tab:: logic
+      test
+   .. tab:: communication
+      test 2
+   .. tab:: edge
+      hbas 
+   .. tab:: serial
+      hola
+   .. tab:: pulse
+      kjasföskldsf.
+      jisaefioeslf
 .. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
-.. method:: Level()
-| Sets the trigger level to 50% of the max/min value of the trigger input signal. The trigger source must pass this level in order to activate a trigger event.
-.. method:: PulseFormEyeDiagram()
-| Sets the trigger to construct an eye diagram.
-.. method:: PulseFormMinusOne()
-| Corresponds to the Isolated +1 on the front panel.
-.. method:: PulseFormPlusOne()
-| Corresponds to the Isolated -1 on the front panel.
-.. method:: SetBitrate(rate)
-| Sets the bit rate.
-| ``rate`` is in bits per second and must be a positive number over one.
-.. method:: SetThresholdHigh(volt)
-| Sets the threshold high level. 
-| ``volt`` is the new threshold level and must be given in volt.
-.. method:: SetThresholdLow(volt)
-| Sets the threshold low level.
-| ``volt`` is the new threshold level and must be given in volt
-.. method:: Trigger()
-| Immediately executes all actions defined by :meth:`DefineTrigger`.
-.. method:: TriggerLogic(logic)
-.. method:: TriggerSetHoldoffTime(time)
-.. method:: WaitForTrigger()
-| Sets the trigger mode to ``normal``. In this mode a valid trigger event must occur before a trigger is generated.
-Vertical
+
 --------
 .. method:: ChannelOffset(offset)
 | Sets the vertical offset for the channel specified by :meth:`Channel`. ``offset`` needs to be written in mV.
@@ -367,12 +345,12 @@ Miscellaneous
 | Automatically adjusts the vertical, horizontal and trigger controls in order to privide a stable display of the waveform on the oscilloscope.
 | These changes can be undone by using the :meth:`Undo` command.
 .. method:: Undo()
-| Reverses all changes done by :meth:`AutoSet`. 
+| Reverses all changes done by :meth:`AutoSet`. This does affect any changes made after the automatic adjustment. 
 .. method:: Busy()
 | Returns :const:`0` if the oscilloscope is currently not running the :meth:`StartAcquisition` command. Returns :const:`1` if the oscilloscope is acquiring data. 
 .. method:: Channel(channelnumber)
-| Sets the standard channel for all future commands. ``channelnumber`` may only be 1, 2, 3 or 4.
-| Default value is ::const::`1`.
+| Sets the standard channel for all future commands. ``channelnumber`` may only be :const:`1`, :const:`2`, :const:`3` or :const:`4`.
+| Default value is :const:`1`.
 .. method:: ChannelAsSource()
 | Sets the channel as source for all acquisitions. The channel can be set by :meth:`Channel`
 | Other options are: :meth:`MathAsSource`, :meth:`RefAsSource` and :meth:`HistogramAsSource`
