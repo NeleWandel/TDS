@@ -446,11 +446,41 @@ def ResetStatistics():
 def TrigLevel():
     tds.write('TRIGger:A SETLevel')
     
-def Trigger(triggertype, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, 
+def TriggerB(state=None, source=None, event=None, count=None, level=None, time=None, edge=None, slope=None):
+    if source:
+        if source == 'aux':
+            tds.write('TRIGger:B:EDGE:SOUrce AUXiliary')
+        else:
+            tds.write('TRIGger:B:EDGE:SOUrce ') + str(source)
+    if time:
+        tds.write('TRIGger:B:BY TIMe')
+        tds.write('TRIGger:B:TIMe ') + str(time)
+    elif count:
+        tds.write('TRIGger:B:BY EVENTS')
+        tds.write('TRIGger:B:EVENTS:COUNt ') + str(count)
+    if level:
+        tds.write('TRIGger:B:LEVel ') + str(level)
+    if edge:
+        tds.write('TRIGger:B:TYPe EDGE')
+        if edge == 'dc':
+            tds.write('TRIGger:B:EDGE:COUPling DC')
+        elif edge == 'trig':
+            tds.write('TRIGger:B:EDGE:COUPling ATRIGger')
+        elif edge == 'noise':
+            tds.write('TRIGger:B:EDGE:COUPling NOISErej')
+    if slope:
+        if slope == 'rise':
+            tds.write('TRIGger:B:EDGE:SLOpe RISe')
+        elif slope == 'fall':
+            tds.write('TRIGger:B:EDGE:SLOpe FALL')  
+    if state:
+        tds.write('TRIGger:B:STATE ') + str(state)
+    
+def Trigger(triggertype=None, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, 
             function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, 
             clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, 
             settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, 
-            CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeout=None, timeouttime=None, deltatime=None, transition=None):
+            CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeouttime=None, deltatime=None, transition=None):
     if mode:
         if mode == 'auto':
             tds.query('TRIGger:A:MODe AUTo')
@@ -459,256 +489,269 @@ def Trigger(triggertype, mode=None, holdhofftime=None, triggerclass=None, CH1=No
     if holdofftime:
         if holdofftime == 'auto':
             tds.write('TRIGger:A:HOLDoff:BY AUTO')
-        elif haldofftime == 'random':
+        elif holdofftime == 'random':
             tds.write('TRIGger:A:HOLDoff:BY RANDOM')
         else:
             tds.write('TRIGger:A:HOLDoff:BY TIMe')
-            tds.write('TRIGger:A:HOLDoff:TIMe ' + str(holdofftime))             
-    if triggertype == 'logic':
-        tds.write('TRIGger:A:TYPe LOGIc')
-        if CH1:
-            tds.write('TRIGger:A:LOGIc:INPut:CH1 ' + str(CH1))
-        if lCH2:
-            tds.write('TRIGger:A:LOGIc:INPut:CH2 ' + str(CH2))
-        if CH3:
-            tds.write('TRIGger:A:LOGIc:INPut:CH3 ' + str(CH3))
-        if function:
-            tds.write('TRIGger:A:LOGIc:FUNCtion ' + str(function))
-        if CH1TH or CH2TH or CH3TH or CH4TH:
-            if CH1TH:
-                tds.write('TRIGger:A:LOGIc:THReshold:CH1 ' + str(CH1TH))
-            if CH2TH:
-                tds.write('TRIGger:A:LOGIc:THReshold:CH2 ' + str(CH2TH))
-            if CH3TH:
-                tds.write('TRIGger:A:LOGIc:THReshold:CH3 ' + str(CH3TH))
-            if CH4TH:
-                tds.write('TRIGger:A:LOGIc:THReshold:CH4 ' + str(CH4TH))
-        if triggerclass:
-            if triggerclass == 'pattern':
-                tds.write('TRIGger:A:LOGIc:CLAss PATtern')
-                if CH4:
-                    tds.write('TRIGger:A:LOGIc:PATtern:INPut:CH4 ' + str(CH4))
-                if triggerwhen:
-                    if triggerwhen == 'true':
-                        tds.write('TRIGger:A:LOGIc:PATtern:WHEn TRUe')
-                    elif triggerwhen == 'false':
-                        tds.write('TRIGger:A:LOGIc:PATtern:WHEn FALSe')
-                    elif triggerwhen == 'less':
-                        tds.write('TRIGger:A:LOGIc:PATtern:WHEn LESSThan')
-                    elif triggerwhen == 'more':
-                        tds.write('TRIGger:A:LOGIc:PATtern:WHEn MOREThan')
-                if logicmax:
-                    tds.write('TRIGger:A:LOGIc:PATtern:WHEn:LESSLimit ' + str(logicmax))
-                if logicmin:
-                    tds.write('TRIGger:A:LOGIc:PATtern:WHEn:MORELimit ' + str(logicmin))
-            if triggerclass == 'state':
-                tds.write('TRIGger:A:LOGIc:CLAss STATE')
-                if CH4:
-                    tds.write('TRIGger:A:LOGIc:STATE:INPut:CH4 ' + st(CH4))
-                if triggerwhen:
-                    if triggerwhen == 'true':
-                        tds.write('TRIGger:A:LOGIc:STATE:WHEn TRUe')
-                    if triggerwhen == 'false':
-                        tds.write('TRIGger:A:LOGIc:STATE:WHEn FALSe')
-            if triggerclass == 'sethold':
-                tds.write('TRIGger:A:LOGIc:CLAss SETHold')
-                if setholdsource:
-                    tds.write('TRIGger:A:LOGIc:SETHold:DATa:SOUrce CH' + str(setholdsource))
-                if clocksource:
-                    tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:SOUrce CH' + str(clocksource))
-                if clock:
-                    if clock == 'fall':
-                        tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:EDGE FALL')
-                    elif clock == 'rise':
-                        tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:EDGE RISe')
-                if clockthreshold:
-                    tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:THReshold ' + str(clockthreshold))
-                if threshold:
-                    tds.write('TRIGger:A:LOGIc:SETHold:DATa:THReshold ' + str(threshold))
-                if settime:
-                    tds.write('TRIGger:A:LOGIc:SETHold:SETTime ' + str(settime))
-                if holdtime:
-                    tds.write('TRIGger:A:LOGIc:SETHold:HOLDTime ' + str(holdtime))       
-    elif triggertype == 'comm':
-        tds.write('TRIGger:A:TYPe COMM')
-        if source:
-            if source >=1 and source <= 4:
-                tds.write('TRIGger:A:COMMunication:SOUrce CH' + str(source))
-            else:
-                raise ValueError('Trigger source may only be 1, 2, 3 or 4.')
-        if standard:
-            tds.write('TRIGger:A:COMMunication:STANdard ' + str(standard))
-        if bitrate:
-            tds.write('TRIGger:A:COMMunication:BITRate ' + str(bitrate))
-        if pulseform and comm:
-            tds.write('TRIGger:A:COMMunication:CODe ' + str(comm))
-            if pulseform == 'plus':
-                tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm PLUSOne')
-            if pulseform == 'minus':
-                tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm MINUSOne')
-            if pulseform == 'eye':
-                tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm EYEDiagram')
-                if eyetype:
-                    if eyetype == 'data':
-                        tds.write('TRIGger:A:COMMunication:SOUrce:TYPe DATA')
-                    elif eyetype == 'clock':
-                        tds.write('TRIGger:A:COMMunication:SOUrce:TYPe CLOCK')
-                    elif eyetype == 'recovered':
-                        tds.write('TRIGger:A:COMMunication:SOUrce:TYPe RECOVERED')
-                    else:
-                        raise TypeError('Eyetype must be data, clock or recovered')
-            if pulseform == 'zero':
-                tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm ZERO')
-        if (low and comm) or (high and comm):
-            tds.write('TRIGger:A:COMMunication:CODe ' + str(comm))
-            if high:
-                tds.write('TRIGger:A:COMMunication:' + str(comm) + ':THReshold:HIGH ' + str(high))
-            if low:
-                tds.write('TRIGger:A:COMMunication:' + str(comm) + ':THReshold:LOW ' + str(low))
-        if polarity:
+            tds.write('TRIGger:A:HOLDoff:TIMe ' + str(holdofftime))        
+    if triggertype:
+        if triggertype == 'logic':
+            tds.write('TRIGger:A:TYPe LOGIc')
+            if CH1:
+                tds.write('TRIGger:A:LOGIc:INPut:CH1 ' + str(CH1))
+            if CH2:
+                tds.write('TRIGger:A:LOGIc:INPut:CH2 ' + str(CH2))
+            if CH3:
+                tds.write('TRIGger:A:LOGIc:INPut:CH3 ' + str(CH3))
+            if function:
+                tds.write('TRIGger:A:LOGIc:FUNCtion ' + str(function))
+            if CH1TH or CH2TH or CH3TH or CH4TH:
+                if CH1TH:
+                    tds.write('TRIGger:A:LOGIc:THReshold:CH1 ' + str(CH1TH))
+                if CH2TH:
+                    tds.write('TRIGger:A:LOGIc:THReshold:CH2 ' + str(CH2TH))
+                if CH3TH:
+                    tds.write('TRIGger:A:LOGIc:THReshold:CH3 ' + str(CH3TH))
+                if CH4TH:
+                    tds.write('TRIGger:A:LOGIc:THReshold:CH4 ' + str(CH4TH))
+            if triggerclass:
+                if triggerclass == 'pattern':
+                    tds.write('TRIGger:A:LOGIc:CLAss PATtern')
+                    if CH4:
+                        tds.write('TRIGger:A:LOGIc:PATtern:INPut:CH4 ' + str(CH4))
+                    if triggerwhen:
+                        if triggerwhen == 'true':
+                            tds.write('TRIGger:A:LOGIc:PATtern:WHEn TRUe')
+                        elif triggerwhen == 'false':
+                            tds.write('TRIGger:A:LOGIc:PATtern:WHEn FALSe')
+                        elif triggerwhen == 'less':
+                            tds.write('TRIGger:A:LOGIc:PATtern:WHEn LESSThan')
+                        elif triggerwhen == 'more':
+                            tds.write('TRIGger:A:LOGIc:PATtern:WHEn MOREThan')
+                    if logicmax:
+                        tds.write('TRIGger:A:LOGIc:PATtern:WHEn:LESSLimit ' + str(logicmax))
+                    if logicmin:
+                        tds.write('TRIGger:A:LOGIc:PATtern:WHEn:MORELimit ' + str(logicmin))
+                if triggerclass == 'state':
+                    tds.write('TRIGger:A:LOGIc:CLAss STATE')
+                    if CH4:
+                        if CH4 == 'fall':
+                            tds.write('TRIGger:A:LOGIc:STATE:INPut:CH4 FALL')
+                        if CH4 == 'rise':
+                            tds.write('TRIGger:A:LOGIc:STATE:INPut:CH4 RISe')
+                    if triggerwhen:
+                        if triggerwhen == 'true':
+                            tds.write('TRIGger:A:LOGIc:STATE:WHEn TRUe')
+                        if triggerwhen == 'false':
+                            tds.write('TRIGger:A:LOGIc:STATE:WHEn FALSe')
+                if triggerclass == 'sethold':
+                    tds.write('TRIGger:A:LOGIc:CLAss SETHold')
+                    if setholdsource:
+                        tds.write('TRIGger:A:LOGIc:SETHold:DATa:SOUrce CH' + str(setholdsource))
+                    if clocksource:
+                        tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:SOUrce CH' + str(clocksource))
+                    if clock:
+                        if clock == 'fall':
+                            tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:EDGE FALL')
+                        elif clock == 'rise':
+                            tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:EDGE RISe')
+                    if clockthreshold:
+                        tds.write('TRIGger:A:LOGIc:SETHold:CLOCk:THReshold ' + str(clockthreshold))
+                    if threshold:
+                        tds.write('TRIGger:A:LOGIc:SETHold:DATa:THReshold ' + str(threshold))
+                    if settime:
+                        tds.write('TRIGger:A:LOGIc:SETHold:SETTime ' + str(settime))
+                    if holdtime:
+                        tds.write('TRIGger:A:LOGIc:SETHold:HOLDTime ' + str(holdtime))       
+        elif triggertype == 'comm':
+            tds.write('TRIGger:A:TYPe COMM')
+            if source:
+                if source >=1 and source <= 4:
+                    tds.write('TRIGger:A:COMMunication:SOUrce CH' + str(source))
+                else:
+                    raise ValueError('Trigger source may only be 1, 2, 3 or 4.')
+            if standard:
+                tds.write('TRIGger:A:COMMunication:STANdard ' + str(standard))
+            if bitrate:
+                tds.write('TRIGger:A:COMMunication:BITRate ' + str(bitrate))
+            if pulseform and comm:
+                tds.write('TRIGger:A:COMMunication:CODe ' + str(comm))
+                if pulseform == 'plus':
+                    tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm PLUSOne')
+                if pulseform == 'minus':
+                    tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm MINUSOne')
+                if pulseform == 'eye':
+                    tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm EYEDiagram')
+                    if eyetype:
+                        if eyetype == 'data':
+                            tds.write('TRIGger:A:COMMunication:SOUrce:TYPe DATA')
+                        elif eyetype == 'clock':
+                            tds.write('TRIGger:A:COMMunication:SOUrce:TYPe CLOCK')
+                        elif eyetype == 'recovered':
+                            tds.write('TRIGger:A:COMMunication:SOUrce:TYPe RECOVERED')
+                        else:
+                            raise TypeError('Eyetype must be data, clock or recovered')
+                if pulseform == 'zero':
+                    tds.write('TRIGger:A:COMMunication:' + str(comm) + ':PULSEForm ZERO')
+            if (low and comm) or (high and comm):
+                tds.write('TRIGger:A:COMMunication:CODe ' + str(comm))
+                if high:
+                    tds.write('TRIGger:A:COMMunication:' + str(comm) + ':THReshold:HIGH ' + str(high))
+                if low:
+                    tds.write('TRIGger:A:COMMunication:' + str(comm) + ':THReshold:LOW ' + str(low))
+            if polarity:
+                if polarity == 'rise':
+                    tds.write('TRIGger:A:COMMunication:CLOCK:POLarity RISE')
+                elif polarity == 'fall':
+                    tds.write('TRIGger:A:COMMunication:CLOCK:POLarity FALL')
+        elif triggertype == 'edge':
+            tds.write('TRIGger:A:TYPe EDGE')
+            if edgesource:
+                if edgesource == 'AUX':
+                    tds.write('TRIGger:A:EDGE:SOUrce AUXiliary')
+                elif edgesource == 'line':
+                    tds.write('TRIGger:A:EDGE:SOUrce LINE')
+                else:
+                    tds.write('TRIGger:A:EDGE:SOUrce ' + str(edgesource))
+            if edgecoupling:
+                tds.write('TRIGger:A:EDGE:COUPling ' + str(edgecoupling))
+            if edgeslope:
+                if edgeslope == 'rise':
+                    tds.write('TRIGger:A:EDGE:SLOpe RISe')
+                elif edgeslope == 'fall':
+                    tds.write('TRIGger:A:EDGE:SLOpe FALL')
+                else:
+                    raise TypeError('Edgeslope must be rise or fall.')
+        elif triggertype == 'serial':
+            tds.write('TRIGger:A:TYPe SERIal')
+            if source:
+                tds.write('TRIGger:A:Serial:SOUrce ' + str(source))
+            if standard:
+                tds.write('TRIGger:A:Serial:STANdard ' + str(standard))
+            if dataformat:
+                if dataformat == 'hex':
+                    tds.write('TRIGger:A:Serial:DATa:FORMat HEX')
+                elif dataformat == 'binary':
+                    tds.write('TRIGger:A:Serial:DATa:FORMat BINary')
+            if datapattern:
+                tds.write('TRIGger:A:Serial:DATa:PATtern ' + str(datapattern))
+            if bitrate:
+                tds.write('TRIGger:A:SERial:BITRate ' + str(bitrate))
+            if code:
+                tds.write('TRIGger:A:Serial:CODe NRZ')
+            if clock:
+                tds.write('TRIGger:A:Serial:CLOCK:LEVel ' + str(clock))
             if polarity == 'rise':
-                tds.write('TRIGger:A:COMMunication:CLOCK:POLarity RISE')
+                tds.write('TRIGger:A:Serial:CLOCK:POLARITY RISe')
             elif polarity == 'fall':
-                tds.write('TRIGger:A:COMMunication:CLOCK:POLarity FALL')
-    elif triggertype == 'edge':
-        tds.write('TRIGger:A:TYPe EDGE')
-        if edgesource:
-            if edgesource == 'AUX':
-                tds.write('TRIGger:A:EDGE:SOUrce AUXiliary')
-            elif edgesource == 'line':
-                tds.write('TRIGger:A:EDGE:SOUrce LINE')
-            else:
-                tds.write('TRIGger:A:EDGE:SOUrce ' + str(edgesource))
-        if edgecoupling:
-            tds.write('TRIGger:A:EDGE:COUPling ' + str(edgecoupling))
-        if edgeslope:
-            if edgeslope == 'rise':
-                tds.write('TRIGger:A:EDGE:SLOpe RISe')
-            elif edgeslope == 'fall':
-                tds.write('TRIGger:A:EDGE:SLOpe FALL')
-            else:
-                raise TypeError('Edgeslope must be rise or fall.')
-    elif triggertype == 'serial':
-        if source:
-            tds.write('TRIGger:A:Serial:SOUrce ' + str(source))
-        if standard:
-            tds.write('TRIGger:A:Serial:STANdard ' + str(standard))
-        if dataformat:
-            if dataformat == 'hex':
-                tds.write('TRIGger:A:Serial:DATa:FORMat HEX')
-            if dataformat == 'binary':
-                tds.write('TRIGger:A:Serial:DATa:FORMat BINary')
-        if datapattern:
-            tds.write('TRIGger:A:Serial:DATa:PATtern ' + str(datapattern))
-        if bitrate:
-            tds.write('TRIGger:A:SERial:BITRate ' + str(bitrate))
-        if code:
-            tds.write('TRIGger:A:Serial:CODe ' + str(code))
-        if clock:
-            tds.write('TRIGger:A:Serial:CLOCK:LEVel ' + str(clock))
-        if polarity == 'rise':
-            tds.write('TRIGger:A:Serial:CLOCK:POLARITY RISe')
-        elif polarity == 'fall':
-            tds.write('TRIGger:A:Serial:CLOCK:POLARITY FALL')
-        if clocksource:
-            tds.write('TRIGger:A:Serial:CLOCK SOUrce ' + str(clocksource))
-    elif triggertype == 'pulse':
-        tds.write('TRIGger:A:TYPe PULse')
-        if timeout:
-            if timeout == 'high':
-                tds.write('TRIGger:A:PULse:TIMEOut:POLarity STAYSHigh')
-            elif timeout == 'low':
-                tds.write('TRIGger:A:PULse:TIMEOut:POLarity STAYSLow')
-            elif timeout == 'both':
-                tds.write('TRIGger:A:PULse:TIMEOut:POLarity EITher')
-            else:
-                raise ValueError('Pulse timeout can only be high, low or both.')
-        if timeouttime:
-            tds.write('TRIGger:A:PULse:TIMEOut:TIMe ' + str(timeouttime))
-        if source:
-            tds.write('TRIGger:A:PULse:SOUrce CH' + str(source))
-        if triggerclass:
-            if triggerclass == 'glitch':
-                tds.write('TRIGger:A:PULse:CLAss GLItch')
-                if polarity:
-                    if polarity == 'positive':
-                        tds.write('TRIGger:A:PULse:GLItch:POLarity POSITIVe')
-                    elif polarity == 'negative':
-                        tds.write('TRIGger:A:PULse:GLItch:POLarity NEGAtive')
-                    elif polarity == 'both':
-                        tds.write('TRIGger:A:PULse:GLItch:POLarity EITher')
-                    else:
-                        raise ValueError('Polarity in the glitch class may only be positive, negative or both.')
-                if triggerwhen:
-                    if triggerwhen == 'wider':
-                        tds.write('TRIGger:A:PULse:GLItch:TRIGIF REJect')
-                    if triggwhen == 'narrower':
-                        tds.write('TRIGger:A:PULse:GLItch:TRIGIF ACCept')
-                if width:
-                    tds.write('TRIGger:A:PULse:GLItch:WIDth ' + str(width))
-            elif triggerclass == 'runt':
-                tds.write('TRIGger:A:PULse:CLAss RUNT')
-                if width:
-                    tds.write('TRIGger:A:PULse:RUNT:WIDth ' + str(width))
-                if polarity:
-                    tds.write('TRIGger:A:PULse:RUNT:POLarity ' +str(polarity))
-                if threshold:
-                    tds.write('TRIGger:A:PULse:RUNT:THReshold:BOTh ' + str(threshold))
-                if high:
-                    tds.write('TRIGger:A:PULse:RUNT:THReshold:HIGH ' + str(high))
-                if low:
-                    tds.write('TRIGger:A:PULse:RUNT:THReshold:LOW ' + str(low))
-                if triggerwhen:
-                    if triggerwhen == 'any':
-                        tds.write('TRIGger:A:PULse:RUNT:WHEn OCCurs')
-                    elif triggerwhen == 'greater':
-                        tds.write('TRIGger:A:PULse:RUNT:WHEn WIDERthan')
-            elif triggerclass == 'width':
-                tds.write('TRIGger:A:PULse:CLAss WIDth')
-                if high:
-                    tds.write('TRIGger:A:PULse:WIDth:HIGHLimit ' + str(high))
-                if low:
-                    tds.write('TRIGger:A:PULse:WIDth:LOWLIMIT ' + str(low))
-                if polarity:
-                    if polarity == 'positive':
-                        tds.write('TRIGger:A:PULse:WIDth:POLarity POSITIVe')
-                    if polarity == 'negative':
-                        tds.write('TRIGger:A:PULse:WIDth:POLarity NEGAtive')
-                if triggerwhen:
-                    if triggerwhen == 'outside':
-                        tds.write('TRIGger:A:PULse:WIDth:WHEn OUTside')
-                    if triggerwhen == 'within':
-                        tds.write('TRIGger:A:PULse:WIDth:WHEn WIThin')
-            elif triggerclass == 'transition':
-                tds.write('TRIGger:A:PULse:CLAss TRANsition')
-                if deltatime:
-                    tds.write('TRIGger:A:PULse:TRANsition:DELTATime ' + str(deltatime))
-                if transition:
-                    if transition == 'high':
-                        tds.write('TRIGger:A:PULse:TRANsition:POLarity STAYSHigh')
-                    elif transition == 'low':
-                        tds.write('TRIGger:A:PULse:TRANsition:POLarity STAYSLow')
-                    elif transition == 'both':
-                        tds.write('TRIGger:A:PULse:TRANsition:POLarity EITher')
-                    else:
-                        raise ValueError('Pulse transition timeout can only be high, low or both.')
-                if threshold:
-                    tds.write('TRIGger:A:PULse:TRANsition:THReshold:BOTh ' + str(threshold))
-                if high:
-                    tds.write('TRIGger:A:PULse:TRANsition:THReshold:HIGH ' + str(high))
-                if low:
-                    tds.write('TRIGger:A:PULse:TRANsition:THReshold:LOW ' + str(low))
-                if triggerwhen:
-                    if triggerwhen == 'faster':
-                        tds.write('TRIGger:A:PULse:TRANsition:WHEn FASTERthan')
-                    elif triggerwhen == 'slower':
-                        tds.write('TRIGger:A:PULse:TRANsition:WHEn SLOWERthan')
-            elif triggerclass == 'timeout':
-                tds.write('TRIGger:A:PULse:CLAss TIMEOut')
-            else:
-                raise ValueError('Pulse trigger class can only be glitch, runt, width, transition or timeout.')
-    else:
-        raise TypeError('Triggertype may only be edge, logic, pulse, comm or serial.')
+                tds.write('TRIGger:A:Serial:CLOCK:POLARITY FALL')
+            if clocksource:
+                tds.write('TRIGger:A:Serial:CLOCK:SOUrce ' + str(clocksource))
+        elif triggertype == 'pulse':
+            tds.write('TRIGger:A:TYPe PULse')
+            if source:
+                tds.write('TRIGger:A:PULse:SOUrce CH' + str(source))
+            if triggerclass:
+                if triggerclass == 'glitch':
+                    tds.write('TRIGger:A:PULse:CLAss GLItch')
+                    if polarity:
+                        if polarity == 'positive':
+                            tds.write('TRIGger:A:PULse:GLItch:POLarity POSITIVe')
+                        elif polarity == 'negative':
+                            tds.write('TRIGger:A:PULse:GLItch:POLarity NEGAtive')
+                        elif polarity == 'both':
+                            tds.write('TRIGger:A:PULse:GLItch:POLarity EITher')
+                        else:
+                            raise ValueError('Polarity in the glitch class may only be positive, negative or both.')
+                    if triggerwhen:
+                        if triggerwhen == 'wider':
+                            tds.write('TRIGger:A:PULse:GLItch:TRIGIF REJect')
+                        if triggwhen == 'narrower':
+                            tds.write('TRIGger:A:PULse:GLItch:TRIGIF ACCept')
+                    if width:
+                        tds.write('TRIGger:A:PULse:GLItch:WIDth ' + str(width))
+                elif triggerclass == 'runt':
+                    tds.write('TRIGger:A:PULse:CLAss RUNT')
+                    if width:
+                        tds.write('TRIGger:A:PULse:RUNT:WIDth ' + str(width))
+                    if polarity:
+                        if polarity == 'positive':
+                            tds.write('TRIGger:A:PULse:RUNT:POLarity POSITIVe')
+                        elif polarity == 'negative':
+                            tds.write('TRIGger:A:PULse:RUNT:POLarity NEGAtive')
+                        elif polarity == 'both':
+                            tds.write('TRIGger:A:PULse:RUNT:POLarity EITher')
+                        else:
+                            raise ValueError('Polarity in the runt class may only be positive, negative or both.')
+                    if threshold:
+                        tds.write('TRIGger:A:PULse:RUNT:THReshold:BOTh ' + str(threshold))
+                    if high:
+                        tds.write('TRIGger:A:PULse:RUNT:THReshold:HIGH ' + str(high))
+                    if low:
+                        tds.write('TRIGger:A:PULse:RUNT:THReshold:LOW ' + str(low))
+                    if triggerwhen:
+                        if triggerwhen == 'any':
+                            tds.write('TRIGger:A:PULse:RUNT:WHEn OCCurs')
+                        elif triggerwhen == 'greater':
+                            tds.write('TRIGger:A:PULse:RUNT:WHEn WIDERthan')
+                elif triggerclass == 'width':
+                    tds.write('TRIGger:A:PULse:CLAss WIDth')
+                    if high:
+                        tds.write('TRIGger:A:PULse:WIDth:HIGHLimit ' + str(high))
+                    if low:
+                        tds.write('TRIGger:A:PULse:WIDth:LOWLIMIT ' + str(low))
+                    if polarity:
+                        if polarity == 'positive':
+                            tds.write('TRIGger:A:PULse:WIDth:POLarity POSITIVe')
+                        elif polarity == 'negative':
+                            tds.write('TRIGger:A:PULse:WIDth:POLarity NEGAtive')
+                        else:
+                            raise ValueError('Width polarity must be either positive or negative.')
+                    if triggerwhen:
+                        if triggerwhen == 'outside':
+                            tds.write('TRIGger:A:PULse:WIDth:WHEn OUTside')
+                        if triggerwhen == 'within':
+                            tds.write('TRIGger:A:PULse:WIDth:WHEn WIThin')
+                elif triggerclass == 'transition':
+                    tds.write('TRIGger:A:PULse:CLAss TRANsition')
+                    if deltatime:
+                        tds.write('TRIGger:A:PULse:TRANsition:DELTATime ' + str(deltatime))
+                    if polarity:
+                        if polarity == 'high':
+                            tds.write('TRIGger:A:PULse:TRANsition:POLarity STAYSHigh')
+                        elif polarity == 'low':
+                            tds.write('TRIGger:A:PULse:TRANsition:POLarity STAYSLow')
+                        elif polarity == 'both':
+                            tds.write('TRIGger:A:PULse:TRANsition:POLarity EITher')
+                        else:
+                            raise ValueError('Pulse transition polarity can only be high, low or both.')
+                    if threshold:
+                        tds.write('TRIGger:A:PULse:TRANsition:THReshold:BOTh ' + str(threshold))
+                    if high:
+                        tds.write('TRIGger:A:PULse:TRANsition:THReshold:HIGH ' + str(high))
+                    if low:
+                        tds.write('TRIGger:A:PULse:TRANsition:THReshold:LOW ' + str(low))
+                    if triggerwhen:
+                        if triggerwhen == 'faster':
+                            tds.write('TRIGger:A:PULse:TRANsition:WHEn FASTERthan')
+                        elif triggerwhen == 'slower':
+                            tds.write('TRIGger:A:PULse:TRANsition:WHEn SLOWERthan')
+                elif triggerclass == 'timeout':
+                    tds.write('TRIGger:A:PULse:CLAss TIMEOut')
+                    if polarity:
+                        if polarity == 'high':
+                            tds.write('TRIGger:A:PULse:TIMEOut:POLarity STAYSHigh')
+                        if polarity == 'low':
+                            tds.write('TRIGger:A:PULse:TIMEOut:POLarity STAYSLow')
+                        if polarity == 'either':
+                            tds.write('TRIGger:A:PULse:TIMEOut:POLarity EITher')
+                    if timeouttime:
+                        tds.write('TRIGger:A:PULse:TIMEOut:TIMe ' + str(timeouttime))
+                    
+                else:
+                    raise ValueError('Pulse trigger class can only be glitch, runt, width, transition or timeout.')
+        else:
+            raise TypeError('Triggertype may only be edge, logic, pulse, comm or serial.')
     if level:
         tds.write('TRIGger:A:LEVel ' + str(level))
         
