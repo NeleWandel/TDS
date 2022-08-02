@@ -252,64 +252,10 @@ Math
 
 Measurement
 -----------
-.. method:: CountMeasures()
-| Returns the number of valid values accumulated by the measurement since the last statistical reset.
-.. method:: DisableCalcAndDisplay()
-| Disables the computing and display of the measurement selected by :meth:`UseMeasurement`.
-.. method:: EnableCalcAndDisplay()
-| Enables the computing and display of the measurement selected by :meth:`UseMeasurement`.
-.. method:: HistogramAsSource()
-| Selects a histogram as source for all single channel, delay and phase measurements.
-.. method:: ImmediateChannelAsSource()
-| Selects the channel defined by :meth:`Channel` as source for all immediate single channel, delay and phase measurements.
-.. method:: ImmediateHistogramAsSource()
-| Selects a histogram as source for all immediate single channel, delay and phase measurements.
-.. method:: ImmediateMathAsSource()
-| Selects the math definition defined by :meth:`SetMathStorage` as source for all immediate single channel, delay and phase measurements.
-.. method:: ImmediateRefAsSource(waveform)
-| Selects a reference waveform as source for all immediate single channel, delay and phase measurements.
-| ``waveform`` may range from 1 through 4.
-.. method:: ImmediateRefIsAbsolute()
-.. method:: ImmediateRefIsPercent()
-.. method:: ImmediateSetHighRefAbsolute(volt)
-.. method:: ImmediateSetHighRefPercent(percent)
-.. method:: ImmediateSetLowRefAbsolute(volt)
-.. method:: ImmediateSetLowRefPercent(percent)
-.. method:: ImmediateSetMidRefAbsolute(volt)
-.. method:: ImmediateSetMidRefPercent(percent)
-.. method:: ImmediateUnit()
-.. method:: ImmediateValue()
-.. method:: MathAsSource()
-.. method:: Maximum()
-.. method:: Mean()
-.. method:: MeasDealayEdge2(edge)
-.. method:: MeasDelayDirect(direction)
-.. method:: MeasDelayEdge1(edge)
-.. method:: MeasImmediateDelayDirect(direction)
-.. method:: MeasImmediateDelayEdge(edge)
-.. method:: MeasImmediateDelayEdge2(edge)
-.. method:: Minimum()
-.. method:: RefAsSource(waveform)
-.. method:: RefIsAbsolute()
-.. method:: RefIsPercent()
-.. method:: ResetStatistics()
-.. method:: ShowAllMeasPara()
-.. method:: ShowImmediateMeasPara()
-.. method:: ShowMeasurementPara(x)
-.. method:: SetHighRefAbsolute(volt)
-.. method:: SetHighRefPercent(percent)
-.. method:: SetImmediateMeasType(argument)
-.. method:: SetLowRefAbsolute(volt)
-.. method:: SetLowRefPercent(percent)
-.. method:: SetMeasType()
-.. method:: SetMidRefAbsolute(volt)
-.. method:: SetMidRefPercent(percent)
-.. method:: StanDeviation()
-.. method:: Unit()
+
 .. method:: UseMeasurement(x)
 | Sets the storage number for every command in the measurement group. ``x`` must range from 1 through 8.
 | Default storage is 1.
-.. method:: Value()
 
 Trigger
 -------
@@ -317,6 +263,24 @@ Trigger
 
 | Allows full controll of the trigger settings. All arguments are optional and not every argument is needed for every trigger type. All arguments ordered by ``triggertype`` can be found in the tabs below.
 .. tabs::
+   .. tab:: edge
+   
+      | Turns the trigger type to edge. In this state a trigger event is executed when a signal has a specified voltage level and direction.
+      | 
+      | ``edgesource`` defines the source. This can be either :const:`CH1`, :const:`CH2`, :const:`CH3`, :const:`CH4`, :const:`AUX` or :const:`line`.
+      | AUX specifies that an external trigger is used. This must be connected via the auxiliary trigger input connector on the back of the oscilloscope.
+      | line specifies that an AC line voltage is used.
+      | 
+      | ``edgecoupling`` sets the coupling type. Valid states are:
+      | :const:`AC` (AC coupling)
+      | :const:`DC` (DC coupling)
+      | :const:`HFRej` (Removes high frequency components of the DC signal)
+      | :const:`LFRej` (Removes low frequency components of the AC signal)
+      | :const:`NOISErej` (Low sensitivity DC coupling. This option needs a higher signal amplitude to minimise false triggers)
+      | 
+      | ``edgeslope`` defines the slope. Valid states are:
+      | :const:`rise` (triggers on a rising/positive signal edge)
+      | :const:`fall` (triggers on a falling/negative signal edge)
    .. tab:: logic
    
       | Turns the trigger type to logic. In this state the oscilloscope starts a trigger event in case a defined logical situation occurs.
@@ -367,20 +331,29 @@ Trigger
             | 
             | ``holdtime`` in seconds, specifies the hold time for sethold violation triggering.
          
-         
-   .. tab:: communication
-   
-      | test
-   .. tab:: edge
-   
-      | hbas 
-   .. tab:: serial
-   
-      | hola
    .. tab:: pulse
    
-      | kjasföskldsf.
-      | jisaefioeslf
+      | Turns the trigger type to pulse. In this state a trigger event is executed when a specified pulse is found.
+      | 
+      | 
+   .. tab:: comm
+   
+      | Turns the trigger type to communitcation. In this state a trigger events is executed when a defined communication signal is found.
+      | 
+      | ``comm`` defines the communication type. Valid states are:
+      | :const:`CMI`
+      | :const:`AMI`
+      | :const:`HDB3`
+      | :const:`B3ZS`
+      | :const:`B6ZS`
+      | :const:`B8ZS`
+      | 
+      | ``source`` defines the channel that shall be used as communication source. It must be eihter :const:`1`, :const:`2`, :const:`3` or :const:`4`.
+
+   .. tab:: serial
+   
+      | Turns the trigger type to serial. In this state a trigger event is executed when NRZ-encoded data providing a 32-bit serial word is found.
+
 .. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
 
 --------
