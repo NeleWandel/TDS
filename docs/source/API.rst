@@ -284,11 +284,14 @@ Trigger
    .. tab:: logic
    
       | Turns the trigger type to logic. In this state the oscilloscope starts a trigger event in case a defined logical situation occurs.
+      | 
       | ``CH1``, ``CH2`` and ``CH3`` sets the logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`. This specifies the logic that will be used when the trigger detects the trigger threshold level.
       | :const:`HIGH` specifies the logic high
       | :const:`LOW` specifies the logic low
       | :const:`x` specifies that it doesn't matter
+      | 
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
+      | 
       | ``triggerclass`` has three valid options that open up more options:
       .. tabs::
          .. tab:: pattern
@@ -335,7 +338,22 @@ Trigger
    
       | Turns the trigger type to pulse. In this state a trigger event is executed when a specified pulse is found.
       | 
-      | 
+      .. tabs::
+         .. tab:: glitch
+            
+            | 
+         .. tab:: runt
+            
+            | 
+         .. tab:: width
+            
+            | 
+         .. tab:: transition
+            
+            | 
+         .. tab:: timeout
+            
+            | 
    .. tab:: comm
    
       | Turns the trigger type to communitcation. In this state a trigger events is executed when a defined communication signal is found.
@@ -349,12 +367,49 @@ Trigger
       | :const:`B8ZS`
       | 
       | ``source`` defines the channel that shall be used as communication source. It must be eihter :const:`1`, :const:`2`, :const:`3` or :const:`4`.
+      | 
+      | ``standard`` defines the standard that shall be applied for the code and bit rate. A table of all viable standard settings can be found on page 646 in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
+      | 
+      | ``bitrate`` defines the bits per seconds. This can be any positive number greater than one.
+      | 
+      | ``pulseform`` defines the pulseform. Valid states are:
+      | :const:`plus` (sets the pulseform to plusone, this means the triggering occurs on a positive mark)
+      | :const:`minus` (sets the pulseform to minusone, this means the triggering occurs on a negative mark)
+      | :const:`eye` (constructs an eye diagram, this can be further specified by ``eyetype``)
+      | :const:`zero` (the triggering occurs on a bit representing zero)
+      | 
+      | ``eyetype`` sets the source type for creating the eye pattern when pulseform=eye. Valid arguments are:
+      | :const:`data` (The oscilloscope triggers and shifts in five units intervalls to form the eye pattern.)
+      | :const:`clock` (The oscilloscope triggers randomly with respect to the data channel in order to form the eye pattern. No shifts occur.)
+      | :const:`recovered` (The oscilloscope uses a phase locked loop on the recovered clock from the data signal. Triggers are random, no shift occurs.)
+      | 
+      | ``high`` sets the upper communication threshold.
+      | ``low`` sets the lower communication threshold.
+      | 
+      | ``polarity`` sets the clock polarity to either :const:`rise` or :const:`fall`.
 
    .. tab:: serial
    
       | Turns the trigger type to serial. In this state a trigger event is executed when NRZ-encoded data providing a 32-bit serial word is found.
-
-.. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
+      | 
+      | ``source`` sets the serial source. Source can be :const:`CH1` through :const:`CH4`.
+      | 
+      | ``standard`` sets the standard that identifies the code and bit rate. Following standards are valid:
+      | :const:`OC1`, :const:`OC3`, :const:`OC12`, :const:`FC133`, :const:`FC266`, :const:`FC531`, :const:`FC1063`, :const:`FW139BS400B`, :const:`FW139BS800B`, :const:`ENET1250`, :const:`CUSTom`, :const:`RIO_500M`, :const:`RIO_750M`, :const:`RIO:1G`, :const:`RIO_SERIAL_1G`, :const:`VSROC192`
+      | 
+      | ``dataformat`` sets the format in which the serial signals are to be expected. Valid choices are :const:`hex` and :const:`binary`.
+      | 
+      | ``datapattern`` sets the serial pattern to trigger on. Default is :const:`XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX01`.
+      | 
+      | ``bitrate`` defines the bits per second. Valid range is :const:`1.5e6` to :const:`1.25e9`.
+      | 
+      | ``code`` any value other than None sets the signal code to NRZ.
+      | 
+      | ``clocksource`` defines the source of the clock. Can be either :const:`CH1` to :const:`CH4` or :const:`RECOVered`.
+      | 
+      | ``clock`` sets the clock level in Volt. Level may range from :const:`-9.9e37` to :const:`9.9e37`.
+      | 
+      | ``polarity`` sets the polarity of the clock to either :const:`rise` or :const:`fall`.
 
 --------
 .. method:: ChannelOffset(offset)
