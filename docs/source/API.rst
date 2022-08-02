@@ -292,7 +292,7 @@ Trigger
       | 
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
       | 
-      | ``triggerclass`` has three valid options that open up more options:
+      | ``triggerclass`` has three valid states each with their own set of arguments:
       .. tabs::
          .. tab:: pattern
          
@@ -338,22 +338,79 @@ Trigger
    
       | Turns the trigger type to pulse. In this state a trigger event is executed when a specified pulse is found.
       | 
+      | ``triggerclass`` has five valid states each with their own set of arguments:
       .. tabs::
          .. tab:: glitch
             
+            | With the glitch class activated, the oscilloscope executes a trigger event as soon as a pulse with a specified polarity and width is found.
             | 
+            | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
+            | :const:`positive` (The oscilloscope only triggers when the pulse has a positive polarity)
+            | :const:`negative` (The oscilloscope only triggers when the pulse has a negative polarity)
+            | :const:`both` (The oscilloscope triggers for both cases)
+            | 
+            | ``triggerwhen`` defines whether the pulse needs to be :const:`wider` or :const:`narrower` than the defined ``width`` in order to trigger. 
+            | 
+            | ``width`` in seconds, defines the minimum or maximum width (depending on ``triggerwhen``) the pulse needs to have in order to trigger. 
          .. tab:: runt
             
+            | With the runt class activated, the oscilloscope executes a trigger event as soon as a pulse crosses the first voltage threshold two times without crossing the second threshold.
             | 
+            | ``width`` in seconds, defines the minimum width for a pulse to trigger, when ``triggerwhen`` is set to :const:`greater`.
+            | 
+            | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
+            | :const:`positive` (The oscilloscope only triggers when the pulse crosses the low threshold twice without crossing the high threshold)
+            | :const:`negative` (The oscilloscope only triggers when the pulse crosses the high threshold twice without crossing the low threshold)
+            | :const:`both` (The oscilloscope triggers for both cases)
+            | 
+            | ``threshold`` sets the upper and lower threshold to predefined values. The two options are :const:`TTL`, which sets the upper threshold to 1.8V and the lower to 800mV, and :const:`ECL`, which sets the upper threshold to -1.1V and the lower to -1.5V. With the ``high`` and ``low`` arguments, the thresholds can be set to user defined values.
+            | 
+            | ``high`` in Volt, sets the upper threshold.
+            | 
+            | ``low`` in Volt, sets the lower threshold.
+            | 
+            | ``triggerwhen`` defines whether the oscilloscope checks for the width of the pulse. The two valid states are:
+            | :const:`any` (A pulse of any width can trigger, as long as the polarity is correct.)
+            | :const:`greater` (The pulse must be wider than the amount set with ``width`` in order to trigger.)
          .. tab:: width
             
+            | With the width class activated, the oscilloscope executes a trigger event as soon as a pulse with a specified polarity is found inside or outside a defined limit.
             | 
+            | ``high`` in seconds, sets the upper trigger limit.
+            | 
+            | ``low`` in seconds, sets the lower trigger limit.
+            | 
+            | ``polarity`` specifies whether a pulse needs to be :const:`positive` or :const:`negative` for a trigger event to occur.
+            | 
+            | ``triggerwhen`` defines wether the the pulse must be detected :const:`outside` or :const:`within` the limit to execute a trigger event.
          .. tab:: transition
             
+            | With the transition class activated, the oscilloscope executes a trigger event as soon as a pulse crosses two defined thresholds in the same direction within a defined time span.
             | 
+            | ``deltatime`` in seconds, sets the timespan during which the pulse crosses need to occur.
+            | 
+            | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
+            | :const:`high` (The oscilloscope only triggers when the pulse first crosses the lower and then the higher threshold.)
+            | :const:`low` (The oscilloscope only triggers when the pulse frist crosses the higher and then the lower threshold.)
+            | :const:`both` (The oscilloscope triggers for both cases.)
+            | 
+            | ``threshold`` sets the upper and lower threshold to predefined values. The two options are :const:`TTL`, which sets the upper threshold to 1.8V and the lower to 800mV, and :const:`ECL`, which sets the upper threshold to -1.1V and the lower to -1.5V. With the ``high`` and ``low`` arguments, the thresholds can be set to user defined values.
+            | 
+            | ``high`` in Volt, sets the upper threshold.
+            | 
+            | ``low`` in Volt, sets the lower threshold.
+            | 
+            | ``triggerwhen`` defines whether the crossing of the pulse needs to be :const:`faster` or :const:`slower` than ``deltatime``.
          .. tab:: timeout
             
+            | With the timeout class activated, the oscilloscope executes a trigger event as soon as a the pulses stop for a set amount of time.
             | 
+            | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
+            | :const:`high` (The oscilloscope only triggers when the pulse edge stays high/positive during the required time out period.)
+            | :const:`low` (The oscilloscope only triggers when the pulse edge stays low/negative during the required time out period.)
+            | :const:`either` (The oscilloscope triggers for both cases.)
+            | 
+            | ``timeouttime`` in seconds, defines the time out period.
    .. tab:: comm
    
       | Turns the trigger type to communitcation. In this state a trigger events is executed when a defined communication signal is found.
