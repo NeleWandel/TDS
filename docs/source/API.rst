@@ -318,14 +318,19 @@ Trigger
 | Allows full controll of the trigger settings. All arguments are optional and not every argument is needed for every
 .. tabs::
    .. tab:: logic
-      test o_o
+   
+      test
    .. tab:: communication
-      test 2 :)
+   
+      test
    .. tab:: edge
+   
       hbas 
    .. tab:: serial
+   
       hola
    .. tab:: pulse
+   
       kjasföskldsf.
       jisaefioeslf
 .. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
