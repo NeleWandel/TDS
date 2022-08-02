@@ -330,12 +330,16 @@ Trigger
          .. tab:: pattern
          
             | ``CH4`` sets the logic input for channel 4. The logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`.
-            | ``triggerwhen`` specifies the condition under which the trigger will be generated. Valid states are:
+            | 
+            | ``triggerwhen`` specifies the condition under which the trigger will be generated. 
+            | Valid states are:
             | :const:`true` (generates a trigger when the pattern becomes true)
             | :const:`false` (generates a trigger when the pattern becomes false)
             | :const:`less` (generates a trigger when the pattern becomes true for less than the duration set by ``logicmax``)
             | :const:`more` (generates a trigger when the pattern becomes true for longer than the duration set by ``logicmin``)
+            | 
             | ``logicmax`` sets the duration in seconds that will be used as the time threshold for ``triggerwhen=less``
+            | 
             | ``logicmin`` sets the duration in seconds that will be used as the time threshold for ``triggerwhen=more``
          .. tab:: state
          
