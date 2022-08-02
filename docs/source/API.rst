@@ -15,12 +15,12 @@ Acquisition
 | All arguments, except ``acquiremode`` are optional. 
 | ``acquiremode`` enables the selected mode for aquiring data.
 | Valid arguments are:
-      | :const:`sampling` (Enanbles sampling mode)
-      | :const:`peakdetect` (Enables peak detect mode)
-      | :const:`hires` (Enables HiRes mode)
-      | :const:`averaging` (Enables averaging mode)
-      | :const:`envelope` (Enables envelope mode)
-      | :const:`wfmdb` (Enables WFMDB mode)
+| :const:`sampling` (Enanbles sampling mode)
+| :const:`peakdetect` (Enables peak detect mode)
+| :const:`hires` (Enables HiRes mode)
+| :const:`averaging` (Enables averaging mode)
+| :const:`envelope` (Enables envelope mode)
+| :const:`wfmdb` (Enables WFMDB mode)
 | 
 | ``mode`` sets the wanted samplingmode to either real time (:const:`RT`), interpolated real time (:const:`IT`) or equivalent time (:const:`ET`).
 | 
@@ -61,23 +61,23 @@ Hard Copy and Export
 | If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
 | Valid formats for ``fileformat`` are:
-   | :const:`BMP`
-   | :const:`JPEG`
-   | :const:`PNG`
+| :const:`BMP`
+| :const:`JPEG`
+| :const:`PNG`
 | 
-   | ``inksaver`` has three valid states:
-   | :const:`1` (Displays the display in the usual colors)
-   | :const:`2` (Changes the background to white)
-   | :const:`3` (Chooses colors that are well visible on a white background)
+| ``inksaver`` has three valid states:
+| :const:`1` (Displays the display in the usual colors)
+| :const:`2` (Changes the background to white)
+| :const:`3` (Chooses colors that are well visible on a white background)
 | 
 | ``palette`` has three valid states:
-   | :const:`color` (The exported file is in color)
-   | :const:`gray` (The exported file is in grayscale)
-   | :const:`baw` (The exported file is in black and white)
+| :const:`color` (The exported file is in color)
+| :const:`gray` (The exported file is in grayscale)
+| :const:`baw` (The exported file is in black and white)
 | 
 | ``fullscreen`` has two valid states:
-   | :const:`off` (Hides all menu areas)
-   | :const:`on` (Shows all menu areas)
+| :const:`off` (Hides all menu areas)
+| :const:`on` (Shows all menu areas)
 
 .. method:: Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None)
 | Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen.
@@ -87,22 +87,22 @@ Hard Copy and Export
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
 | 
 | ``inksaver`` has three valid states:
-   | :const:`1` (Displays the display in the usual colors)
-   | :const:`2` (Changes the background to white)
-   | :const:`3` (Chooses colors that are well visible on a white background)
+| :const:`1` (Displays the display in the usual colors)
+| :const:`2` (Changes the background to white)
+| :const:`3` (Chooses colors that are well visible on a white background)
 | 
 | ``palette`` has three valid states:
-   | :const:`color` (The screenshot is in color)
-   | :const:`gray` (The screenshot is in grayscale)
-   | :const:`baw` (The screenshot is in black and white)
+| :const:`color` (The screenshot is in color)
+| :const:`gray` (The screenshot is in grayscale)
+| :const:`baw` (The screenshot is in black and white)
 | 
 | ``orientation`` has two valid states:
-   | :const:`1` (The screenshot will be captured in portrait mode)
-   | :const:`2` (The screenshot will be captured in horizontal mode)
+| :const:`1` (The screenshot will be captured in portrait mode)
+| :const:`2` (The screenshot will be captured in horizontal mode)
 | 
 | ``fullscreen`` has two valid states:
-   | :const:`off` (Hides all menu areas)
-   | :const:`on` (Shows all menu areas)
+| :const:`off` (Hides all menu areas)
+| :const:`on` (Shows all menu areas)
 
 Histogram
 ---------
@@ -111,16 +111,16 @@ Histogram
 | Sets up the histogram, defined by the arguments.
 | All arguments are optional. Defining none of the arguments results in this command having no effect.
 | ``display`` has three valid states:
-   | :const:`off` (Disables the display of the histogram, data will still be collected)
-   | :const:`log` (The histogram display is turned on and set to logarithmic format)
-   | :const:`lin` (The histogram display is turned on and set to linear format)
+| :const:`off` (Disables the display of the histogram, data will still be collected)
+| :const:`log` (The histogram display is turned on and set to logarithmic format)
+| :const:`lin` (The histogram display is turned on and set to linear format)
 | ``source`` sets the source for the histogram. The source may be either CH<x>, MATH<x> or REF<x>. 
 | ``size`` is given in devisions and defines the size of the histogram. If the histogram is horizontal, the value may range from 0.1 to 8.0. In case the histogram is vertical, the range is 0.1 to 10.0.
 | ``function`` defines whether the histogram is :const:`horizontal` or :const:`vertical`.
 | ``state`` defines whether histogram calculations are :const:`ON` or :const:`OFF`.
 | ``box`` defines the boundaries of the histogram has two valid arguments:
-   | :const:`coordinates`
-   | :const:`percent`
+| :const:`coordinates`
+| :const:`percent`
 | If ``box`` is used ``left``, ``top``, ``right`` and ``bottom`` must be defined by either the waveform coordinates or the percentage coordinates. 
 .. warning::
    Changing the histogram box results in a reset of the histogram data. Make sure to retrieve all wanted data with the :meth:`HistogramData` function before executing changes of the box.
@@ -159,9 +159,9 @@ Horizontal
 | ``position`` in percent. Positions the chosen amout of the waveform to the left of the center. 
 | ``resolution`` in data points per frame. The minimum is :const:`500`, maximum is :const:`400000` if only one channel is in use, :const:`200000` if two channels are in use and :const:`100000` in case all four channels are in use.
 | ``roll`` changes the roll mode status. This can be usefull for observing data samples at slow speeds. It has three valid states:
-   | :const:`AUTO`
-   | :const:`OFF`
-   | :const:`ON`
+| :const:`AUTO`
+| :const:`OFF`
+| :const:`ON`
 .. method:: TimeDelay(mode='seconds', time='0')
 | Sets the horizontal time delay of the oscilloscope.
 | ``mode`` can be either :const:`percent` or :const:`seconds`. 
@@ -187,9 +187,9 @@ Math
 | Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. The equation will be saved to the place defined by :meth:`SetMathStorage`.
 | Changes to any of the operands lead to changes of the output.
 | Examples:
-   | DefineMath(Ch1+Ch2)
-   | DefineMath((Ch1-Meas1)/Meas2)
-   | DefineMath(Intg(Ch1-Avg(Ch1))
+| DefineMath(Ch1+Ch2)
+| DefineMath((Ch1-Meas1)/Meas2)
+| DefineMath(Intg(Ch1-Avg(Ch1))
 .. method:: DefineMathVariable(varnumber, varvalue)
 | Defines a variable that can be used in :meth:`DefineMath`.
 | `varnumber` must be a number ranging from 1 through 8 and defines the storage place of the variable.
@@ -233,23 +233,23 @@ Trigger
       | line specifies that an AC line voltage is used.
       | 
       | ``edgecoupling`` sets the coupling type. Valid states are:
-         | :const:`AC` (AC coupling)
-         | :const:`DC` (DC coupling)
-         | :const:`HFRej` (Removes high frequency components of the DC signal)
-         | :const:`LFRej` (Removes low frequency components of the AC signal)
-         | :const:`NOISErej` (Low sensitivity DC coupling. This option needs a higher signal amplitude to minimise false triggers)
+      | :const:`AC` (AC coupling)
+      | :const:`DC` (DC coupling)
+      | :const:`HFRej` (Removes high frequency components of the DC signal)
+      | :const:`LFRej` (Removes low frequency components of the AC signal)
+      | :const:`NOISErej` (Low sensitivity DC coupling. This option needs a higher signal amplitude to minimise false triggers)
       | 
       | ``edgeslope`` defines the slope. Valid states are:
-         | :const:`rise` (triggers on a rising/positive signal edge)
-         | :const:`fall` (triggers on a falling/negative signal edge)
+      | :const:`rise` (triggers on a rising/positive signal edge)
+      | :const:`fall` (triggers on a falling/negative signal edge)
    .. tab:: logic
    
       | Turns the trigger type to logic. In this state the oscilloscope starts a trigger event in case a defined logical situation occurs.
       | 
       | ``CH1``, ``CH2`` and ``CH3`` sets the logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`. This specifies the logic that will be used when the trigger detects the trigger threshold level.
-         | :const:`HIGH` specifies the logic high
-         | :const:`LOW` specifies the logic low
-         | :const:`x` specifies that it doesn't matter
+      | :const:`HIGH` specifies the logic high
+      | :const:`LOW` specifies the logic low
+      | :const:`x` specifies that it doesn't matter
       | 
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
       | 
@@ -263,10 +263,10 @@ Trigger
             | 
             | ``triggerwhen`` specifies the condition under which the trigger will be generated. 
             | Valid states are:
-               | :const:`true` (generates a trigger when the pattern becomes true)
-               | :const:`false` (generates a trigger when the pattern becomes false)
-               | :const:`less` (generates a trigger when the pattern becomes true for less than the duration set by ``logicmax``)
-               | :const:`more` (generates a trigger when the pattern becomes true for longer than the duration set by ``logicmin``)
+            | :const:`true` (generates a trigger when the pattern becomes true)
+            | :const:`false` (generates a trigger when the pattern becomes false)
+            | :const:`less` (generates a trigger when the pattern becomes true for less than the duration set by ``logicmax``)
+            | :const:`more` (generates a trigger when the pattern becomes true for longer than the duration set by ``logicmin``)
             | 
             | ``logicmax`` sets the duration in seconds that will be used as the time threshold for ``triggerwhen=less``
             | 
@@ -306,9 +306,9 @@ Trigger
             | With the glitch class activated, the oscilloscope executes a trigger event as soon as a pulse with a specified polarity and width is found.
             | 
             | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
-               | :const:`positive` (The oscilloscope only triggers when the pulse has a positive polarity)
-               | :const:`negative` (The oscilloscope only triggers when the pulse has a negative polarity)
-               | :const:`both` (The oscilloscope triggers for both cases)
+            | :const:`positive` (The oscilloscope only triggers when the pulse has a positive polarity)
+            | :const:`negative` (The oscilloscope only triggers when the pulse has a negative polarity)
+            | :const:`both` (The oscilloscope triggers for both cases)
             | 
             | ``triggerwhen`` defines whether the pulse needs to be :const:`wider` or :const:`narrower` than the defined ``width`` in order to trigger. 
             | 
@@ -320,9 +320,9 @@ Trigger
             | ``width`` in seconds, defines the minimum width for a pulse to trigger, when ``triggerwhen`` is set to :const:`greater`.
             | 
             | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
-               | :const:`positive` (The oscilloscope only triggers when the pulse crosses the low threshold twice without crossing the high threshold)
-               | :const:`negative` (The oscilloscope only triggers when the pulse crosses the high threshold twice without crossing the low threshold)
-               | :const:`both` (The oscilloscope triggers for both cases)
+            | :const:`positive` (The oscilloscope only triggers when the pulse crosses the low threshold twice without crossing the high threshold)
+            | :const:`negative` (The oscilloscope only triggers when the pulse crosses the high threshold twice without crossing the low threshold)
+            | :const:`both` (The oscilloscope triggers for both cases)
             | 
             | ``threshold`` sets the upper and lower threshold to predefined values. The two options are :const:`TTL`, which sets the upper threshold to 1.8V and the lower to 800mV, and :const:`ECL`, which sets the upper threshold to -1.1V and the lower to -1.5V. With the ``high`` and ``low`` arguments, the thresholds can be set to user defined values.
             | 
@@ -331,8 +331,8 @@ Trigger
             | ``low`` in Volt, sets the lower threshold.
             | 
             | ``triggerwhen`` defines whether the oscilloscope checks for the width of the pulse. The two valid states are:
-               | :const:`any` (A pulse of any width can trigger, as long as the polarity is correct.)
-               | :const:`greater` (The pulse must be wider than the amount set with ``width`` in order to trigger.)
+            | :const:`any` (A pulse of any width can trigger, as long as the polarity is correct.)
+            | :const:`greater` (The pulse must be wider than the amount set with ``width`` in order to trigger.)
          .. tab:: width
             
             | With the width class activated, the oscilloscope executes a trigger event as soon as a pulse with a specified polarity is found inside or outside a defined limit.
@@ -351,9 +351,9 @@ Trigger
             | ``deltatime`` in seconds, sets the timespan during which the pulse crosses need to occur.
             | 
             | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
-               | :const:`high` (The oscilloscope only triggers when the pulse first crosses the lower and then the higher threshold.)
-               | :const:`low` (The oscilloscope only triggers when the pulse frist crosses the higher and then the lower threshold.)
-               | :const:`both` (The oscilloscope triggers for both cases.)
+            | :const:`high` (The oscilloscope only triggers when the pulse first crosses the lower and then the higher threshold.)
+            | :const:`low` (The oscilloscope only triggers when the pulse frist crosses the higher and then the lower threshold.)
+            | :const:`both` (The oscilloscope triggers for both cases.)
             | 
             | ``threshold`` sets the upper and lower threshold to predefined values. The two options are :const:`TTL`, which sets the upper threshold to 1.8V and the lower to 800mV, and :const:`ECL`, which sets the upper threshold to -1.1V and the lower to -1.5V. With the ``high`` and ``low`` arguments, the thresholds can be set to user defined values.
             | 
@@ -367,9 +367,9 @@ Trigger
             | With the timeout class activated, the oscilloscope executes a trigger event as soon as a the pulses stop for a set amount of time.
             | 
             | ``polarity`` defines the polarity the pulse needs to trigger. Valid states are:
-               | :const:`high` (The oscilloscope only triggers when the pulse edge stays high/positive during the required time out period.)
-               | :const:`low` (The oscilloscope only triggers when the pulse edge stays low/negative during the required time out period.)
-               | :const:`either` (The oscilloscope triggers for both cases.)
+            | :const:`high` (The oscilloscope only triggers when the pulse edge stays high/positive during the required time out period.)
+            | :const:`low` (The oscilloscope only triggers when the pulse edge stays low/negative during the required time out period.)
+            | :const:`either` (The oscilloscope triggers for both cases.)
             | 
             | ``timeouttime`` in seconds, defines the time out period.
    .. tab:: comm
@@ -377,12 +377,12 @@ Trigger
       | Turns the trigger type to communitcation. In this state a trigger events is executed when a defined communication signal is found.
       | 
       | ``comm`` defines the communication type. Valid states are:
-         | :const:`CMI`
-         | :const:`AMI`
-         | :const:`HDB3`
-         | :const:`B3ZS`
-         | :const:`B6ZS`
-         | :const:`B8ZS`
+      | :const:`CMI`
+      | :const:`AMI`
+      | :const:`HDB3`
+      | :const:`B3ZS`
+      | :const:`B6ZS`
+      | :const:`B8ZS`
       | 
       | ``source`` defines the channel that shall be used as communication source. It must be eihter :const:`1`, :const:`2`, :const:`3` or :const:`4`.
       | 
@@ -391,15 +391,15 @@ Trigger
       | ``bitrate`` defines the bits per seconds. This can be any positive number greater than one.
       | 
       | ``pulseform`` defines the pulseform. Valid states are:
-         | :const:`plus` (sets the pulseform to plusone, this means the triggering occurs on a positive mark)
-         | :const:`minus` (sets the pulseform to minusone, this means the triggering occurs on a negative mark)
-         | :const:`eye` (constructs an eye diagram, this can be further specified by ``eyetype``)
-         | :const:`zero` (the triggering occurs on a bit representing zero)
-         | 
+      | :const:`plus` (sets the pulseform to plusone, this means the triggering occurs on a positive mark)
+      | :const:`minus` (sets the pulseform to minusone, this means the triggering occurs on a negative mark)
+      | :const:`eye` (constructs an eye diagram, this can be further specified by ``eyetype``)
+      | :const:`zero` (the triggering occurs on a bit representing zero)
+      | 
       | ``eyetype`` sets the source type for creating the eye pattern when pulseform=eye. Valid arguments are:
-         | :const:`data` (The oscilloscope triggers and shifts in five units intervalls to form the eye pattern.)
-         | :const:`clock` (The oscilloscope triggers randomly with respect to the data channel in order to form the eye pattern. No shifts occur.)
-         | :const:`recovered` (The oscilloscope uses a phase locked loop on the recovered clock from the data signal. Triggers are random, no shift occurs.)
+      | :const:`data` (The oscilloscope triggers and shifts in five units intervalls to form the eye pattern.)
+      | :const:`clock` (The oscilloscope triggers randomly with respect to the data channel in order to form the eye pattern. No shifts occur.)
+      | :const:`recovered` (The oscilloscope uses a phase locked loop on the recovered clock from the data signal. Triggers are random, no shift occurs.)
       | 
       | ``high`` sets the upper communication threshold.
       | ``low`` sets the lower communication threshold.
