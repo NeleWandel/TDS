@@ -319,20 +319,21 @@ Trigger
 .. tabs::
    .. tab:: logic
    
-      test
+      | test
+      | test 2
    .. tab:: communication
    
-      test
+      | test
    .. tab:: edge
    
-      hbas 
+      | hbas 
    .. tab:: serial
    
-      hola
+      | hola
    .. tab:: pulse
    
-      kjasföskldsf.
-      jisaefioeslf
+      | kjasföskldsf.
+      | jisaefioeslf
 .. note:: A full list of all viable commands can be found in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
 
 --------
