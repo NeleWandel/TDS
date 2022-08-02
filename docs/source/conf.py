@@ -15,6 +15,7 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
 ]
+extensions = ["sphinx_tabs.tabs"]
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
