@@ -321,9 +321,9 @@ Trigger
    
       | Turns the trigger type to logic. In this state the oscilloscope starts a trigger event in case a defined logical situation occurs.
       | ``CH1``, ``CH2`` and ``CH3`` sets the logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`. This specifies the logic that will be used when the trigger detects the trigger threshold level.
-       - :const:`HIGH`specifies the logic high
-       - :const:`LOW` specifies the logic low
-       - :const:`x` specifies that it doesn't matter
+      | :const:`HIGH`specifies the logic high
+      | :const:`LOW` specifies the logic low
+      | :const:`x` specifies that it doesn't matter
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
       | ``triggerclass`` has three valid options that open up more options:
       .. tabs::
@@ -331,10 +331,10 @@ Trigger
          
             | ``CH4`` sets the logic input for channel 4. The logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`.
             | ``triggerwhen`` specifies the condition under which the trigger will be generated. Valid states are:
-             - :const:`true` (generates a trigger when the pattern becomes true)
-             - :const:`false` (generates a trigger when the pattern becomes false)
-             - :const:`less` (generates a trigger when the pattern becomes true for less than the duration set by ``logicmax``)
-             - :const:`more` (generates a trigger when the pattern becomes true for longer than the duration set by ``logicmin``)
+            | :const:`true` (generates a trigger when the pattern becomes true)
+            | :const:`false` (generates a trigger when the pattern becomes false)
+            | :const:`less` (generates a trigger when the pattern becomes true for less than the duration set by ``logicmax``)
+            | :const:`more` (generates a trigger when the pattern becomes true for longer than the duration set by ``logicmin``)
             | ``logicmax`` sets the duration in seconds that will be used as the time threshold for ``triggerwhen=less``
             | ``logicmin`` sets the duration in seconds that will be used as the time threshold for ``triggerwhen=more``
          .. tab:: state
