@@ -214,70 +214,83 @@ Math
 Measurement
 -----------
 .. method:: Measure(meastype=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
-| ``meastype`` defines the kind of measurement that are to be done. 
+| ``m`` defines the measurement from :const:`1` to :const:`8`
+| 
+| ``delay`` sets the starting point and direction for a measurement. It can be either :const:`forwards` (starting at the beginning of the waveform) or :const:`backwards` (starting at the end of the waveform).
+| 
+| ``meastype`` defines the kind of measurement that takes place in the spot selected by ``m``. 
 | Valid options are:
 .. tabs::
    .. tab:: AMPlitude
    
+      | Measures the amplitude of the selected waveform selected.
       | 
+      | Amplitude = High - Low 
    .. tab:: AREa
    
-      | 
+      | Measures the voltage over time for the selected waveform in volt-seconds.
+      | Area above the ground is positive, area below the ground is negative.
    .. tab:: BURst
    
-      | 
+      | Measures the duration of a burst.
    .. tab:: CARea
    
-      | 
+      | Measures the voltage over time for the first cycle of the selected waveform in volt-seconds.
+      | Area above the reference point is positive, area below the reference point.
    .. tab:: CMEan
    
-      | 
+      | Measures the arithmetic mean for the first cycle of the selected waveform.
    .. tab:: CRMs
    
-      | 
+      | Measures the true root mean square voltage for the first cycle of the selected waveform.
    .. tab:: DELay
    
-      | 
-      | ``delay`` sets the starting point and direction for a delay measurement. It can be either :const:`forwards` (starting at the beginning of the waveform) or :const:`backwards` (starting at the end of the waveform).
-      | 
-      | ``edge1`` sets the slope of the edge used for the delay '
-      | 
-      | ``edge2``
+      | Measures the time between the reference amplitude points of the source and destination waveform.
    .. tab:: DISTDUty
    
-      | 
+      | Measures the time between the falling and rising edge of the eye pattern.
    .. tab:: EXTINCTDB
    
+      | Measures the extinction ratio for an optical waveform in dB.
+      | This only works for fast acquisition signals.
       | 
+      | Extinction dB = 10 x (log 10 (High/Low)
    .. tab:: EXTINCTPCT
    
+      | Measures the extinction ratio for an optical waveform in percent.
+      | This only works for fast acquisition signals.
       | 
+      | Extinction % = 100.0 x (Low/High)
    .. tab:: EXTINCTRATIO
    
+      | Measures the extinction ratio for an optical waveform.
+      | This only works for fast acquisition signals.
       | 
+      | Extinction = (High/Low)
    .. tab:: EYEHeight
    
-      | 
+      | Measures the vertical opening of an eye diagram in volts.
    .. tab:: EYEWidth
    
-      | 
+      | Measures the horizontal opening of an eye diagram in seconds.
    .. tab:: FALL
    
-      | 
+      | Measures the time it takes a falling edge to fall from a high reference value (default 90%) to a low reference value (default 10%).
    .. tab:: FREQuency
    
-      | 
+      | Measures the first cycle of the selected waveform in order to form the frequency in Hz.
    .. tab:: HIGH
    
-      | 
+      | Measures the 100% level reference (topline) of the selected waveform.
    .. tab:: HITS
    
-      | 
+      | Measures the number of hits in/on the histogram box.
    .. tab:: LOW
    
-      | 
+      | Measures the 0% level reference (baseline) of the selected waveform.
    .. tab:: MAXimum
    
+      | Measures the maximum amplitude of the selected waveform.
       | 
    .. tab:: MEAN
    
