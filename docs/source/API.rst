@@ -213,10 +213,37 @@ Math
 
 Measurement
 -----------
-.. method:: Measure(meastype=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
-| ``m`` defines the measurement from :const:`1` to :const:`8`
+.. method:: Measure(meastype=None, method=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
+| ``m`` defines the measurement from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`)
+| 
+| ``method`` sets the method used to calculate the 0% and 100% reference level. The valid states are:
+- :const:`histogram` (High and low reference levels are set to the most common values above/below the mid point. Best choice for examining pulses.)
+- :const:`mean` (High and low reference levels are set to mean values above/below the mid point. Best choice for examining eye patterns)
+- :const:`minmax` (High and low reference levels are set to the highest/lowest value of the waveform record.)
 | 
 | ``delay`` sets the starting point and direction for a measurement. It can be either :const:`forwards` (starting at the beginning of the waveform) or :const:`backwards` (starting at the end of the waveform).
+| 
+| ``statistics`` controlls the operation and display of statistics. Statistics can be either turned :const:`off`, they can show :const:`all` statistics for all measurements or display the :const:`mean` of each measurement.
+| 
+| ``weightvalue`` sets the time constant for mean and standard deviation statistical accumulations.
+| 
+| ``state`` turns measurements :const:`off` or :const:`on`.
+| 
+| ``source`` sets the source to measure from. It can be :const:`CH<x>`, :const:`MATH<x>`, :const:`REF<x>` with <x> in the range of 1-4 or :const:`HIStogram`.
+| 
+| ``source2`` sets the sour ce to measure to (for phase or delay measurements). It can be :const:`CH<x>`, :const:`MATH<x>`, :const:`REF<x>` with <x> in the range of 1-4.
+| 
+| ``refmethod`` defines whether the reference levels are given in :const:`percent` or :const:`absolut` values.
+| 
+| ``high`` sets the high reference level in either percent or absolute value depending on ``refmethod``.
+| 
+| ``low`` sets the low reference level in either percent or absolute value depending on ``refmethod``.
+| 
+| ``mid`` sets the mid reference level in either percent or absolute value depending on ``refmethod``.
+| 
+| ``edge1`` sets the slope of the edge for the waveform set by ``source``. Can be either :const:`rise` or :const:`fall`.
+| 
+| ``edge2`` sets the slope of the edge for the waveform set by ``source2``. Can be either :const:`rise` or :const:`fall`.
 | 
 | ``meastype`` defines the kind of measurement that takes place in the spot selected by ``m``. 
 | Valid options are:
@@ -291,130 +318,127 @@ Measurement
    .. tab:: MAXimum
    
       | Measures the maximum amplitude of the selected waveform.
-      | 
+      | If ``method=histogram`` the highest voltage or time within the vertical or horizontal histogram.
    .. tab:: MEAN
    
-      | 
+      | Measures the arithmetic mean over the selected waveform.
+      | If ``method=histogram`` the average of all aquired points within the histogram will be measured.
    .. tab:: MEDian
    
-      | 
+      | Measures the middle point of the histogram box, meaning that half of the acquired points within the histogram are greater in value, while the other half is less in value.
    .. tab:: MINImum
    
-      | 
+      | Measures the minimum amplitude of the selected waveform.
+      | If ``method=histogram`` the lowest voltage or time within the vertical or horizontal histogram.
    .. tab:: NCROss
    
-      | 
+      | Measures the time from trigger point to first falling/negative edge for the selected waveform.
    .. tab:: NDUty
    
+      | Measures the negative duty cycle on the first cycle of the selected waveform.
+      | This is the ratio of the negative pulse width to the signal period, in percent.
       | 
+      | Negative Duty Cycle = (Negative Width)/Period*100%
    .. tab:: NOVershoot
    
+      | Measures the negative overshoot value for the selected waveform.
       | 
+      | Negative Overshoot = (Low - Minimum) / Amplitude * 100%
    .. tab:: NWIdth
    
-      | 
+      | Measures the negative width for the first pulse in the selected waveform in seconds.
+      | The negative width is the distance between the middle reference (default 50%) amplitude points of a negative pulse.
    .. tab:: PBASe
    
-      | 
+      | Measures the base value that will be used in extiction ratio measurements.
    .. tab:: PCROss
    
-      | 
+      | Measures the time from trigger point to first raising/positive edge for the selected waveform.
    .. tab:: PCTCROss
    
+      | Measures the location of the eye crossing point in percent.
       | 
+      | Crossing percent = 100 * ((EyeCrossingPoint - PBASe)/(PTOP - PBASe))
    .. tab:: PDUty
    
+      | Measures the positive duty cycle on the first cycle of the selected waveform.
+      | This is the ratio of the positive pulse width to the signal period, in percent.
       | 
+      | Positive Duty Cycle = (Positive Width)/Period*100%
    .. tab:: PEAKHits
    
-      | 
+      | Measures the number of points in the largest bin of the histogram.
    .. tab:: PERIod
    
-      | 
+      | Measures the time required to complete the first cycle in a waveform in seconds.
    .. tab:: PHAse
    
-      | 
+      | Measures the phase difference between two waveforms in degrees (360° is equal to one waveform cycle).
    .. tab:: PK2Pk
    
-      | 
+      | Measures the amplitude peak to peak for the selected waveform.
+      | If ``method=histogram`` the peak to peak for the histogram is selected instead.
    .. tab:: PKPKJitter
    
-      | 
+      | Measures the minimum and maximum values in the time locations of the cross point.
    .. tab:: PKPKNoise
    
-      | 
+      | Measures the peak to peak noise for the selected waveform. Uses the mid reference level.
    .. tab:: POVershoot
    
+      | Measures the posaitive overshoot value for the selected waveform.
       | 
+      | Positive Overshoot = (Maximum - High) / Amplitude * 100%
    .. tab:: PTOP
    
-      | 
+      | Measures the top value that is used for the extinction ratio measurement.
    .. tab:: PWIdth
    
-      | 
+      | Measures the positive width for the first pulse in the selected waveform in seconds.
+      | The positive width is the distance between the middle reference (default 50%) amplitude points of a positive pulse.
    .. tab:: QFACtor
    
-      | 
+      | Measures the quality factor (ratio eyesize to noise) of the eye diagram.
    .. tab:: RISe
    
-      | 
+      | Measures the time it takes a rising edge to rise from a low reference value (default 90%) to a high reference value (default 10%).
    .. tab:: RMS
    
-      | 
+      | Measures the true root mean square voltage for the selected waveform.
    .. tab:: RMSJitter
    
-      | 
+      | Measures the variance in the time locations of the cross point.
    .. tab:: RMSNoise
    
-      | 
+      | Measures the root mean square noise amplitude at the mid reference level (default 50%) for the selected waveform.
    .. tab:: SIGMA1
    
-      | 
+      | Measures the percentage of points in the histogram that are within one standard deviation of the histogram mean.
    .. tab:: SIGMA2
    
-      | 
+      | Measures the percentage of points in the histogram that are within two standard deviations of the histogram mean.
    .. tab:: SIGMA3
    
-      | 
+      | Measures the percentage of points in the histogram that are within three standard deviations of the histogram mean.
    .. tab:: SIXSigmajit
    
-      | 
+      | Histogram Measurement only.
+      | 6 * RMSJitter
+      | RMSJitter is defined as one standard deviation at the cross point.
    .. tab:: SNRatio
    
-      | 
+      | Measures the signal to noise ratio.
    .. tab:: STDdev
    
-      | 
+      | Measures the standard deviation of all points within the histogram box.
    .. tab:: UNDEFINED
    
-      | 
+      | Default type. No measurement type is specifies. 
+      | Once a measurement type has been chosen :const:`UNDEFINED` can be used to clear the argument again.
    .. tab:: WAVEFORMS
    
-      | 
-
+      | Measures the number of waveforms used to calculate the histogram.
    
-| ``m``
-| 
-| ``statistics``
-| 
-| ``weightvalue``
-| 
-| ``state``
-| 
-| ``source``
-| 
-| ``source2``
-| 
-| ``refmethod``
-| 
-| ``high``
-| 
-| ``low``
-| 
-| ``mid``
-| 
-
-
 .. method:: UseMeasurement(x)
 | Sets the storage number for every command in the measurement group. ``x`` must range from 1 through 8.
 | Default storage is 1.
