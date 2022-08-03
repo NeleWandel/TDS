@@ -111,9 +111,9 @@ Histogram
 | Sets up the histogram, defined by the arguments.
 | All arguments are optional. Defining none of the arguments results in this command having no effect.
 | ``display`` has three valid states:
-| :const:`off` (Disables the display of the histogram, data will still be collected)
-| :const:`log` (The histogram display is turned on and set to logarithmic format)
-| :const:`lin` (The histogram display is turned on and set to linear format)
+- :const:`off` (Disables the display of the histogram, data will still be collected)
+- :const:`log` (The histogram display is turned on and set to logarithmic format)
+- :const:`lin` (The histogram display is turned on and set to linear format)
 | ``source`` sets the source for the histogram. The source may be either CH<x>, MATH<x> or REF<x>. 
 | ``size`` is given in devisions and defines the size of the histogram. If the histogram is horizontal, the value may range from 0.1 to 8.0. In case the histogram is vertical, the range is 0.1 to 10.0.
 | ``function`` defines whether the histogram is :const:`horizontal` or :const:`vertical`.
@@ -213,6 +213,194 @@ Math
 
 Measurement
 -----------
+.. method:: Measure(meastype=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
+| ``meastype`` defines the kind of measurement that are to be done. 
+| Valid options are:
+.. tabs::
+   ..tab:: AMPlitude
+   
+      | 
+   ..tab:: AREa
+   
+      | 
+   ..tab:: BURst
+   
+      | 
+   ..tab:: CARea
+   
+      | 
+   ..tab:: CMEan
+   
+      | 
+   ..tab:: CRMs
+   
+      | 
+   ..tab:: DELay
+   
+      | 
+      | ``delay`` sets the starting point and direction for a delay measurement. It can be either :const:`forwards` (starting at the beginning of the waveform) or :const:`backwards` (starting at the end of the waveform).
+      | 
+      | ``edge1`` sets the slope of the edge used for the delay '
+      | 
+      | ``edge2``
+   ..tab:: DISTDUty
+   
+      | 
+   ..tab:: EXTINCTDB
+   
+      | 
+   ..tab:: EXTINCTPCT
+   
+      | 
+   ..tab:: EXTINCTRATIO
+   
+      | 
+   ..tab:: EYEHeight
+   
+      | 
+   ..tab:: EYEWidth
+   
+      | 
+   ..tab:: FALL
+   
+      | 
+   ..tab:: FREQuency
+   
+      | 
+   ..tab:: HIGH
+   
+      | 
+   ..tab:: HITS
+   
+      | 
+   ..tab:: LOW
+   
+      | 
+   ..tab:: MAXimum
+   
+      | 
+   ..tab:: MEAN
+   
+      | 
+   ..tab:: MEDian
+   
+      | 
+   ..tab:: MINImum
+   
+      | 
+   ..tab:: NCROss
+   
+      | 
+   ..tab:: NDUty
+   
+      | 
+   ..tab:: NOVershoot
+   
+      | 
+   ..tab:: NWIdth
+   
+      | 
+   ..tab:: PBASe
+   
+      | 
+   ..tab:: PCROss
+   
+      | 
+   ..tab:: PCTCROss
+   
+      | 
+   ..tab:: PDUty
+   
+      | 
+   ..tab:: PEAKHits
+   
+      | 
+   ..tab:: PERIod
+   
+      | 
+   ..tab:: PHAse
+   
+      | 
+   ..tab:: PK2Pk
+   
+      | 
+   ..tab:: PKPKJitter
+   
+      | 
+   ..tab:: PKPKNoise
+   
+      | 
+   ..tab:: POVershoot
+   
+      | 
+   ..tab:: PTOP
+   
+      | 
+   ..tab:: PWIdth
+   
+      | 
+   ..tab:: QFACtor
+   
+      | 
+   ..tab:: RISe
+   
+      | 
+   ..tab:: RMS
+   
+      | 
+   ..tab:: RMSJitter
+   
+      | 
+   ..tab:: RMSNoise
+   
+      | 
+   ..tab:: SIGMA1
+   
+      | 
+   ..tab:: SIGMA2
+   
+      | 
+   ..tab:: SIGMA3
+   
+      | 
+   ..tab:: SIXSigmajit
+   
+      | 
+   ..tab:: SNRatio
+   
+      | 
+   ..tab:: STDdev
+   
+      | 
+   ..tab:: UNDEFINED
+   
+      | 
+   ..tab:: WAVEFORMS
+   
+      | 
+
+   
+| ``m``
+| 
+| ``statistics``
+| 
+| ``weightvalue``
+| 
+| ``state``
+| 
+| ``source``
+| 
+| ``source2``
+| 
+| ``refmethod``
+| 
+| ``high``
+| 
+| ``low``
+| 
+| ``mid``
+| 
+
 
 .. method:: UseMeasurement(x)
 | Sets the storage number for every command in the measurement group. ``x`` must range from 1 through 8.
@@ -252,6 +440,8 @@ Trigger
       - :const:`x` specifies that it doesn't matter
       | 
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
+      | 
+      | ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL`(-1.3V) or :const:`TTL`(1.4V).
       | 
       | ``triggerclass`` has three valid states each with their own set of arguments:
       .. tabs::
@@ -429,6 +619,22 @@ Trigger
       | 
       | ``polarity`` sets the polarity of the clock to either :const:`rise` or :const:`fall`.
 
+.. method:: TriggerB(state=None, source=None, count=None, time=None, level=None, slope=None)
+| Controlls the secondary trigger.
+| 
+| ``state`` sets the trigger activity to either :const:`ON` or :const:`OFF`.
+| 
+| ``source``sets the source for the B trigger. It can be either :const:`AUX` or :const:`CH1` to :const:`CH4`.
+| 
+| ``count`` sets the amount of :meth:`Trigger` events that must occur before trigger B triggers an event.
+| ``time`` sets the time period that must pass after a :meth:`Trigger` event for trigger B to trigger an event. 
+| ``time`` and ``count`` cannot be active at the same time.
+| 
+| ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL`(-1.3V) or :const:`TTL`(1.4V).
+| 
+| ``slope`` sets the slope to either :const:`rise` where the trigger occurs on the rising/positive edge of a signal or :const:`fall` where the trigger occurs on the falling/negative edge of a signal.
+
+Vertical
 --------
 .. method:: ChannelOffset(offset)
 | Sets the vertical offset for the channel specified by :meth:`Channel`. ``offset`` needs to be written in mV.
