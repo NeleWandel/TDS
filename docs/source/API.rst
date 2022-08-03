@@ -217,25 +217,25 @@ Measurement
 | ``meastype`` defines the kind of measurement that are to be done. 
 | Valid options are:
 .. tabs::
-   ..tab:: AMPlitude
+   .. tab:: AMPlitude
    
       | 
-   ..tab:: AREa
+   .. tab:: AREa
    
       | 
-   ..tab:: BURst
+   .. tab:: BURst
    
       | 
-   ..tab:: CARea
+   .. tab:: CARea
    
       | 
-   ..tab:: CMEan
+   .. tab:: CMEan
    
       | 
-   ..tab:: CRMs
+   .. tab:: CRMs
    
       | 
-   ..tab:: DELay
+   .. tab:: DELay
    
       | 
       | ``delay`` sets the starting point and direction for a delay measurement. It can be either :const:`forwards` (starting at the beginning of the waveform) or :const:`backwards` (starting at the end of the waveform).
@@ -243,139 +243,139 @@ Measurement
       | ``edge1`` sets the slope of the edge used for the delay '
       | 
       | ``edge2``
-   ..tab:: DISTDUty
+   .. tab:: DISTDUty
    
       | 
-   ..tab:: EXTINCTDB
+   .. tab:: EXTINCTDB
    
       | 
-   ..tab:: EXTINCTPCT
+   .. tab:: EXTINCTPCT
    
       | 
-   ..tab:: EXTINCTRATIO
+   .. tab:: EXTINCTRATIO
    
       | 
-   ..tab:: EYEHeight
+   .. tab:: EYEHeight
    
       | 
-   ..tab:: EYEWidth
+   .. tab:: EYEWidth
    
       | 
-   ..tab:: FALL
+   .. tab:: FALL
    
       | 
-   ..tab:: FREQuency
+   .. tab:: FREQuency
    
       | 
-   ..tab:: HIGH
+   .. tab:: HIGH
    
       | 
-   ..tab:: HITS
+   .. tab:: HITS
    
       | 
-   ..tab:: LOW
+   .. tab:: LOW
    
       | 
-   ..tab:: MAXimum
+   .. tab:: MAXimum
    
       | 
-   ..tab:: MEAN
+   .. tab:: MEAN
    
       | 
-   ..tab:: MEDian
+   .. tab:: MEDian
    
       | 
-   ..tab:: MINImum
+   .. tab:: MINImum
    
       | 
-   ..tab:: NCROss
+   .. tab:: NCROss
    
       | 
-   ..tab:: NDUty
+   .. tab:: NDUty
    
       | 
-   ..tab:: NOVershoot
+   .. tab:: NOVershoot
    
       | 
-   ..tab:: NWIdth
+   .. tab:: NWIdth
    
       | 
-   ..tab:: PBASe
+   .. tab:: PBASe
    
       | 
-   ..tab:: PCROss
+   .. tab:: PCROss
    
       | 
-   ..tab:: PCTCROss
+   .. tab:: PCTCROss
    
       | 
-   ..tab:: PDUty
+   .. tab:: PDUty
    
       | 
-   ..tab:: PEAKHits
+   .. tab:: PEAKHits
    
       | 
-   ..tab:: PERIod
+   .. tab:: PERIod
    
       | 
-   ..tab:: PHAse
+   .. tab:: PHAse
    
       | 
-   ..tab:: PK2Pk
+   .. tab:: PK2Pk
    
       | 
-   ..tab:: PKPKJitter
+   .. tab:: PKPKJitter
    
       | 
-   ..tab:: PKPKNoise
+   .. tab:: PKPKNoise
    
       | 
-   ..tab:: POVershoot
+   .. tab:: POVershoot
    
       | 
-   ..tab:: PTOP
+   .. tab:: PTOP
    
       | 
-   ..tab:: PWIdth
+   .. tab:: PWIdth
    
       | 
-   ..tab:: QFACtor
+   .. tab:: QFACtor
    
       | 
-   ..tab:: RISe
+   .. tab:: RISe
    
       | 
-   ..tab:: RMS
+   .. tab:: RMS
    
       | 
-   ..tab:: RMSJitter
+   .. tab:: RMSJitter
    
       | 
-   ..tab:: RMSNoise
+   .. tab:: RMSNoise
    
       | 
-   ..tab:: SIGMA1
+   .. tab:: SIGMA1
    
       | 
-   ..tab:: SIGMA2
+   .. tab:: SIGMA2
    
       | 
-   ..tab:: SIGMA3
+   .. tab:: SIGMA3
    
       | 
-   ..tab:: SIXSigmajit
+   .. tab:: SIXSigmajit
    
       | 
-   ..tab:: SNRatio
+   .. tab:: SNRatio
    
       | 
-   ..tab:: STDdev
+   .. tab:: STDdev
    
       | 
-   ..tab:: UNDEFINED
+   .. tab:: UNDEFINED
    
       | 
-   ..tab:: WAVEFORMS
+   .. tab:: WAVEFORMS
    
       | 
 
