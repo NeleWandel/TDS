@@ -36,8 +36,7 @@ Acquisition
 | While changes are possible during an acquisition, it is recommended that all acquisition settings are properly set before starting the acquisition.
 .. method:: StopAcquisition()
 | Stops acquiring data.
-.. method:: Wait()
-| The oscilloscope waits with the execution of further commands until all acquisitions are done.
+
 
 Calibration
 -----------
@@ -213,6 +212,12 @@ Math
 
 Measurement
 -----------
+.. method:: CountMeas(m=meas)
+| Returns the amount of values that have been obtained since the last statistical reset. Values that generated an error are not counted.
+.. method:: Maximum(m=meas)
+| Returns the maximum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
+.. method:: Mean(m=meas)
+| Returns the mean value accumulated for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
 .. method:: Measure(meastype=None, method=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
 | ``m`` defines the measurement from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`)
 | 
@@ -439,10 +444,20 @@ Measurement
    
       | Measures the number of waveforms used to calculate the histogram.
    
+.. method:: Minimum(m=meas)
+| Returns the minimum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
+
 .. method:: UseMeasurement(x)
 | Sets the storage number for every command in the measurement group. ``x`` must range from 1 through 8.
 | Default storage is 1.
-
+Status and Error
+----------------
+.. method:: Clear()
+| Clears the event queue, standard event status register and the status byte register. Does not affect the output queue. 
+.. method:: IsDone()
+| Returns :const:`1` when all operations are finished.
+.. method:: Wait()
+| The oscilloscope waits with the execution of further commands until all acquisitions are done.
 Trigger
 -------
 .. method:: Trigger(triggertype=None, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeout=None, timeouttime=None, deltatime=None, transition=None)
@@ -478,7 +493,7 @@ Trigger
       | 
       | Using the ``CH1TH``, ``CH2TH``, ``CH3TH`` and ``CH4TH`` arguments allow for setting the threshold for the respective channel in Volt.
       | 
-      | ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL`(-1.3V) or :const:`TTL`(1.4V).
+      | ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL` (-1.3V) or :const:`TTL` (1.4V).
       | 
       | ``triggerclass`` has three valid states each with their own set of arguments:
       .. tabs::
@@ -661,13 +676,13 @@ Trigger
 | 
 | ``state`` sets the trigger activity to either :const:`ON` or :const:`OFF`.
 | 
-| ``source``sets the source for the B trigger. It can be either :const:`AUX` or :const:`CH1` to :const:`CH4`.
+| ``source`` sets the source for the B trigger. It can be either :const:`AUX` or :const:`CH1` to :const:`CH4`.
 | 
 | ``count`` sets the amount of :meth:`Trigger` events that must occur before trigger B triggers an event.
 | ``time`` sets the time period that must pass after a :meth:`Trigger` event for trigger B to trigger an event. 
 | ``time`` and ``count`` cannot be active at the same time.
 | 
-| ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL`(-1.3V) or :const:`TTL`(1.4V).
+| ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL` (-1.3V) or :const:`TTL` (1.4V).
 | 
 | ``slope`` sets the slope to either :const:`rise` where the trigger occurs on the rising/positive edge of a signal or :const:`fall` where the trigger occurs on the falling/negative edge of a signal.
 
@@ -686,23 +701,22 @@ Miscellaneous
 .. method:: AutoSet()
 | Automatically adjusts the vertical, horizontal and trigger controls in order to privide a stable display of the waveform on the oscilloscope.
 | These changes can be undone by using the :meth:`Undo` command.
-.. method:: Undo()
-| Reverses all changes done by :meth:`AutoSet`. This does affect any changes made after the automatic adjustment. 
 .. method:: Busy()
 | Returns :const:`0` if the oscilloscope is currently not running the :meth:`StartAcquisition` command. Returns :const:`1` if the oscilloscope is acquiring data. 
 .. method:: Channel(channelnumber)
-| Sets the standard channel for all future commands. ``channelnumber`` may only be :const:`1`, :const:`2`, :const:`3` or :const:`4`.
+| Sets the standard channel for all future commands that have a ``channel`` argument. ``channelnumber`` may only be :const:`1`, :const:`2`, :const:`3` or :const:`4`.
 | Default value is :const:`1`.
-.. method:: ChannelAsSource()
-| Sets the channel as source for all acquisitions. The channel can be set by :meth:`Channel`
-| Other options are: :meth:`MathAsSource`, :meth:`RefAsSource` and :meth:`HistogramAsSource`
-.. method:: Clear()
-| Clears the ``event queue``, ``standard event status register`` and the ``status byte register``. Does not affect the output queue. 
 .. method:: Date()
 | Returns the current date of the oscilloscope. 
 | The date can be adjusted by using :meth:`SetDate`
+.. method:: Header(status='off')
+| Turns the headers of the oscilloscope either :const:`on` or :const:`off`
+| Turning them off results in the oscilloscope returning only the values.
+| Example:
+| Header off: ``100``
+| Header on: ``:ACQUIRE:NUMAVG 100``
 .. method:: Identify()
-| Prints information and the identifaction code of the oscilloscope.
+| Returns information and the identifaction code of the oscilloscope.
 .. method:: Lock()
 | Disables all frontpanel buttons and knobs on the oscilloscope, including the touchscreen.
 | The command :meth:`Unlock` enables them again.
@@ -716,5 +730,7 @@ Miscellaneous
 | ``storagelocation`` must range from 1 through 10.
 .. method:: SetDate(day, month, year)
 | Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
+.. method:: Undo()
+| Reverses all changes done by :meth:`AutoSet`. This does affect any changes made after the automatic adjustment. 
 .. method:: Unlock()
 | Enables all frontpanel buttons and knobs on the oscilloscope, after they have been locked by :meth:`Lock`
