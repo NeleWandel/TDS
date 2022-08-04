@@ -296,9 +296,6 @@ def MaskHit():
 def ResetMaskHit():
     tds.write('MASK:COUNt:RESET')
 
-def SetMathStorage(number):
-    global mathvari
-    mathvari = number
     
 def MathVariable(varnumber, varvalue):
     if varnumber >= 1 or varnumber <= 8:
@@ -306,20 +303,14 @@ def MathVariable(varnumber, varvalue):
     else:
         raise ValueError('Variable Number can only range from 1 through 8.')
 
-def Math(math=mathvari, equation=None, y=None, x=None):
+def Math(math='1', equation=None, y=None, x=None):
     if equation:
         tds.write('MATH' + str(math) + ':DEFine "' + str(equation) + '"')
     if y:
         tds.write('MATH' + str(math) + ':POSition ' + str(y))
     if x:
         tds.write('MATH' + str(math) + ':SCAle ' + str(x))
-        
-def AllMeasPara():
-    tds.query('MEASUrement?')
-    
-def ImmedMeasPara():
-    tds.query('MEASUrement:IMMed?')
-    
+      
 def ImmedValue():
     tds.query('MEASUrement:IMMed:VALue?')
     
@@ -364,10 +355,7 @@ def ImmedMeasure(m=meas, statistics=None, meastype=None, source=None, source2=No
             tds.write('MEASUrement:IMMed:DELay:EDGE[2] FALL')
     if meastype:
         tds.write('MEASUrement:IMMed:TYPE ' + str(argument)) 
-    
-def MeasPara(m=meas):
-        tds.query('MEASUrement:MEAS' + str(m) + '?')
-
+        
 def GlobalMeas(x):
     global meas
     meas = str(x)
