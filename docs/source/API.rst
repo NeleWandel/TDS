@@ -272,40 +272,60 @@ Mask
 
 Math
 -----
-| Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be stored and displayed at the same time. :meth:`SetMathStorage` regulates which of the four possible math storages will be used by the other commands in the math group.
+| Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be stored and displayed at the same time. 
 
-.. method:: DefineMath(equation)
-| Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. The equation will be saved to the place defined by :meth:`SetMathStorage`.
+.. method:: Math(math='1', equation=None, y=None, x=None)
+| ``equation`` Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. 
 | Changes to any of the operands lead to changes of the output.
 | Examples:
 | DefineMath(Ch1+Ch2)
 | DefineMath((Ch1-Meas1)/Meas2)
 | DefineMath(Intg(Ch1-Avg(Ch1))
+| 
+| ``y`` sets the vertical position of the waveform. ``y`` can be either positive or negative and is given in divisions.
+| 
+| ``x`` sets the horizontal scale of the waveform. ``x`` can be either positive or negative and is given in volt, amper or watt per divisions.
+| Viable ranges are from :const:`100.0E-36` through :const:`100.0E+36`.
+
 .. method:: DefineMathVariable(varnumber, varvalue)
-| Defines a variable that can be used in :meth:`DefineMath`.
-| `varnumber` must be a number ranging from 1 through 8 and defines the storage place of the variable.
-| `varvalue` can be any value.
-.. method:: MathDefinition()
-| Returns the current definition for the math waveform stored in the storage selected by :meth:`SetMathStorage`
-.. method:: SetMathPos(y)
-| Sets the vertical position of the waveform defined by :meth:`DefineMath`. `y` can be either positive or negative and is given in divisions.
-| Please make sure to leave a time of at least 0.5 seconds between computing the math definition and changing the vertical positioning, as autoscaling occurs directly after computing. Autoscaling will override any position changes. 
-.. method:: SetMathScale(x)
-| Sets the horizontal scale of the waveform defined by :meth:`DefineMath`. `x` can be either positive or negative and is given in volt, amper or watt per divisions.
-| Viable ranges are from 100.0E-36 through 100.0E+36.
-| Please make sure to leave a time of at least 0.5 seconds between computing the math definition and changing the vertical positioning, as autoscaling occurs directly after computing. Autoscaling will override any position changes. 
-.. method:: SetMathStorage(number)
-| Sets the storage number for every command in the math group. ``number`` must be either 1, 2, 3 or 4.
-| Default storage is 1.
-.. method:: ShowMathPos()
-| Returns the current position set by :meth:`SetMathPos`.
-.. method:: ShowMathScale()
-| Returns the current scale set by :meth:`SetMathScale`.
+| Defines a variable that can be used in :meth:`Math`.
+| ``varnumber`` must be a number ranging from 1 through 8 and defines the storage place of the variable.
+| ``varvalue`` can be any value.
 
 Measurement
 -----------
 .. method:: CountMeas(m=meas)
 | Returns the amount of values that have been obtained since the last statistical reset. Values that generated an error are not counted.
+.. method:: ImmedMeasure(m=meas, statistics=None, meastype=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
+| 
+| 
+| ``m``
+| 
+| ``statistics``
+| 
+| ``meastype``
+| 
+| ``source``
+| 
+| ``source2``
+| 
+| ``refmethod``
+| 
+| ``high``
+| 
+| ``low``
+| 
+| ``mid``
+| 
+| ``delay``
+| 
+| ``edge1``
+| 
+| ``edge2``
+.. method:: ImmedValue()
+| Returns the value of the immediate measurement.
+.. method:: ImmedUnit()
+| Returns the unit of the immediate measurement.
 .. method:: Maximum(m=meas)
 | Returns the maximum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
 .. method:: Mean(m=meas)
