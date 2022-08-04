@@ -9,7 +9,7 @@ Acquisition
 ---------
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
-.. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None)
+.. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None, fast=None)
 | Sets all the options for the acquisition. While it is possible to change these parameters during an ongoing acquisition, it is adviced to change them before starting the acquisition. Starting and stopping an acquisition must be done by :meth:`StartAcquisition` and :meth:`StopAcquisition`.
 | 
 | All arguments, except ``acquiremode`` are optional. 
@@ -31,12 +31,12 @@ Acquisition
 |
 | ``stop`` defines whether the acquisition stops after a :const:`single` sequence or :const:`repeat` until stopped with :meth:`StopAcquisition`.
 | 
+| ``fast`` determines whether fast acquisition mode is turned :const:`on` or :const:`off`.
 .. method:: StartAcquisition()
 | Starts acquiring data. 
 | While changes are possible during an acquisition, it is recommended that all acquisition settings are properly set before starting the acquisition.
 .. method:: StopAcquisition()
 | Stops acquiring data.
-
 
 Calibration
 -----------
@@ -105,7 +105,7 @@ Hard Copy and Export
 
 Histogram
 ---------
-
+| Commands of the histogram group control the histogram options and data.
 .. method:: Histogram(display=None, source=None, size=None, function=None, state=None, box=None, left=None, top=None, right=None, bottom=None)
 | Sets up the histogram, defined by the arguments.
 | All arguments are optional. Defining none of the arguments results in this command having no effect.
@@ -133,6 +133,7 @@ Histogram
 
 Horizontal
 ----------
+| Commands of the horizontal group control the time bases of the oscilloscope.
 .. method:: FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None)
 | Sets up all FastFrame (also known as memory segmentation) parameters.
 | All arguments are optional. Not defining any of the arguments results in this command being useless.
@@ -172,12 +173,103 @@ Mask
 ----
 | Commands in the mask group allow for comparison of incoming waveforms with standard or user-defined masks. It is possible to set actions that the oscilloscope takes in case the waveform falls inside or outside the mask limits.
 
-.. method:: AutoAdjustMaskOff()
-| Turns off automatic optimising of the mask.
-.. method:: AutoAdjustMaskOn()
-| Turns on automatic optimising of the mask. This feature shifts the mask horizontally and vertically in order to minimise the signal hits.
-.. method:: Mask(start=True, mask=None, source='CH1', display='ON', counting=None, wfmamount=None, highlights=None, inverted=None, margin=None, polatity=None, stoponfailure=None, failthreshold=None, failscreen=None, logfail=None, logwfm=None, repeat=None, delay=None, auto=None, hdelta=None, vdelta=None, digitalfilter=None, beep=None, failbeep=None)
-| The mask function controlls 
+.. method:: DeleteUserMaskSeg(seg):
+| Deletes the segment of the user mask defined by ``seg``.
+
+.. method:: Mask(start=True, mask=None, source=None, display=None, counting=None, wfmamount=None, highlights=None, inverted=None, margin=None, polatity=None, stoponfailure=None, failthreshold=None, failscreen=None, logfail=None, logwfm=None, repeat=None, delay=None, auto=None, hdelta=None, vdelta=None, digitalfilter=None, beep=None, failbeep=None)
+| The mask function creates, deletes and changes the mask.
+| All arguments are optional.
+| 
+| ``start`` defines whether the mask starts the mask pass/fail testing.
+| 
+| ``mask`` allows input of a standard mask. A full list of all standard masks can be found on page 419 in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
+| 
+| ``source`` sets the source that will be compared against the mask. This may be either :const:`CH<x>`, :const:`MATH<x>` or :const:`REF<x>` with x ranging from 1 through 4.
+| 
+| ``display`` turns the masks display on screen either :const:`ON` or :const:`OFF`. When turned off, mask counting, testing and autoset are not available.
+| 
+| ``counting`` turns the mask hit count state to either :const:`ON` or :const:`OFF`. ``display`` must be :const:`ON` to activate the mask counting.
+| 
+| ``wfmamount`` sets the amount of waveforms to test during a pass/fail test. (Default is 20)
+| 
+| ``highlights`` turns the highlighting of hits in a mask to either :const:`ON` or :const:`OFF`. If turned on, hits are highlighted in different colors than other waveform data.
+| 
+| ``inverted`` sets whether or not the mask is inverted. Valid states are :const:`OFF` (default) and :const:`ON`.
+| 
+| ``margin`` sets the mask margin in percent. Range is :const:`-50` to :const:`50` if no margin is set, it is turned off automatically.
+| 
+| ``polarity`` sets whether the pass/fail test tests :const:`positive` pulses, :const:`negative` pulses or :const:`both`. 
+| 
+| ``stoponfailure`` if turned :const:`ON` the oscilloscope stops acquiring data when a failure occurs during a pass/fail test. Turned :const:`OFF` is the default.
+| 
+| ``failthreshold`` sets the number of failed tested waveforms needed for the pass/fail testing status to change from passing to failing. If WfmDB mode is turned on, it sets the minimum number of hits needed to change the status from passing to failing.
+| 
+| ``failscreen`` if turned :const:`ON` the oscilloscope generates a screenshot as soon as the status changes to failing. :const:`OFF`turns this feature off. To change the screenshot settings use the :meth:`Screenshot` command beforehand. 
+| 
+| ``logfail`` if turned :const:`ON` the oscilloscope logs the current date and time to a file as soon as the status changes to failing. :const:`OFF`turns this feature off.
+| 
+| ``logwfm`` if turned :const:`ON`the oscilloscope copies waveform data from all active channels to files as soon as the status changes to failing. To creat a log of every violation set ``wfamount`` to :const:`1` and ``repeat`` to :const:`ON`.
+| :const:`OFF`turns this feature off.
+| 
+| ``repeat`` if turned :const:`ON` the oscilloscope starts a new pass/fail test after completion.
+| 
+| ``delay`` in seconds, sets the amount of time the oscilloscope waits after starting a pass/fail test before actually testing. 
+| 
+| ``auto`` controlls whether auto adjustment is :const:`ON` or :const:`OFF`. Auto adjustment optimises the signal position within the mask in order to minimise hits.
+| 
+| ``hdelta`` in percent of a devision, defines how far the auto adjustment searches horizontally. 
+| 
+| ``vdelta`` in percent of a devision, defines how far the auto adjustment searches vertically.
+| 
+| ``digitalfilter`` turns the digital filter :const:`ON` or :const:`OFF`. The filter simulates optical hardware. 
+| It runs on: OC1, OC3, OC12, OC48, FC133, FC266, FC531, FC1063, FC2125Draft, Gigabit Ethernet, Infiniband 2.5Gb, 1394b, 393Mb, 786.4 3Mb, 1.572 Gb.
+| 
+| ``beep`` if turned :const:`ON` the oscilloscope gives audible feedback on completion of the pass/fail test.
+| 
+| ``failbeep`` if turned :const:`ON` the oscilloscope gives audible feedback as soon as the status changes to failure.
+
+.. method:: MaskHit()
+| Returns the total amount of mask hits.
+
+.. method:: ResetMaskHit()
+| Resets the total amount of mask hits.
+
+.. method:: UserMask(seg=None, points=None, amp=None, bit=None, hscale=None, htrigpos=None, patbits=None, presampbits=None, reclength=None, serialtrig=None, trigtosamp=None, voffset=None, vpos=None, vscale=None, width=None)
+| Defines and changes the user mask. To use a standard mask, use the :meth:`Mask` command.
+| All arguments are optional.
+| 
+| ``seg`` selects the segment that needs to be modified
+| 
+| ``points`` are X-Y coordinates that specify the user mask. Points always come in pairs with the horizontal (x) first and the vertical (y) afterwards seperated by commas. There need to be at least two pairs, that have to be listed counterclockwise. If only one pair is given, the segment is marked as undefined.
+| **Example:** UserMask(seg=2, points='–2.3e-9, 44e-3,-2.5e-9, 47e-3, 1.2e-9, 44e-3')
+| 
+| ``amp`` sets the nominal pulse amplitude in volts.
+| 
+| ``bit`` sets the bitrate in bits per second.
+| 
+| ``hscale`` in seconds per devision, sets the horizontal resolution used to draw the mask.
+| 
+| ``htrigpos`` sets the nominal trigger position used to draw the mask as a fraction of the display width. The range is :const:`0.0` to :const:`1.0`.
+| 
+| ``patbits`` sets the number of bits used for serial trigger.
+| 
+| ``presampbits`` sets the number of bits before the pulse leading edge in the serial trigger pass/fail test.
+| 
+| ``reclength`` sets the nominal record length for pulse mask testing.
+| 
+| ``serialtrig`` sets the type of triggering used in pass/fail testing. Valid types are: :const:``AMI``, :const:``HDB3``, :const:``B3ZS``, :const:``B6ZS``, :const:``B8ZS``, :const:``CMI``, :const:``NRZ``, :const:``MLT3``, :const:``EDGE``.
+| 
+| ``trigtosamp`` in seconds, sets the time from the leading edge trigger position to the pulse bit sampling position.
+| 
+| ``voffset`` in volts, sets the vertical offset.
+| 
+| ``vpos`` in devisions, sets the vertical position of the input channels.
+| 
+| ``vscale`` in volts per devision, sets the vertical scale for the input channels.
+| 
+| ``width`` in seconds, sets the bit width.
+
+
 Math
 -----
 | Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be stored and displayed at the same time. :meth:`SetMathStorage` regulates which of the four possible math storages will be used by the other commands in the math group.
