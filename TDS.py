@@ -63,7 +63,7 @@ def ResetToFactorySettings():
 def Trig():
     tds.write('*TRG')
     
-def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None):
+def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None):
     if acquiremode:
         if acquiremode == 'sampling':
             tds.write('ACQuire:MODe SAMple')
@@ -92,11 +92,13 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
             tds.query('ACQuire:STOPAfter SEQuence')
         elif stop == 'repeat':
             tds.query('ACQuire:STOPAfter RUNSTop')  
-
-def StartFastAcquisition():
-    tds.write('FASTAcq:STATE ON')
-def StopFFastAcquisition():
-    tds.write('FASTAcq:STATE OFF')
+    if fast:
+        if fast == 'on':
+            tds.write('FASTAcq:STATE ON')
+        elif fast == 'off':
+            tds.write('FASTAcq:STATE OFF')
+        else:
+            raise ValueError('Fast only has two valid states: on/off.')
     
 def StartAcquisition():
     tds.write('ACQuire:STATE RUN')
@@ -188,20 +190,22 @@ def Lock():
 def Unlock():
     tds.write('UNLock ALL')
 
-def Mask(start=True, mask=None, source='CH1', display='ON', counting=None, wfmamount=None,
+def Mask(start=True, mask=None, source=None, display=None, counting=None, wfmamount=None,
          highlights=None, inverted=None, margin=None, polatity=None, stoponfailure=None, failthreshold=None, failscreen=None, 
          logfail=None, logwfm=None, repeat=None, delay=None, auto=None, hdelta=None, vdelta=None, digitalfilter=None, 
          beep=None, failbeep=None):
     if mask:
         tds.write('MASK:STANdard ' + str(mask))
-    tds.write('MASK:SOUrce ' + str(source))
-    tds.write('MASK:DISplay ' + str(display))
+    if source:
+        tds.write('MASK:SOUrce ' + str(source))
+    if display:
+        tds.write('MASK:DISplay ' + str(display))
     if counting:
         tds.write('MASK:COUNt:STATE ' + str(counting))
     if highlights:
         tds.write('MASK:HIGHLIGHTHits ' + str(highlights))
     if digitalfilter:
-        tds.write('MASKFILTer ' + str(digitalfilter))
+        tds.write('MASK:FILTer ' + str(digitalfilter))
     if failthreshold:
         tds.write('MASK:TESt:SAMple:THReshold ' + str(failthreshold))
         tds.write('MASK:TESt:THReshold ' + str(failthreshold))
@@ -227,6 +231,7 @@ def Mask(start=True, mask=None, source='CH1', display='ON', counting=None, wfmam
             tds.write('MASK:AUTOAdjust:HDELTA ' + str(hdelta))
         if vdelta:
             tds.write('MASK:AUTOAdjust:VDELTA ' + str(vdelta))
+    if auto:
         tds.write('MASK:AUTOAdjust ' + str(auto))
     if inverted:
         tds.write('MASK:INVert ' + str(inverted))
@@ -239,24 +244,22 @@ def Mask(start=True, mask=None, source='CH1', display='ON', counting=None, wfmam
     if start == True:
         tds.write('MASK:TESt:STATE ON')
         if polarity:
-            if polarity == 0:
+            if polarity == 'negative':
                 tds.write('MASK:POLarity NEGAtive')
-            elif polarity == 1:
+            elif polarity == 'positive':
                 tds.write('MASK:POLarity POSITIVe')
-            elif polarity == 2:
+            elif polarity == 'both':
                 tds.write('MASK:POLarity BOTh')
             else:
                 raise ValueError('Maks polarity may only be 0 (negative), 1 (positive) or 2 (both).')
     else:
         tds.write('MASK:TESt:STATE OFF')
     
-def UserMask(seg=None, p1=None, p2=None, p3=None, p4=None, amp=None, bit=None, hscale=None, htrigpos=None, patbits=None, 
+def UserMask(seg=None, points=None, amp=None, bit=None, hscale=None, htrigpos=None, patbits=None, 
              presampbits=None, reclength=None, serialtrig=None, trigtosamp=None, voffset=None, vpos=None, vscale=None, width=None):
     if seg:
-        if p3 and p4:
-            tds.write('MASK:USER:SEG' + str(seg) + ':POINTS ' + str(p1) + ', ' + str(p2) + ', ' + str(p3) + ', ' + str(p4))
-        elif p1 and p2:
-            tds.write('MASK:USER:SEG' + str(seg) + ':POINTS ' + str(p1) + ', ' + str(p2))
+        if points:
+            tds.write('MASK:USER:SEG' + str(seg) + ':POINTS ' + str(points))
     if amp:
         tds.write('MASK:USER:ASMPlitude ' + str(amp))
     if bit:
@@ -284,9 +287,8 @@ def UserMask(seg=None, p1=None, p2=None, p3=None, p4=None, amp=None, bit=None, h
     if width:
         tds.write('MASK:USER:WIDth' + str(width))
         
-def DeleteUserMaskSeg(seg=None):
-    if seg:
-        tds.write('MASK:USER:SEG' + str(seg) + ' DELETE')
+def DeleteUserMaskSeg(seg):
+    tds.write('MASK:USER:SEG' + str(seg) + ' DELETE')
     
 def MaskHit():
     tds.query('MASK:COUNt:TOTal?')
