@@ -1,19 +1,6 @@
 import pyvisa
 import time
 import sys
-
-ch = 1
-mathvari = 1
-meas = 1
-
-def Channel(channelnumber):
-    if channelnumber >= 1 and channelnumber <= 4:
-        global ch
-        ch = str(channelnumber)
-        tds.write('TRIGger:A:COMMunication:SOUrce CH' + str(ch))
-        return
-    else:
-        raise ValueError('Selected channel can only be 1, 2, 3 or 4.')
        
 def Header(status='off'):
     if status == 'off':
@@ -56,6 +43,18 @@ def Save(storagelocation):
         return
     else:
         raise ValueError('Storage Location must range from 0 through 10.')
+        
+def SaveWaveform(waveform, filepath='REF1', fileformat=None, start=None, stop=None):
+    if start:
+        tds.write('DATa:STARt ' + str(start))
+    if stop:
+        tds.write('DATa:STOP ' + str(start))
+    if fileformat:
+        tds.write('SAVE:WAVEform:FILEFormat ' + str(fileformat))
+    tds.write('SAVE:WAVEform ' + str(filepath))
+    
+def RecallWaveform(filepath, ref='REF1'):
+    tds.write('RECAll:WAVEform "' + str(filepath) + '",' + str(ref))
 
 def ResetToFactorySettings():
     tds.write('*RST')
@@ -99,6 +98,29 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
             tds.write('FASTAcq:STATE OFF')
         else:
             raise ValueError('Fast only has two valid states: on/off.')
+            
+def Transfer(default=True, source=None, ref=None, encode=None, startframe=None, endframe=None, firstdata=None, lastdata=None):
+    if default == True:
+        tds.write('DATa INIT')
+    if source:
+        tds.write('DATa:SOUrce ' + str(source))
+    if ref:
+        tds.write('DATa:DESTination REF' + str(ref))
+    if encode:
+        tds.write('DATa:ENCdg ' + str(encode))
+    if startframe:
+        tds.write('DATa:FRAMESTARt ' + str(startframe))
+    if endframe:
+        tds.write('DATa:FRAMESTOP ' + str(endframe))
+    if firstdata:
+        tds.write('DATa:STARt ' + str(firstdata))
+    if lastdata:
+        tds.write('DATa:STOP ' + str(lastdata))
+    tds.query('CURVe?')
+    
+            
+def Resistor(channel='1', value='50'):
+    tds.write('CH' + str(channel) + ':TERmination ' + str(value))
     
 def StartAcquisition():
     tds.write('ACQuire:STATE RUN')
@@ -109,13 +131,16 @@ def StopAcquisition():
 def Busy():
     tds.query('BUSY?')
 
-def ProbeCalibration(channel=ch):
+def ProbeCalibration(channel='1'):
     tds.query('CALibrate:CALProbe:CH' + str(channel) + '?')
 
-def ChannelOffset(offsetinmV, channel=ch):
-    offset = float(offsetinmV)
-    off="{:.2f}".format(offset)
-    tds.query('CH'+ str(channel)+ ':OFFSet ' + str(off) + 'E-03')
+def Vertical(channel='1', scale=None, offset=None, position=None):
+    if scale:
+        tds.write('CH' + str(channel) + ':SCAle ' + str(scale))
+    if offset:
+        tds.write('CH'+ str(channel) + ':OFFSet ' + str(offset))
+    if position:
+        tds.write('CH' + str(channel) + ':POSition ' + str(position)) 
 
 def Date():
     tds.query('DATE?')
@@ -316,66 +341,23 @@ def ImmedValue():
     
 def ImmedUnit():
     tds.query('MEASUrement:IMMed:UNIts?')
-    
-def ImmedMeasure(m=meas, statistics=None, meastype=None, source=None, source2=None, refmethod=None, 
-            high=None, low=None, mid=None, delay=None, edge1=None, edge2=None):
-    if source:
-        tds.write('MEASUrement:IMMed:SOURCE[1] ' + str(source))
-    if source2:
-        tds.write('MEASUrement:IMMed:SOURCE[2] ' + str(source))
-    if refmethod:
-        if refmethod == 'percent':
-            if high:
-                tds.write('MEASUrement:IMMed:REFLevel:PERCent:HIGH ' + str(high))
-            if low:
-                tds.write('MEASUrement:IMMed:REFLevel:PERCent:LOW ' + str(low)) 
-            if mid:
-                tds.write('MEASUrement:IMMed:REFLevel:PERCent:MID[1]' + str(mid))
-        if refmethod == 'absolute':
-            if high:
-                tds.write('MEASUrement:IMMed:REFLevel:ABSolute:HIGH ' + str(high))
-            if low:
-                tds.write('MEASUrement:IMMed:REFLevel:ABSolute:LOW ' + str(low))    
-            if mid:
-                tds.write('MEASUrement:IMMed:REFLevel:ABSolute:MID[1]' + str(mid))
-    if delay:
-        if delay == forwards:
-            tds.write('MEASUrement:IMMed:DELay:DIREction FORWards')
-        elif delay == backwards:
-            tds.write('MEASUrement:IMMed:DELay:DIREction BACKWards')
-    if edge1:
-        if edge1 == 'rise':
-            tds.write('MEASUrement:IMMed:DELay:EDGE[1] RISe')
-        if edge1 == 'fall':
-            tds.write('MEASUrement:IMMed:DELay:EDGE[1] FALL')
-    if edge2:
-        if egde2 == 'rise':
-            tds.write('MEASUrement:IMMed:DELay:EDGE[2] RISe')
-        if edge2 == 'fall':
-            tds.write('MEASUrement:IMMed:DELay:EDGE[2] FALL')
-    if meastype:
-        tds.write('MEASUrement:IMMed:TYPE ' + str(argument)) 
-        
-def GlobalMeas(x):
-    global meas
-    meas = str(x)
-    
-def CountMeas(m=meas):
+
+def CountMeas(m='1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':COUNt?')
 
-def Maximum(m=meas):
+def Maximum(m='1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':MAXimum?')
-def Mean(m=meas):
+def Mean(m='1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':MEAN?')
-def Minimum(m=meas):
+def Minimum(m='1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':MINImum?')
     
-def Measure(meastype=None, method=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, 
+def Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, 
             high=None, low=None, mid=None, delay=None, edge1=None, edge2=None):
     if source:
-        tds.write('MEASUrement:MEAS' + str(m) + ':SOURCE[1] ' + str(source))
+        tds.write('MEASUrement:' + str(m) + ':SOURCE[1] ' + str(source))
     if source2:
-        tds.write('MEASUrement:MEAS' + str(m) + ':SOURCE[2] ' + str(source))
+        tds.write('MEASUrement:' + str(m) + ':SOURCE[2] ' + str(source))
     if method:
         if method == 'histogram':
             tds.write('MEASUrement:METHod HIStogram')
@@ -387,36 +369,36 @@ def Measure(meastype=None, method=None, m=meas, statistics=None, weightvalue=Non
             raise ValueError('Measure method may only be histogram, mean or minmax')
     if delay:
         if delay == forwards:
-            tds.write('MEASUrement:MEAS' + str(m) + ':DELay:DIREction FORWards')
+            tds.write('MEASUrement:' + str(m) + ':DELay:DIREction FORWards')
         elif delay == backwards:
-            tds.write('MEASUrement:MEAS' + str(m) + ':DELay:DIREction BACKWards')
+            tds.write('MEASUrement:' + str(m) + ':DELay:DIREction BACKWards')
     if edge1:
         if edge1 == 'rise':
-            tds.write('MEASUrement:MEAS' + str(m) + ':DELay:EDGE[1] RISe')
+            tds.write('MEASUrement:' + str(m) + ':DELay:EDGE[1] RISe')
         elif edge1 == 'fall':
-            tds.write('MEASUrement:MEAS' + str(m) + ':DELay:EDGE[1] FALL')
+            tds.write('MEASUrement:' + str(m) + ':DELay:EDGE[1] FALL')
     if edge2:
         if egde2 == 'rise':
-            tds.write('MEASUrement:MEAS' + str(m) + ':DELay:EDGE[2] RISe')
+            tds.write('MEASUrement:' + str(m) + ':DELay:EDGE[2] RISe')
         elif edge2 == 'fall':
-            tds.write('MEASUrement:MEAS' + str(m) + ':DELay:EDGE[2] FALL')
+            tds.write('MEASUrement:' + str(m) + ':DELay:EDGE[2] FALL')
     if refmethod:
         if refmethod == 'percent':
             if high:
-                tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:PERCent:HIGH ' + str(high))
+                tds.write('MEASUrement:' + str(m) + ':REFLevel:PERCent:HIGH ' + str(high))
             if low:
-                tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:PERCent:LOW ' + str(low)) 
+                tds.write('MEASUrement:' + str(m) + ':REFLevel:PERCent:LOW ' + str(low)) 
             if mid:
-                tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:PERCent:MID[1]' + str(mid))
+                tds.write('MEASUrement:' + str(m) + ':REFLevel:PERCent:MID[1]' + str(mid))
         elif refmethod == 'absolute':
             if high:
-                tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:ABSolute:HIGH ' + str(high))
+                tds.write('MEASUrement:' + str(m) + ':REFLevel:ABSolute:HIGH ' + str(high))
             if low:
-                tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:ABSolute:LOW ' + str(low))    
+                tds.write('MEASUrement:' + str(m) + ':REFLevel:ABSolute:LOW ' + str(low))    
             if mid:
                 tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:ABSolute:MID[1]' + str(mid))
     if meastype:
-        tds.write('MEASUrement:MEAS' + str(m) + ':TYPE ' + str(argument)) 
+        tds.write('MEASUrement:' + str(m) + ':TYPE ' + str(argument)) 
     if statistics =='all':
         tds.write('MEASUrement:STATIstics:MODe ALL')
     elif statistics == 'off':
@@ -427,23 +409,21 @@ def Measure(meastype=None, method=None, m=meas, statistics=None, weightvalue=Non
         tds.write('MEASUrement:STATIstics:WEIghting ' + str(weightvalue))
     if state:
         if state == 'off':
-            tds.write('MEASUrement:MEAS' + str(m) + ':STATE OFF')   
+            tds.write('MEASUrement:' + str(m) + ':STATE OFF')   
         elif state == 'on':
-            tds.write('MEASUrement:MEAS' + str(m) + ':STATE ON')
+            tds.write('MEASUrement:' + str(m) + ':STATE ON')
 
-def MeasValue():
-    tds.query('MEASUrement:MEAS' + str(m) + ':VALue?')
-def MeasUnit():
-    tds.query('MEASUrement:MEAS' + str(m) + ':UNIts?')
+def MeasValue(m='MEAS1'):
+    tds.query('MEASUrement:' + str(m) + ':VALue?')
+def MeasUnit(m='MEAS1'):
+    tds.query('MEASUrement:' + str(m) + ':UNIts?')
     
-def StanDeviation():
+def StanDeviation(m='MEAS1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':STDdev?')
     
 def ResetStatistics():
     tds.query('MEASUrement:STATIstics:COUNt RESET')
-    
-def TrigLevel():
-    tds.write('TRIGger:A SETLevel')
+ 
     
 def TriggerB(state=None, source=None, count=None, time=None, level=None, slope=None):
     tds.write('TRIGger:B:EDGE:COUPling ATRIGger')
@@ -828,7 +808,7 @@ def TimeDelay(mode='seconds', time='0'):
     else:
         raise TypeError('Time delay mode must be either seconds or percent. Alternatively time can be set to 0.')
 
-def Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, roll=None):
+def Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, reclength=None, roll=None):
     if rate:
         tds.write('HORizontal:MAIn:SAMPLERate ' + str(rate))
     if scale:
@@ -837,8 +817,8 @@ def Horizontal(rate=None, scale=None, units=None, position=None, resolution=None
         tds.write('HORizontal:MAIn:UNIts ' + str(units))
     if position:
         tds.write('HORizontal:MAIn:POSition ' + str(position))
-    if resolution:
-        tds.write('HORizontal:RECOrdlength ' + str(resolution))
+    if reclength:
+        tds.write('HORizontal:RECOrdlength ' + str(reclength))
     if roll:
         tds.write('HORizontal:ROLL ' + str(roll))
 
