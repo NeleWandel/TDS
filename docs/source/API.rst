@@ -150,14 +150,15 @@ Horizontal
 | Starts FastFrame acquisition.
 .. method:: FastFrameStop()
 | Stops FastFrame acquisition.
-.. method:: Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, roll=None)
+.. method:: Horizontal(rate=None, scale=None, units=None, position=None, resolution=None, reclength=None, roll=None)
 | Sets the horizontal parameters of the oscilloscope.
 | All arguments are optional.
 | ``rate`` in samples for second. Sets the horizontal sample rate of the oscilloscope. Adjusting the rate leads to an automatic adjustment of the record length.
 | ``scale`` in seconds per devision. Sets the horizontal scale, range is :const:`2E-10` to :const:`40` (200ps to 40s).
 | ``units`` as a string. Sets the unit for the time base. 
 | ``position`` in percent. Positions the chosen amout of the waveform to the left of the center. 
-| ``resolution`` in data points per frame. The minimum is :const:`500`, maximum is :const:`400000` if only one channel is in use, :const:`200000` if two channels are in use and :const:`100000` in case all four channels are in use.
+| ``resolution`` in data points per frame. It ranges from :const:`500` through :const:`400000`.
+| ``reclength`` in data points per record. The minimum is :const:`500`, maximum is :const:`400000` if only one channel is in use, :const:`200000` if two channels are in use and :const:`100000` in case all four channels are in use.
 | ``roll`` changes the roll mode status. This can be usefull for observing data samples at slow speeds. It has three valid states:
 - :const:`AUTO`
 - :const:`OFF`
@@ -294,44 +295,18 @@ Math
 
 Measurement
 -----------
-.. method:: CountMeas(m=meas)
-| Returns the amount of values that have been obtained since the last statistical reset. Values that generated an error are not counted.
-.. method:: ImmedMeasure(m=meas, statistics=None, meastype=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
-| 
-| 
-| ``m``
-| 
-| ``statistics``
-| 
-| ``meastype``
-| 
-| ``source``
-| 
-| ``source2``
-| 
-| ``refmethod``
-| 
-| ``high``
-| 
-| ``low``
-| 
-| ``mid``
-| 
-| ``delay``
-| 
-| ``edge1``
-| 
-| ``edge2``
+.. method:: CountMeas(m='1')
+| Returns the amount of values that have been obtained for the measurement defined by ``m`` since the last statistical reset. Values that generated an error are not counted.
 .. method:: ImmedValue()
 | Returns the value of the immediate measurement.
 .. method:: ImmedUnit()
 | Returns the unit of the immediate measurement.
-.. method:: Maximum(m=meas)
-| Returns the maximum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
-.. method:: Mean(m=meas)
-| Returns the mean value accumulated for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
-.. method:: Measure(meastype=None, method=None, m=meas, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
-| ``m`` defines the measurement from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`)
+.. method:: Maximum(m='1')
+| Returns the maximum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. The default is :const:`1`.
+.. method:: Mean(m='1')
+| Returns the mean value accumulated for the measurement defined by ``m`` from :const:`1` to :const:`8`. The default is :const:`1`.
+.. method:: Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
+| ``m`` defines the measurement from :const:`MEAS1` to :const:`MEAS8` or :const:`IMMed` for immediate measurement. The default is :const:`MEAS1`.
 | 
 | ``method`` sets the method used to calculate the 0% and 100% reference level. The valid states are:
 - :const:`histogram` (High and low reference levels are set to the most common values above/below the mid point. Best choice for examining pulses.)
@@ -556,12 +531,37 @@ Measurement
    
       | Measures the number of waveforms used to calculate the histogram.
    
-.. method:: Minimum(m=meas)
-| Returns the minimum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. If ``m`` is not defined, the command will use the value set by :meth:`UseMeasurement` (default is :const:`1`).
+.. method:: Minimum(m=`1`)
+| Returns the minimum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. The default is :const:`1`.
 
-.. method:: UseMeasurement(x)
-| Sets the storage number for every command in the measurement group. ``x`` must range from 1 through 8.
-| Default storage is 1.
+.. method:: ResetStatistics()
+| Resets the current statistics count.
+
+Save and Recall
+---------------
+.. method:: Recall(storagelocation)
+| Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
+| ``storagelocation`` must range from 1 through 10.
+.. method:: RecallWaveform(filepath, ref='REF1')
+| Recalls a waveform from a directory specified by ``filepath`` to one of the four referencce memory locations, ranging from :const:`REF1` through :const:`REF4`.
+.. method:: ResetToFactorySettings()
+| Resets the oscilloscope to the default settings. 
+.. method:: Save(storagelocation)
+| Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall` command.
+| ``storagelocation`` must range from 1 through 10.
+.. method:: SaveWaveform(waveform, filepath='REF1', fileformat=None, start=None, stop=None)
+| Saves the waveform selected by ``waveform`` (:const:`CH<x>`, :const:`MATH<x>` or :const:`REF<x>` with <x> ranging from 1 through 4) to a designated filepath. This can either be a path to a harddrive, just the name of the file (in which case the default filepath will be used) or one of four reference memory locations :const:`REF1` to :cosnt:`REF4`.
+| Valid ``fileformat`` are: 
+- :const:`INTERNal` (saves the waveform in the internal .wfm format. This format can be used for reference waveforms.)
+- :const:`MATHCad` (saves the waveform in MathCad .dat format. This format allows for export to MathCad or Matlab. Waveform values are delimited with new lines, FastAcq and WfmDB waveform data is exported as a matrix.)
+- :const:`MATLab` (same as `MATHCad`)
+- :const:`SPREADSHEETCsv` (saves the waveform in .csv format. Waveform values are demilited by commas.)
+- :const:`SPREADSHEETTxt` (saves the waveform in .txt format. Waveform values are delimited by tabs.)
+| ``start`` sets the first data point that will be transferred. The range is from 1 to the set record length.
+| ``stop`` sets the last data point that will be transferred. The range is from 1 to the set record length.
+| For complex waveforms ``start`` should be set to 1 and ``stop`` to the maximum record length.
+| The record length can be set with :const:`Horizontal`.
+
 Status and Error
 ----------------
 .. method:: Clear()
@@ -800,12 +800,36 @@ Trigger
 
 Vertical
 --------
-.. method:: ChannelOffset(offset)
-| Sets the vertical offset for the channel specified by :meth:`Channel`. ``offset`` needs to be written in mV.
+.. method:: Resistor(channel='1', value='50')
+| Enables a resistor between the specified ``chanel`` input and oscilloscope ground. 
+| For the TDS7404B only a Resistor of 50 Ohm is available. So only :const:`0` and :const:`50` are valid states.
+| Other instruments might have other possible resistors, more information about can be found in their manual. 
+.. method:: Vertical(channel='1', scale=None, offset=None, position=None)
+| Sets the vertical offset for the channel specified by ``channel``. 
+| ``scale`` in units per devision sets the oscilloscopes vertical scale.
+| ``offset`` in volts, sets the channel offset.
 | Depending on the vertical scale factor the range of the channel offset can be either ±100V, ±10V or ±1V.
+| ``position`` in devisions from center graticule, sets the vertical position. The range is :const:`8` to :const:`-8`.
 
 Waveform Transfer
 -----------------
+
+.. method:: Transfer()
+| Transfers the source waveform to one of the four reference memory locations. To download the waveform data instead use :meth:`SaveWaveform`.
+| If ``default`` is set to :const:`True` the waveform data parameters are initialized to their factory defaults.
+| ``source`` determines the waveform for the data transfer. This can be either :const:`CH<x>`, :const:`MATH<x>` or :const:`REF<x>` with x in range from 1 through 4.
+| ``ref`` sets the reference memory location the waveform data is transferred to. Valid options range from :const:`1` through :const:`4`.
+| ``encode`` chooses the format of the outgoing waveform data. Valid options are:
+- :const:`ASCIi` (All waveform data will be encoded to ASCII)
+- :const:`FAStest` (The data will be sent in the fastest way possible)
+- :const:`RIBinary` (Integer data point representation with the most significant byte transferred first)
+- :const:`RPBinary` (Positive integer data-point reprensentation with the most significant byte transferred first)
+- :const:`FPBinary` (Floating point data. Only applicable to math waveforms)
+- :const:`SRIbinary` (Integer data point representation with the least significant byte transferred first)
+- :const:`SRPbinary` (Positive integer data-point reprensentation with the least significant byte transferred first)
+- :const:`SFPbinary` (Floating point data in IBM format. Only applicable to math waveforms)
+| ``startframe`` and ``endframe`` set the starting and ending frame for the data transfer. Range is from :const:`1` to the number of acquired frames. 
+| ``firstdata`` and ``lastdata`` set the first and last data points for the data transfer. The range is from :const:`1` to the record length.
 
 Miscellaneous
 -------------
@@ -832,14 +856,6 @@ Miscellaneous
 .. method:: Lock()
 | Disables all frontpanel buttons and knobs on the oscilloscope, including the touchscreen.
 | The command :meth:`Unlock` enables them again.
-.. method:: Recall(storagelocation)
-| Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
-| ``storagelocation`` must range from 1 through 10.
-.. method:: ResetToFactorySettings()
-| Resets the oscilloscope to the default settings. 
-.. method:: Save(storagelocation)
-| Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall` command.
-| ``storagelocation`` must range from 1 through 10.
 .. method:: SetDate(day, month, year)
 | Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
 .. method:: Undo()
