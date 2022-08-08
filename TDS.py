@@ -24,7 +24,10 @@ def IsDone():
     tds.query('*OPC?')
 
 def Wait():
-    tds.write('*WAI')
+    busy = tds.query('BUSY?')
+    while busy == '1':
+        sleep(1)
+        busy = tds.query('BUSY?')
 
 def Calibration():
     print(tds.write('*CAL?'))
@@ -336,11 +339,11 @@ def Math(math='1', equation=None, y=None, x=None):
     if x:
         tds.write('MATH' + str(math) + ':SCAle ' + str(x))
       
-def ImmedValue():
-    tds.query('MEASUrement:IMMed:VALue?')
+def Value(m='MEAS1'):
+    tds.query('MEASUrement:' + str(m) + ':VALue?')
     
-def ImmedUnit():
-    tds.query('MEASUrement:IMMed:UNIts?')
+def Unit(m='MEAS1'):
+    tds.query('MEASUrement:' + str(m) + ':UNIts?')
 
 def CountMeas(m='1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':COUNt?')
@@ -412,11 +415,6 @@ def Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=
             tds.write('MEASUrement:' + str(m) + ':STATE OFF')   
         elif state == 'on':
             tds.write('MEASUrement:' + str(m) + ':STATE ON')
-
-def MeasValue(m='MEAS1'):
-    tds.query('MEASUrement:' + str(m) + ':VALue?')
-def MeasUnit(m='MEAS1'):
-    tds.query('MEASUrement:' + str(m) + ':UNIts?')
     
 def StanDeviation(m='MEAS1'):
     tds.query('MEASUrement:MEAS' + str(m) + ':STDdev?')
