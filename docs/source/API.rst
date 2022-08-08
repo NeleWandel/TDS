@@ -279,9 +279,9 @@ Math
 | ``equation`` Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. 
 | Changes to any of the operands lead to changes of the output.
 | Examples:
-| DefineMath(Ch1+Ch2)
-| DefineMath((Ch1-Meas1)/Meas2)
-| DefineMath(Intg(Ch1-Avg(Ch1))
+| DefineMath(CH1+CH2)
+| DefineMath((CH1-MEAS1)/MEAS2)
+| DefineMath(Intg(CH1-Avg(CH1))
 | 
 | ``y`` sets the vertical position of the waveform. ``y`` can be either positive or negative and is given in divisions.
 | 
