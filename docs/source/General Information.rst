@@ -30,9 +30,11 @@ Device Set Up
 Example
 -------
 | Now that the device is properly set up, it is time to write a code to operate the oscilloscope.
+
       >>> import pyvisa
       >>> rm = pyvisa.ResourceManager()
       >>> tds = rm.open_resource('GPIB0::1::INSTR')
+      
 | This short code always needs to be executed first, followed by the command definitions, which can be found   `here. <https://github.com/NeleWandel/TDS/blob/main/TDS.py>`_
 | The next important step is to connect your probe to the oscilloscope so that there is data to acquire.
 | Afterwards you should be able to set up your device and start acquiring data.
@@ -49,5 +51,6 @@ Example
       
 | In this example we first turn on the display of our source waveform, then we let the oscilloscope auto calibrate our probe with :meth:`ProbeCalibration`. To ensure that the calibration is fully done before moving on, we use the :meth:`Wait` command.
 | Next we let the oscilloscope :meth:`AutoSet` the horizontal, vertical and trigger values, so that we have a stable display of our waveform. The :meth:`Acquisition` command sets the wanted parameters, in this case a single sequence acquisition in sampling mode. :meth:`StartAcquisition` then starts acquiring data. The :meth:`Measure` command then sets the measurement parameters to amplitude measurement in immediate mode on channel 1. 
-| The Wait() command ensures that all data has been acquired before the actual measurement takes place. 
-| Not using the Wait() command, might result in unfinished data acquisition, which might lead to a false measurement result.
+| The :meth:`Wait` command ensures that all data has been acquired before the actual measurement takes place. 
+| Not using the :meth:`Wait` command, might result in unfinished data acquisition, which might lead to a false measurement result.
+
