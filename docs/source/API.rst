@@ -288,7 +288,7 @@ Math
 | ``x`` sets the horizontal scale of the waveform. ``x`` can be either positive or negative and is given in volt, amper or watt per divisions.
 | Viable ranges are from :const:`100.0E-36` through :const:`100.0E+36`.
 
-.. method:: DefineMathVariable(varnumber, varvalue)
+.. method:: MathVariable(varnumber, varvalue)
 | Defines a variable that can be used in :meth:`Math`.
 | ``varnumber`` must be a number ranging from 1 through 8 and defines the storage place of the variable.
 | ``varvalue`` can be any value.
@@ -297,10 +297,6 @@ Measurement
 -----------
 .. method:: CountMeas(m='1')
 | Returns the amount of values that have been obtained for the measurement defined by ``m`` since the last statistical reset. Values that generated an error are not counted.
-.. method:: ImmedValue()
-| Returns the value of the immediate measurement.
-.. method:: ImmedUnit()
-| Returns the unit of the immediate measurement.
 .. method:: Maximum(m='1')
 | Returns the maximum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. The default is :const:`1`.
 .. method:: Mean(m='1')
@@ -536,6 +532,16 @@ Measurement
 
 .. method:: ResetStatistics()
 | Resets the current statistics count.
+
+.. method:: StanDeviation(m='MEAS1')
+| Returns the standard deviation for the measurement defined by ``m``.
+
+.. method:: Unit(m='MEAS1')
+| Returns the unit of the measurement defined by ``m``.
+
+.. method:: Value(m='MEAS1')
+| Returns the value of the measurement defined by ``m``.
+
 
 Save and Recall
 ---------------
@@ -800,16 +806,17 @@ Trigger
 
 Vertical
 --------
+.. method:: ChannelSetup(channel='CH1', coupling=None, deskewtime=None, offset=None, position=None, scale=None)
+| Changes the settings of the channel selected by ``channel``.
+| ``coupling`` changes the attenuator coupling settings to either :const:`AC`, :const:`DC` or :const:`GND`.
+| ``deskewtime`` in seconds, adjusts the deskew time. The allowed range is from :const:`-75E-9` to :const:`75E-9`.
+| ``offset`` in volts, sets the channel offset. Depending on the vertical scale factor the range of the channel offset is either ±100V (vertical scale from 1.01 to 100), ±10V (vertical scale from 0.1 to 1) or ±1V (vertical scale from 0.001 to 0.1).
+| ``position`` in devisions, sets the vertical position of the waveform. Range is :const:`-8` to :const:`8`.
+| ``scale`` in units per devision, sets the vertical scale.
 .. method:: Resistor(channel='1', value='50')
 | Enables a resistor between the specified ``channel`` input and oscilloscope ground. 
 | For the TDS7404B only a Resistor of 50 Ohm is available. So only :const:`0` and :const:`50` are valid states.
 | Other instruments might have other possible resistors, more information about can be found in their manual. 
-.. method:: Vertical(channel='1', scale=None, offset=None, position=None)
-| Sets the vertical offset for the channel specified by ``channel``. 
-| ``scale`` in units per devision sets the oscilloscopes vertical scale.
-| ``offset`` in volts, sets the channel offset.
-| Depending on the vertical scale factor the range of the channel offset can be either ±100V, ±10V or ±1V.
-| ``position`` in devisions from center graticule, sets the vertical position. The range is :const:`8` to :const:`-8`.
 
 Waveform Transfer
 -----------------
@@ -865,3 +872,5 @@ Miscellaneous
 | Reverses all changes done by :meth:`AutoSet`. This does affect any changes made after the automatic adjustment. 
 .. method:: Unlock()
 | Enables all frontpanel buttons and knobs on the oscilloscope, after they have been locked by :meth:`Lock`
+.. method:: WaveformDisplay(source='CH1', arg='ON')
+| Turns the display and calculation of the waveform selected by :const:`source` either :const:`ON` or :const:`OFF`.
