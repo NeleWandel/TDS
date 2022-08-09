@@ -61,9 +61,6 @@ def RecallWaveform(filepath, ref='REF1'):
 
 def ResetToFactorySettings():
     tds.write('*RST')
-
-def Trig():
-    tds.write('*TRG')
     
 def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None):
     if acquiremode:
@@ -102,13 +99,11 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
         else:
             raise ValueError('Fast only has two valid states: on/off.')
             
-def Transfer(default=True, source=None, ref=None, encode=None, startframe=None, endframe=None, firstdata=None, lastdata=None):
+def Transfer(default=False, source=None, encode=None, startframe=None, endframe=None, firstdata=None, lastdata=None):
     if default == True:
         tds.write('DATa INIT')
     if source:
         tds.write('DATa:SOUrce ' + str(source))
-    if ref:
-        tds.write('DATa:DESTination REF' + str(ref))
     if encode:
         tds.write('DATa:ENCdg ' + str(encode))
     if startframe:
@@ -119,7 +114,7 @@ def Transfer(default=True, source=None, ref=None, encode=None, startframe=None, 
         tds.write('DATa:STARt ' + str(firstdata))
     if lastdata:
         tds.write('DATa:STOP ' + str(lastdata))
-    tds.query('CURVe?')
+    print(tds.query('CURVe?'))
     
             
 def Resistor(channel='1', value='50'):
@@ -136,14 +131,6 @@ def Busy():
 
 def ProbeCalibration(channel='1'):
     tds.query('CALibrate:CALProbe:CH' + str(channel) + '?')
-
-def Vertical(channel='1', scale=None, offset=None, position=None):
-    if scale:
-        tds.write('CH' + str(channel) + ':SCAle ' + str(scale))
-    if offset:
-        tds.write('CH'+ str(channel) + ':OFFSet ' + str(offset))
-    if position:
-        tds.write('CH' + str(channel) + ':POSition ' + str(position)) 
 
 def Date():
     tds.query('DATE?')
@@ -820,7 +807,7 @@ def Horizontal(rate=None, scale=None, units=None, position=None, resolution=None
     if roll:
         tds.write('HORizontal:ROLL ' + str(roll))
 
-def ChannelSetup(channel=ch, coupling=None, deskewtime=None, offset=None, position=None, scale=None):
+def ChannelSetup(channel='CH1', coupling=None, deskewtime=None, offset=None, position=None, scale=None):
     if coupling:
         tds.write('CH' + str(channel) + ':COUPling ' + str(coupling))
     if deskewtime:
@@ -835,3 +822,8 @@ def ChannelSetup(channel=ch, coupling=None, deskewtime=None, offset=None, positi
 def WaveformDisplay(source='CH1', arg = 'ON'):
     tds.write('SELect:' + str(source) + ' ' + str(arg))
     
+def Time():
+    tds.query('TIMe?')
+
+def SetTime(time='00:00:00'):
+    tds.write('TIMe ' + str(time))
