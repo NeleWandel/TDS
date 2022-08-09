@@ -543,7 +543,7 @@ Save and Recall
 | Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
 | ``storagelocation`` must range from 1 through 10.
 .. method:: RecallWaveform(filepath, ref='REF1')
-| Recalls a waveform from a directory specified by ``filepath`` to one of the four referencce memory locations, ranging from :const:`REF1` through :const:`REF4`.
+| Recalls a waveform from a directory specified by ``filepath`` to one of the four reference memory locations, ranging from :const:`REF1` through :const:`REF4`.
 .. method:: ResetToFactorySettings()
 | Resets the oscilloscope to the default settings. 
 .. method:: Save(storagelocation)
@@ -801,7 +801,7 @@ Trigger
 Vertical
 --------
 .. method:: Resistor(channel='1', value='50')
-| Enables a resistor between the specified ``chanel`` input and oscilloscope ground. 
+| Enables a resistor between the specified ``channel`` input and oscilloscope ground. 
 | For the TDS7404B only a Resistor of 50 Ohm is available. So only :const:`0` and :const:`50` are valid states.
 | Other instruments might have other possible resistors, more information about can be found in their manual. 
 .. method:: Vertical(channel='1', scale=None, offset=None, position=None)
@@ -814,11 +814,10 @@ Vertical
 Waveform Transfer
 -----------------
 
-.. method:: Transfer()
-| Transfers the source waveform to one of the four reference memory locations. To download the waveform data instead use :meth:`SaveWaveform`.
+.. method:: Transfer(default=False, source=None, encode=None, startframe=None, endframe=None, firstdata=None, lastdata=None)
+| Returns the source waveform data.
 | If ``default`` is set to :const:`True` the waveform data parameters are initialized to their factory defaults.
-| ``source`` determines the waveform for the data transfer. This can be either :const:`CH<x>`, :const:`MATH<x>` or :const:`REF<x>` with x in range from 1 through 4.
-| ``ref`` sets the reference memory location the waveform data is transferred to. Valid options range from :const:`1` through :const:`4`.
+| ``source`` determines the waveform for the data transfer. This can be either :const:`CHx`, :const:`MATHx` or :const:`REFx` with x in range from 1 through 4.
 | ``encode`` chooses the format of the outgoing waveform data. Valid options are:
 - :const:`ASCIi` (All waveform data will be encoded to ASCII)
 - :const:`FAStest` (The data will be sent in the fastest way possible)
@@ -858,6 +857,10 @@ Miscellaneous
 | The command :meth:`Unlock` enables them again.
 .. method:: SetDate(day, month, year)
 | Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
+.. method:: SetTime(time='00:00:00')
+| Changes the internal time of the oscilloscope. Time must be given in the format hh:mm:ss.
+.. method:: Time()
+| Returns the current internal time of the oscilloscope.
 .. method:: Undo()
 | Reverses all changes done by :meth:`AutoSet`. This does affect any changes made after the automatic adjustment. 
 .. method:: Unlock()
