@@ -113,7 +113,7 @@ Histogram
 - :const:`off` (Disables the display of the histogram, data will still be collected)
 - :const:`log` (The histogram display is turned on and set to logarithmic format)
 - :const:`lin` (The histogram display is turned on and set to linear format)
-| ``source`` sets the source for the histogram. The source may be either CH<x>, MATH<x> or REF<x>. 
+| ``source`` sets the source for the histogram. The source may be either CHx, MATHx or REFx. 
 | ``size`` is given in devisions and defines the size of the histogram. If the histogram is horizontal, the value may range from 0.1 to 8.0. In case the histogram is vertical, the range is 0.1 to 10.0.
 | ``function`` defines whether the histogram is :const:`horizontal` or :const:`vertical`.
 | ``state`` defines whether histogram calculations are :const:`ON` or :const:`OFF`.
@@ -137,13 +137,13 @@ Horizontal
 .. method:: FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None)
 | Sets up all FastFrame (also known as memory segmentation) parameters.
 | All arguments are optional. Not defining any of the arguments results in this command being useless.
-| ``source`` defines the reference source. Valid sources are CH<x>, MATH<x> and REF<x> with <x> being an number ranging from 1 through 4.
+| ``source`` defines the reference source. Valid sources are :cosnt:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from 1 through 4.
 | ``count`` defines how many frames/segments the FastFrame mode acquires.
 | ``refframe`` defines the reference frame number which is then used to calculate the time differences for the frames.
 | ``length`` may range from :const:`500` through :const:`400000` and defines the record length to the number of data points in each frame.
 | ``mode`` can be either :const:`ALL` or :const:`LIVE`. In live mode adjusting a channel waveform leads to adjustment of all channel and math waveforms, as they get locked together. For example changing the reference frame from CH1 to frame 6 results in CH2, CH3, CH4, MATH1, MATH2, MATH3 and MATH 4 also using frame 6 as reference. All mode the same happens, but on top of that all REF waveforms also adjust to the selected frame.
 | ``multiframes`` if turned :const:`on` the oscilloscope displays multiple overlaid frames. Turning on multiframe mode gives access to ``multisource``, ``frameamount`` and ``start``.
-| ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible. Valid sources are :const:`CH<x>`, :const:`MATH<x>` and :const:`REF<x>` with <x> being an number ranging from 1 through 4.
+| ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible. Valid sources are :const:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from 1 through 4.
 | ``frameamount`` defines the number of overlaying frames. 
 | ``start`` defines the starting frame.
 .. method:: FastFrameStart()
@@ -185,7 +185,7 @@ Mask
 | 
 | ``mask`` allows input of a standard mask. A full list of all standard masks can be found on page 419 in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
 | 
-| ``source`` sets the source that will be compared against the mask. This may be either :const:`CH<x>`, :const:`MATH<x>` or :const:`REF<x>` with x ranging from 1 through 4.
+| ``source`` sets the source that will be compared against the mask. This may be either :const:`CHx`, :const:`MATHx` or :const:`REFx` with x ranging from 1 through 4.
 | 
 | ``display`` turns the masks display on screen either :const:`ON` or :const:`OFF`. When turned off, mask counting, testing and autoset are not available.
 | 
@@ -317,9 +317,9 @@ Measurement
 | 
 | ``state`` turns measurements :const:`off` or :const:`on`.
 | 
-| ``source`` sets the source to measure from. It can be :const:`CH<x>`, :const:`MATH<x>`, :const:`REF<x>` with <x> in the range of 1-4 or :const:`HIStogram`.
+| ``source`` sets the source to measure from. It can be :const:`CHx`, :const:`MATHx`, :const:`REFx` with x in the range of 1-4 or :const:`HIStogram`.
 | 
-| ``source2`` sets the sour ce to measure to (for phase or delay measurements). It can be :const:`CH<x>`, :const:`MATH<x>`, :const:`REF<x>` with <x> in the range of 1-4.
+| ``source2`` sets the sour ce to measure to (for phase or delay measurements). It can be :const:`CHx`, :const:`MATHx`, :const:`REFx` with x in the range of 1-4.
 | 
 | ``refmethod`` defines whether the reference levels are given in :const:`percent` or :const:`absolut` values.
 | 
@@ -556,7 +556,7 @@ Save and Recall
 | Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall` command.
 | ``storagelocation`` must range from 1 through 10.
 .. method:: SaveWaveform(waveform, filepath='REF1', fileformat=None, start=None, stop=None)
-| Saves the waveform selected by ``waveform`` (:const:`CH<x>`, :const:`MATH<x>` or :const:`REF<x>` with <x> ranging from 1 through 4) to a designated filepath. This can either be a path to a harddrive, just the name of the file (in which case the default filepath will be used) or one of four reference memory locations :const:`REF1` to :cosnt:`REF4`.
+| Saves the waveform selected by ``waveform`` (:const:`CHx`, :const:`MATHx` or :const:`REFx` with x ranging from 1 through 4) to a designated filepath. This can either be a path to a harddrive, just the name of the file (in which case the default filepath will be used) or one of four reference memory locations :const:`REF1` to :cosnt:`REF4`.
 | Valid ``fileformat`` are: 
 - :const:`INTERNal` (saves the waveform in the internal .wfm format. This format can be used for reference waveforms.)
 - :const:`MATHCad` (saves the waveform in MathCad .dat format. This format allows for export to MathCad or Matlab. Waveform values are delimited with new lines, FastAcq and WfmDB waveform data is exported as a matrix.)
