@@ -1,6 +1,5 @@
 import pyvisa
 import time
-import sys
        
 def Header(status='off'):
     if status == 'off':
