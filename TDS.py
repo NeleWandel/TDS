@@ -1,6 +1,6 @@
 import pyvisa
 import time
-       
+
 def Conntect():
     rm = pyvisa.ResourceManager()
     print(rm.list_resources())
@@ -14,6 +14,7 @@ def Conntect():
     elif y == 'n':
         tds = rm.open_resource('')
         print('Please try again. Device is not connected. For further information, please check the PyVISA documentation.')
+       
        
 def Header(status='off'):
     if status == 'off':
@@ -38,10 +39,11 @@ def IsDone():
 
 def Wait():
     busy = tds.query('BUSY?')
-    while busy == '1':
-        sleep(1)
+    time.sleep(1)
+    while busy == '1\n' or busy == '1':
         busy = tds.query('BUSY?')
-
+        time.sleep(1)
+        
 def Calibration():
     print(tds.write('*CAL?'))
 
@@ -67,7 +69,7 @@ def SaveWaveform(waveform, filepath='REF1', fileformat=None, start=None, stop=No
         tds.write('DATa:STOP ' + str(start))
     if fileformat:
         tds.write('SAVE:WAVEform:FILEFormat ' + str(fileformat))
-    tds.write('SAVE:WAVEform ' + str(filepath))
+    tds.write('SAVE:WAVEform ' +str(waveform) + ','+ str(filepath))
     
 def RecallWaveform(filepath, ref='REF1'):
     tds.write('RECAll:WAVEform "' + str(filepath) + '",' + str(ref))
@@ -101,9 +103,9 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
         tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
     if stop:
         if stop == 'single':
-            tds.query('ACQuire:STOPAfter SEQuence')
+            tds.write('ACQuire:STOPAfter SEQuence')
         elif stop == 'repeat':
-            tds.query('ACQuire:STOPAfter RUNSTop')  
+            tds.write('ACQuire:STOPAfter RUNSTop')  
     if fast:
         if fast == 'on':
             tds.write('FASTAcq:STATE ON')
@@ -153,7 +155,7 @@ def SetDate(day='01', month='01', year='2000'):
     
 def Export(filename=None, fileformat=None, inksaver=None, palette=None, fullscreen=None):
     if filename:
-        tds.query('EXPort:FILEName "' + str(path) + '"')
+        tds.write('EXPort:FILEName "' + str(filename) + '"')
     if fileformat:
         if fileformat == 'BMP':
             tds.write('EXPort:FORMat BMP')
@@ -339,8 +341,28 @@ def Math(math='1', equation=None, y=None, x=None):
     if x:
         tds.write('MATH' + str(math) + ':SCAle ' + str(x))
       
+
+ #def Value(m='MEAS1'):
+ #   tds.query('MEASUrement:' + str(m) + ':VALue?')
 def Value(m='MEAS1'):
-    tds.query('MEASUrement:' + str(m) + ':VALue?')
+    if m == 'MEAS1':
+        tds.query('MEASUrement:MEAS1:VALue?')
+    if m == 'MEAS2':
+        tds.query('MEASUrement:MEAS2:VALue?')
+    if m == 'MEAS3':
+        tds.query('MEASUrement:MEAS3:VALue?')
+    if m == 'MEAS4':
+        tds.query('MEASUrement:MEAS4:VALue?')
+    if m == 'MEAS5':
+        tds.query('MEASUrement:MEAS5:VALue?')
+    if m == 'MEAS6':
+        tds.query('MEASUrement:MEAS6:VALue?')
+    if m == 'MEAS7':
+        tds.query('MEASUrement:MEAS7:VALue?')
+    if m == 'MEAS8':
+        tds.query('MEASUrement:MEAS8:VALue?')
+    if m == 'IMMed':
+        tds.query('MEASUrement:IMMed:VALue?')
     
 def Unit(m='MEAS1'):
     tds.query('MEASUrement:' + str(m) + ':UNIts?')
@@ -401,7 +423,7 @@ def Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=
             if mid:
                 tds.write('MEASUrement:MEAS' + str(m) + ':REFLevel:ABSolute:MID[1]' + str(mid))
     if meastype:
-        tds.write('MEASUrement:' + str(m) + ':TYPE ' + str(argument)) 
+        tds.write('MEASUrement:' + str(m) + ':TYPe ' + str(meastype)) 
     if statistics =='all':
         tds.write('MEASUrement:STATIstics:MODe ALL')
     elif statistics == 'off':
@@ -446,7 +468,7 @@ def TriggerB(state=None, source=None, count=None, time=None, level=None, slope=N
     if state:
         tds.write('TRIGger:B:STATE ') + str(state)
     
-def Trigger(triggertype=None, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, 
+def Trigger(triggertype=None, mode=None, holdofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, 
             function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, 
             clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, 
             settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, 
@@ -576,19 +598,14 @@ def Trigger(triggertype=None, mode=None, holdhofftime=None, triggerclass=None, C
                     tds.write('TRIGger:A:COMMunication:CLOCK:POLarity FALL')
         elif triggertype == 'edge':
             tds.write('TRIGger:A:TYPe EDGE')
-            if edgesource:
-                if edgesource == 'AUX':
-                    tds.write('TRIGger:A:EDGE:SOUrce AUXiliary')
-                elif edgesource == 'line':
-                    tds.write('TRIGger:A:EDGE:SOUrce LINE')
-                else:
-                    tds.write('TRIGger:A:EDGE:SOUrce ' + str(edgesource))
+            if source:
+                tds.write('TRIGger:A:EDGE:SOUrce ' + str(source))
             if edgecoupling:
                 tds.write('TRIGger:A:EDGE:COUPling ' + str(edgecoupling))
-            if edgeslope:
-                if edgeslope == 'rise':
+            if polarity:
+                if polarity == 'rise':
                     tds.write('TRIGger:A:EDGE:SLOpe RISe')
-                elif edgeslope == 'fall':
+                elif polarity == 'fall':
                     tds.write('TRIGger:A:EDGE:SLOpe FALL')
                 else:
                     raise TypeError('Edgeslope must be rise or fall.')
@@ -752,15 +769,16 @@ def Histogram(display=None, source=None, size=None, function=None, state=None, b
             tds.write('HIStogram:FUNCtion VERTical')
         elif function == 'horizontal':
             tds.write('HIStogram:FUNCtion HORizontal')
-    if box and left and top and right and bottom:
-        if box == 'coordinates':
-            tds.write('HIStogram:Box ' + str(left) + ', '+ str(top) + ', '+ str(right) + ', '+ str(bottom))
-        elif box == 'percent':
-            tds.write('HIStogram:BOXPcnt ' + str(left) + ', '+ str(top) + ', '+ str(right) + ', '+ str(bottom))
+    if box:
+        if box and left and top and right and bottom:
+            if box == 'coordinates':
+                tds.write('HIStogram:Box ' + str(left) + ', '+ str(top) + ', '+ str(right) + ', '+ str(bottom))
+            elif box == 'percent':
+                tds.write('HIStogram:BOXPcnt ' + str(left) + ', '+ str(top) + ', '+ str(right) + ', '+ str(bottom))
+            else:
+                raise TypeError('Histogram Box can only be coordinates or percent')
         else:
-            raise TypeError('Histogram Box can only be coordinates or percent')
-    else:
-        raise ValueError('Box argument needs left, top, right and bottom arguments.')
+            raise ValueError('Box argument needs left, top, right and bottom arguments.')
 
 def FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None):
     if source:
@@ -839,4 +857,4 @@ def Time():
     tds.query('TIMe?')
 
 def SetTime(time='00:00:00'):
-    tds.write('TIMe ' + str(time))
+    tds.write('TIMe "' + str(time) + '"')
