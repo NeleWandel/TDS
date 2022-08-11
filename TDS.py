@@ -1,6 +1,20 @@
 import pyvisa
 import time
        
+def Conntect():
+    rm = pyvisa.ResourceManager()
+    print(rm.list_resources())
+    x = input('Copy the wanted resource name. For example: ‘GPIB0::1::INSTR’')
+    tds = rm.open_resource(x)
+    print('Is this the right device:')
+    print(tds.query('*IDN?'))
+    y = input('y/n')
+    if y == 'y':
+        print('Device is now connected.')
+    elif y == 'n':
+        tds = rm.open_resource('')
+        print('Please try again. Device is not connected. For further information, please check the PyVISA documentation.')
+       
 def Header(status='off'):
     if status == 'off':
         tds.write('HDR OFF')
