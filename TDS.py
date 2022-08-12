@@ -1,20 +1,5 @@
 import pyvisa
 import time
-
-def Conntect():
-    rm = pyvisa.ResourceManager()
-    print(rm.list_resources())
-    x = input('Copy the wanted resource name. For example: ‘GPIB0::1::INSTR’')
-    tds = rm.open_resource(x)
-    print('Is this the right device:')
-    print(tds.query('*IDN?'))
-    y = input('y/n')
-    if y == 'y':
-        print('Device is now connected.')
-    elif y == 'n':
-        tds = rm.open_resource('')
-        print('Please try again. Device is not connected. For further information, please check the PyVISA documentation.')
-       
        
 def Header(status='off'):
     if status == 'off':
@@ -23,7 +8,8 @@ def Header(status='off'):
         tds.write('HDR ON')
 
 def Identify():
-    tds.query("*IDN?")
+    idn = tds.query("*IDN?")
+    return(idn)
 
 def AutoSet():
     tds.write('AUTOSet EXECute')
@@ -35,7 +21,8 @@ def Clear():
     tds.write('*CLS')
 
 def IsDone():
-    tds.query('*OPC?')
+    done = tds.query('*OPC?')
+    return(done)
 
 def Wait():
     busy = tds.query('BUSY?')
@@ -142,13 +129,15 @@ def StopAcquisition():
     tds.write('ACQuire:STATE STOP')
 
 def Busy():
-    tds.query('BUSY?')
+    busy = tds.query('BUSY?')
+    return(busy)
 
 def ProbeCalibration(channel='1'):
     tds.query('CALibrate:CALProbe:CH' + str(channel) + '?')
 
 def Date():
-    tds.query('DATE?')
+    date = tds.query('DATE?')
+    return(date)
     
 def SetDate(day='01', month='01', year='2000'):
     tds.write('DATE "' + str(year) + '-' + str(month) + '-' + str(day) +'"')
@@ -321,7 +310,8 @@ def DeleteUserMaskSeg(seg):
     tds.write('MASK:USER:SEG' + str(seg) + ' DELETE')
     
 def MaskHit():
-    tds.query('MASK:COUNt:TOTal?')
+    hits = tds.query('MASK:COUNt:TOTal?')
+    return(hits)
     
 def ResetMaskHit():
     tds.write('MASK:COUNt:RESET')
@@ -345,37 +335,26 @@ def Math(math='1', equation=None, y=None, x=None):
  #def Value(m='MEAS1'):
  #   tds.query('MEASUrement:' + str(m) + ':VALue?')
 def Value(m='MEAS1'):
-    if m == 'MEAS1':
-        tds.query('MEASUrement:MEAS1:VALue?')
-    if m == 'MEAS2':
-        tds.query('MEASUrement:MEAS2:VALue?')
-    if m == 'MEAS3':
-        tds.query('MEASUrement:MEAS3:VALue?')
-    if m == 'MEAS4':
-        tds.query('MEASUrement:MEAS4:VALue?')
-    if m == 'MEAS5':
-        tds.query('MEASUrement:MEAS5:VALue?')
-    if m == 'MEAS6':
-        tds.query('MEASUrement:MEAS6:VALue?')
-    if m == 'MEAS7':
-        tds.query('MEASUrement:MEAS7:VALue?')
-    if m == 'MEAS8':
-        tds.query('MEASUrement:MEAS8:VALue?')
-    if m == 'IMMed':
-        tds.query('MEASUrement:IMMed:VALue?')
+    value = tds.query('MEASUrement:' + str(m) + ':VALue?')
+    return(value)
     
 def Unit(m='MEAS1'):
-    tds.query('MEASUrement:' + str(m) + ':UNIts?')
+    unit = tds.query('MEASUrement:' + str(m) + ':UNIts?')
+    return(unit)
 
 def CountMeas(m='1'):
-    tds.query('MEASUrement:MEAS' + str(m) + ':COUNt?')
+    count = tds.query('MEASUrement:MEAS' + str(m) + ':COUNt?')
+    return(count)
 
 def Maximum(m='1'):
-    tds.query('MEASUrement:MEAS' + str(m) + ':MAXimum?')
+    maximum = tds.query('MEASUrement:MEAS' + str(m) + ':MAXimum?')
+    return(maximum)
 def Mean(m='1'):
-    tds.query('MEASUrement:MEAS' + str(m) + ':MEAN?')
+    mean = tds.query('MEASUrement:MEAS' + str(m) + ':MEAN?')
+    return(mean)
 def Minimum(m='1'):
-    tds.query('MEASUrement:MEAS' + str(m) + ':MINImum?')
+    minimum = tds.query('MEASUrement:MEAS' + str(m) + ':MINImum?')
+    return(minimum)
     
 def Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, 
             high=None, low=None, mid=None, delay=None, edge1=None, edge2=None):
@@ -746,7 +725,8 @@ def ResetHistogram():
     tds.write('HIStogram:COUNt RESET')
     
 def HistogramData():
-    tds.query('HIStogram:DATa?')
+    histodata = tds.query('HIStogram:DATa?')
+    return(histodata)
         
 def Histogram(display=None, source=None, size=None, function=None, state=None, box=None, left=None, top=None, right=None, bottom=None):
     if display:
@@ -854,7 +834,8 @@ def WaveformDisplay(source='CH1', arg = 'ON'):
     tds.write('SELect:' + str(source) + ' ' + str(arg))
     
 def Time():
-    tds.query('TIMe?')
+    t = tds.query('TIMe?')
+    return(t)
 
 def SetTime(time='00:00:00'):
     tds.write('TIMe "' + str(time) + '"')
