@@ -13,12 +13,12 @@ sp = rm.open_resource('ASRL3::INSTR', read_termination = '\r',
 def Run(wavelength):
     sp.write(str(wavelength) + ' GOTO')
 
-def Scan(wavelength):
+def Scan(scanrate, resolution=None):
+    if scanrate:
+        sp.write(str(scanrate) + ' NM/MIN')
+        time.sleep(0.1)
     sp.write(str(wavelength) + ' NM')
-    
-#Set Resolution in nanometer per minute
-def SetResolution(perminute):
-    sp.write(str(perminute) + ' NM/MIN')
+
 
 #initialises the monochromator to default values
 def Reset():
