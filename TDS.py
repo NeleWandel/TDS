@@ -68,7 +68,7 @@ def RecallWaveform(filepath, ref='REF1'):
 def ResetToFactorySettings():
     tds.write('*RST')
     
-def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None):
+def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None, start=None):
     if acquiremode:
         if acquiremode == 'sampling':
             tds.write('ACQuire:MODe SAMple')
@@ -89,7 +89,7 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
         else:
             raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
     if mode:
-        tds.write('ACQuire:SAMPlingmode ' + str(mode)) #RT, IT, ET
+        tds.write('ACQuire:SAMPlingmode ' + str(mode))
     if samplesize:
         tds.write('ACQuire:NUMSAMples ' + str(samplesize)) 
     if stop:
@@ -97,14 +97,19 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
             tds.write('ACQuire:STOPAfter SEQuence')
         elif stop == 'repeat':
             tds.write('ACQuire:STOPAfter RUNSTop')  
-    if fast:
-        if fast == 'on':
+    if fast == 'on':
+        if acquire == 'on':
             tds.write('FASTAcq:STATE ON')
-        elif fast == 'off':
+        elif acquire == 'off':
             tds.write('FASTAcq:STATE OFF')
         else:
             raise ValueError('Fast only has two valid states: on/off.')
-            
+     elif acquire:
+        if acquire == 'on':
+            tds.write('ACQuire:STATE RUN')
+        elif acquire == 'off':
+            tds.write('ACQuire:STATE STOP')
+                
 def Transfer(default=False, source=None, encode=None, startframe=None, endframe=None, firstdata=None, lastdata=None):
     if default == True:
         tds.write('DATa INIT')
@@ -126,12 +131,6 @@ def Transfer(default=False, source=None, encode=None, startframe=None, endframe=
             
 def Resistor(channel='1', value='50'):
     tds.write('CH' + str(channel) + ':TERmination ' + str(value))
-    
-def StartAcquisition():
-    tds.write('ACQuire:STATE RUN')
-
-def StopAcquisition():
-    tds.write('ACQuire:STATE STOP')
 
 def Busy():
     busy = tds.query('BUSY?')
