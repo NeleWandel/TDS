@@ -68,7 +68,7 @@ def RecallWaveform(filepath, ref='REF1'):
 def ResetToFactorySettings():
     tds.write('*RST')
     
-def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None, start=None):
+def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None, acquire=None):
     if acquiremode:
         if acquiremode == 'sampling':
             tds.write('ACQuire:MODe SAMple')
@@ -98,12 +98,13 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
         elif stop == 'repeat':
             tds.write('ACQuire:STOPAfter RUNSTop')  
     if fast == 'on':
-        if acquire == 'on':
-            tds.write('FASTAcq:STATE ON')
-        elif acquire == 'off':
-            tds.write('FASTAcq:STATE OFF')
-        else:
-            raise ValueError('Fast only has two valid states: on/off.')
+        if acquire:
+            if acquire == 'on':
+                tds.write('FASTAcq:STATE ON')
+            elif acquire == 'off':
+                tds.write('FASTAcq:STATE OFF')
+            else:
+                raise ValueError('Fast only has two valid states: on/off.')
      elif acquire:
         if acquire == 'on':
             tds.write('ACQuire:STATE RUN')
