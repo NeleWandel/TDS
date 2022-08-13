@@ -1,5 +1,9 @@
 import pyvisa
 import time
+
+def CalibrationStatus():
+    status = tds.query(CALibrate?)
+    return(status)
        
 def Header(status='off'):
     if status == 'off':
@@ -116,7 +120,8 @@ def Transfer(default=False, source=None, encode=None, startframe=None, endframe=
         tds.write('DATa:STARt ' + str(firstdata))
     if lastdata:
         tds.write('DATa:STOP ' + str(lastdata))
-    print(tds.query('CURVe?'))
+    curve = tds.query('CURVe?'))
+    return(curve)
     
             
 def Resistor(channel='1', value='50'):
@@ -133,7 +138,7 @@ def Busy():
     return(busy)
 
 def ProbeCalibration(channel='1'):
-    tds.query('CALibrate:CALProbe:CH' + str(channel) + '?')
+    tds.write('CALibrate:CALProbe:CH' + str(channel) + '?')
 
 def Date():
     date = tds.query('DATE?')
@@ -331,9 +336,6 @@ def Math(math='1', equation=None, y=None, x=None):
     if x:
         tds.write('MATH' + str(math) + ':SCAle ' + str(x))
       
-
- #def Value(m='MEAS1'):
- #   tds.query('MEASUrement:' + str(m) + ':VALue?')
 def Value(m='MEAS1'):
     value = tds.query('MEASUrement:' + str(m) + ':VALue?')
     return(value)
@@ -418,10 +420,11 @@ def Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=
             tds.write('MEASUrement:' + str(m) + ':STATE ON')
     
 def StanDeviation(m='MEAS1'):
-    tds.query('MEASUrement:MEAS' + str(m) + ':STDdev?')
-    
+    sd = tds.query('MEASUrement:MEAS' + str(m) + ':STDdev?')
+    return(sd)
+
 def ResetStatistics():
-    tds.query('MEASUrement:STATIstics:COUNt RESET')
+    tds.write('MEASUrement:STATIstics:COUNt RESET')
  
     
 def TriggerB(state=None, source=None, count=None, time=None, level=None, slope=None):
@@ -454,9 +457,9 @@ def Trigger(triggertype=None, mode=None, holdofftime=None, triggerclass=None, CH
             CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeouttime=None, deltatime=None, transition=None):
     if mode:
         if mode == 'auto':
-            tds.query('TRIGger:A:MODe AUTo')
+            tds.write('TRIGger:A:MODe AUTo')
         elif mode == 'normal':
-            tds.query('TRIGger:A:MODe NORMal')
+            tds.write('TRIGger:A:MODe NORMal')
     if holdofftime:
         if holdofftime == 'auto':
             tds.write('TRIGger:A:HOLDoff:BY AUTO')
