@@ -24,10 +24,6 @@ def Undo():
 def Clear():
     tds.write('*CLS')
 
-def IsDone():
-    done = tds.query('*OPC?')
-    return(done)
-
 def Wait():
     busy = tds.query('BUSY?')
     time.sleep(1)
@@ -68,7 +64,7 @@ def RecallWaveform(filepath, ref='REF1'):
 def ResetToFactorySettings():
     tds.write('*RST')
     
-def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, stop=None, fast=None, acquire=None):
+def Acquisition(acquiremode=None, samplesize=None, avg=None, env=None, mode=None, stop=None, fast=None, acquire=None):
     if acquiremode:
         if acquiremode == 'sampling':
             tds.write('ACQuire:MODe SAMple')
@@ -78,16 +74,16 @@ def Acquisition(acquiremode=None, samplesize=None, WFamount=None, mode=None, sto
             tds.write('ACQuire:MODe HIRes')
         elif acquiremode == 'averaging':
             tds.write('ACQuire:MODe AVErage')
-            if WFamount:
-                tds.write('ACQuire:NUMAVg ' + str(WFamount))
         elif acquiremode == 'envelope':
             tds.write('ACQuire:MODe ENVelope')
-            if WFamount:
-                tds.write('ACQuire:NUMENv' + str(WFamount))
         elif acquiremode == 'wfmdb':
             tds.write('ACQuire:MODE WFMDB')
         else:
             raise ValueError('acquiremode must be sampling, peakdetect, hires, averaging, envelope or wfmdb')
+    if env:
+        tds.write('ACQuire:NUMENv' + str(env))
+    if avg:
+        tds.write('ACQuire:NUMAVg ' + str(avg))
     if mode:
         tds.write('ACQuire:SAMPlingmode ' + str(mode))
     if samplesize:
@@ -144,8 +140,8 @@ def Date():
     date = tds.query('DATE?')
     return(date)
     
-def SetDate(day='01', month='01', year='2000'):
-    tds.write('DATE "' + str(year) + '-' + str(month) + '-' + str(day) +'"')
+def SetDate(date='2022-01-01'):
+    tds.write('DATE "' + str(date) +'"')
     
 def Export(filename=None, fileformat=None, inksaver=None, palette=None, fullscreen=None):
     if filename:
@@ -247,7 +243,7 @@ def Mask(start=True, mask=None, source=None, display=None, counting=None, wfmamo
         tds.write('MASK:TEST:DELay ' + str(delay))
     if margin:
         tds.write('MASK:MARgin:STATE ON')
-        tds.write('MASK:MARgin:PERCent ' + str(margin)) #range -50 to +50
+        tds.write('MASK:MARgin:PERCent ' + str(margin))
     else:
         tds.write('MASK:MARgin:STATE OFF')
     if auto == 'ON':
@@ -265,17 +261,17 @@ def Mask(start=True, mask=None, source=None, display=None, counting=None, wfmamo
         tds.write('MASK:TESt:BEEP:FAILure ' + str(failbeep))
     if stoponfailure:
         tds.write('MASK:TESt:STOP:FAILure ' + str(stoponfailure))
+    if polarity:
+        if polarity == 'negative':
+            tds.write('MASK:POLarity NEGAtive')
+        elif polarity == 'positive':
+            tds.write('MASK:POLarity POSITIVe')
+        elif polarity == 'both':
+            tds.write('MASK:POLarity BOTh')
+        else:
+            raise ValueError('Maks polarity may only be 0 (negative), 1 (positive) or 2 (both).')
     if start == True:
         tds.write('MASK:TESt:STATE ON')
-        if polarity:
-            if polarity == 'negative':
-                tds.write('MASK:POLarity NEGAtive')
-            elif polarity == 'positive':
-                tds.write('MASK:POLarity POSITIVe')
-            elif polarity == 'both':
-                tds.write('MASK:POLarity BOTh')
-            else:
-                raise ValueError('Maks polarity may only be 0 (negative), 1 (positive) or 2 (both).')
     else:
         tds.write('MASK:TESt:STATE OFF')
     
@@ -291,7 +287,7 @@ def UserMask(seg=None, points=None, amp=None, bit=None, hscale=None, htrigpos=No
     if hscale:
         tds.write('MASK:USER:HSCAle ' + str(hscale))
     if htrigpos:
-        tds.write('MASK:USER:HTRIGPOS ' + str(htrigpos)) #0.0 to 1.0
+        tds.write('MASK:USER:HTRIGPOS ' + str(htrigpos)) 
     if patbits:
         tds.write('MASK:USER:PATTERNBITS ' + str(patbits))
     if presampbits:
@@ -590,7 +586,7 @@ def Trigger(triggertype=None, mode=None, holdofftime=None, triggerclass=None, CH
                 elif polarity == 'fall':
                     tds.write('TRIGger:A:EDGE:SLOpe FALL')
                 else:
-                    raise TypeError('Edgeslope must be rise or fall.')
+                    raise TypeError('Polarity must be rise or fall.')
         elif triggertype == 'serial':
             tds.write('TRIGger:A:TYPe SERIal')
             if source:
@@ -746,7 +742,7 @@ def Histogram(display=None, source=None, size=None, function=None, state=None, b
     if source:
         tds.write('HIStogram:SOUrce ' + str(source))
     if size:
-        tds.write('HIStogram:SIZe ' + str(size))#0.1-8 div hor, 0.1+10 vert
+        tds.write('HIStogram:SIZe ' + str(size))
     if function:
         if function == 'vertical':
             tds.write('HIStogram:FUNCtion VERTical')
@@ -761,7 +757,7 @@ def Histogram(display=None, source=None, size=None, function=None, state=None, b
             else:
                 raise TypeError('Histogram Box can only be coordinates or percent')
         else:
-            raise ValueError('Box argument needs left, top, right and bottom arguments.')
+            raise ValueError('Box argument needs left, top, right and bottom parameters.')
 
 def FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None):
     if source:
