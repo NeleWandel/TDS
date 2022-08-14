@@ -29,7 +29,7 @@ Device Set Up
 
 Example
 -------
-| Now that the device is properly set up, it is time to write a code to operate the oscilloscope.
+| Now that the device is properly set up, it is time to write a script to operate the oscilloscope.
 
       >>> import pyvisa
       >>> rm = pyvisa.ResourceManager()
@@ -40,17 +40,14 @@ Example
 | Afterwards you should be able to set up your device and start acquiring data.
 
       >>> WaveformDisplay('CH1', 'ON')
-      >>> ProbeCalibration('1')
-      >>> Wait()
       >>> AutoSet()
-      >>> Acquisition('sampling', stop='single')
-      >>> StartAcquisition()
-      >>> Measure(meastype='AMP', m='IMMed', source='CH1')
+      >>> Acquisition('sampling', stop='single', acquire='on')
       >>> Wait()
+      >>> Measure(meastype='AMP', m='IMMed', source='CH1')
       >>> print(Value())
       
-| In this example we first turn on the display of our source waveform, then we let the oscilloscope auto calibrate our probe with :meth:`ProbeCalibration`. To ensure that the calibration is fully done before moving on, we use the :meth:`Wait` command.
-| Next we let the oscilloscope :meth:`AutoSet` the horizontal, vertical and trigger values, so that we have a stable display of our waveform. The :meth:`Acquisition` command sets the wanted parameters, in this case a single sequence acquisition in sampling mode. :meth:`StartAcquisition` then starts acquiring data. The :meth:`Measure` command then sets the measurement parameters to amplitude measurement in immediate mode on channel 1. 
-| The :meth:`Wait` command ensures that all data has been acquired before the actual measurement takes place. 
+| In this example we first turn on the display of our source waveform. Next we let the oscilloscope :meth:`AutoSet` the horizontal, vertical and trigger values, so that we have a stable display of our waveform. The :meth:`Acquisition` command sets the wanted parameters, in this case a single sequence acquisition in sampling mode. The ``acquire`` argument decides whether or not the instrument starts the acquisition. In this case we turn it on. 
+| The :meth:`Wait` command ensures that all data has been acquired before the measurement takes place. 
 | Not using the :meth:`Wait` command, might result in unfinished data acquisition, which might lead to a false measurement result.
-
+| The :meth:`Measure` command then sets the measurement parameters to amplitude measurement in immediate mode on channel 1. 
+| Lastly :meth:`Value` returns the measured value, making it possible to print it to the computer.
