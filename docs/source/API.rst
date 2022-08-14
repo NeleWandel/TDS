@@ -160,7 +160,7 @@ Horizontal
 .. method:: FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None)
 | Sets up all FastFrame (also known as memory segmentation) parameters.
 | All arguments are optional. Not defining any of the arguments results in this command being useless.
-| ``source`` defines the reference source. Valid sources are :cosnt:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from :cosnt:`1` through :const:`4`.
+| ``source`` defines the reference source. Valid sources are :const:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from :const:`1` through :const:`4`.
 | ``count`` defines how many frames/segments the FastFrame mode acquires.
 | ``refframe`` defines the reference frame number which is then used to calculate the time differences for the frames.
 | ``length`` may range from :const:`500` through :const:`400000` and defines the record length to the number of data points in each frame.
@@ -583,7 +583,7 @@ Save and Recall
 | Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall` command.
 | ``storagelocation`` must range from 1 through 10.
 .. method:: SaveWaveform(waveform, filepath='REF1', fileformat=None, start=None, stop=None)
-| Saves the waveform selected by ``waveform`` (:const:`CHx`, :const:`MATHx` or :const:`REFx` with x ranging from 1 through 4) to a designated filepath. This can either be a path to a harddrive, just the name of the file (in which case the default filepath will be used) or one of four reference memory locations :const:`REF1` to :cosnt:`REF4`.
+| Saves the waveform selected by ``waveform`` (:const:`CHx`, :const:`MATHx` or :const:`REFx` with x ranging from 1 through 4) to a designated filepath. This can either be a path to a harddrive, just the name of the file (in which case the default filepath will be used) or one of four reference memory locations :const:`REF1` to :const:`REF4`.
 | Valid ``fileformat`` are: 
 - :const:`INTERNal` (saves the waveform in the internal .wfm format. This format can be used for reference waveforms.)
 - :const:`MATHCad` (saves the waveform in MathCad .dat format. This format allows for export to MathCad or Matlab. Waveform values are delimited with new lines, FastAcq and WfmDB waveform data is exported as a matrix.)
