@@ -358,7 +358,7 @@ def Minimum(m='1'):
     minimum = tds.query('MEASUrement:MEAS' + str(m) + ':MINImum?')
     return(minimum)
     
-def Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, 
+def Measure(m='MEAS1', meastype=None, method=None, statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, 
             high=None, low=None, mid=None, delay=None, edge1=None, edge2=None):
     if source:
         tds.write('MEASUrement:' + str(m) + ':SOURCE[1] ' + str(source))
@@ -454,7 +454,7 @@ def Trigger(triggertype=None, mode=None, holdofftime=None, triggerclass=None, CH
             function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, 
             clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, 
             settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, 
-            CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeouttime=None, deltatime=None, transition=None):
+            CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeouttime=None, deltatime=None):
     if mode:
         if mode == 'auto':
             tds.write('TRIGger:A:MODe AUTo')
@@ -686,11 +686,11 @@ def Trigger(triggertype=None, mode=None, holdofftime=None, triggerclass=None, CH
                     if deltatime:
                         tds.write('TRIGger:A:PULse:TRANsition:DELTATime ' + str(deltatime))
                     if polarity:
-                        if polarity == 'high':
-                            tds.write('TRIGger:A:PULse:TRANsition:POLarity STAYSHigh')
-                        elif polarity == 'low':
-                            tds.write('TRIGger:A:PULse:TRANsition:POLarity STAYSLow')
-                        elif polarity == 'both':
+                        if polarity == 'negative':
+                            tds.write('TRIGger:A:PULse:TRANsition:POLarity NEGAtive')
+                        elif polarity == 'positive':
+                            tds.write('TRIGger:A:PULse:TRANsition:POLarity POSITIVe')
+                        elif polarity == 'either':
                             tds.write('TRIGger:A:PULse:TRANsition:POLarity EITher')
                         else:
                             raise ValueError('Pulse transition polarity can only be high, low or both.')
