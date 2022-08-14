@@ -224,16 +224,16 @@ Mask
 | 
 | ``polarity`` sets whether the pass/fail test tests :const:`positive` pulses, :const:`negative` pulses or :const:`both`. 
 | 
-| ``stoponfailure`` if turned :const:`ON` the oscilloscope stops acquiring data when a failure occurs during a pass/fail test. If turned :const:`OFF`the oscilloscope keeps acquiring data after the failure occured. 
+| ``stoponfailure`` if turned :const:`ON` the oscilloscope stops acquiring data when a failure occurs during a pass/fail test. If turned :const:`OFF` the oscilloscope keeps acquiring data after the failure occured. 
 | 
 | ``failthreshold`` sets the number of failed tested waveforms needed for the pass/fail testing status to change from passing to failing. If WfmDB mode is turned on, it sets the minimum number of hits needed to change the status from passing to failing.
 | 
-| ``failscreen`` if turned :const:`ON` the oscilloscope generates a screenshot as soon as the status changes to failing. :const:`OFF`turns this feature off. To change the screenshot settings use the :meth:`Screenshot` command beforehand. 
+| ``failscreen`` if turned :const:`ON` the oscilloscope generates a screenshot as soon as the status changes to failing. :const:`OFF` turns this feature off. To change the screenshot settings use the :meth:`Screenshot` command beforehand. 
 | 
-| ``logfail`` if turned :const:`ON` the oscilloscope logs the current date and time to a file as soon as the status changes to failing. :const:`OFF`turns this feature off.
+| ``logfail`` if turned :const:`ON` the oscilloscope logs the current date and time to a file as soon as the status changes to failing. :const:`OFF` turns this feature off.
 | 
-| ``logwfm`` if turned :const:`ON`the oscilloscope copies waveform data from all active channels to files as soon as the status changes to failing. To creat a log of every violation set ``wfamount`` to :const:`1` and ``repeat`` to :const:`ON`.
-| :const:`OFF`turns this feature off.
+| ``logwfm`` if turned :const:`ON` the oscilloscope copies waveform data from all active channels to files as soon as the status changes to failing. To creat a log of every violation set ``wfamount`` to :const:`1` and ``repeat`` to :const:`ON`.
+| :const:`OFF` turns this feature off.
 | 
 | ``repeat`` if turned :const:`ON` the oscilloscope starts a new pass/fail test after completion.
 | 
@@ -281,7 +281,7 @@ Mask
 | 
 | ``reclength`` sets the nominal record length for pulse mask testing.
 | 
-| ``serialtrig`` sets the type of triggering used in pass/fail testing. Valid types are: :const:``AMI``, :const:``HDB3``, :const:``B3ZS``, :const:``B6ZS``, :const:``B8ZS``, :const:``CMI``, :const:``NRZ``, :const:``MLT3``, :const:``EDGE``.
+| ``serialtrig`` sets the type of triggering used in pass/fail testing. Valid types are: :const:`AMI`, :const:`HDB3`, :const:`B3ZS`, :const:`B6ZS`, :const:`B8ZS`, :const:`CMI`, :const:`NRZ`, :const:`MLT3`, :const:`EDGE`.
 | 
 | ``trigtosamp`` in seconds, sets the time from the leading edge trigger position to the pulse bit sampling position.
 | 
