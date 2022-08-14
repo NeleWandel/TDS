@@ -5,6 +5,23 @@ API
 
    API
 
+
+| Whenever a parameter in this documentation is written in both capital and small letters, with exception to :const:`True` and :const:`False`, it means that the parameter can be shortend to just the capital letters. These parameters are also not case sensitive.
+| **Example**
+| Parameter written on the page: :const:`FREQuency`
+| Accepted variants:
+- :const:`FREQuency`
+- :const:`frequency`
+- :const:`FREQ`
+- :const:`freq`
+| Not accepted:
+- :const:`freque`
+- :const:`fr`
+- :const:`uency`
+- ...
+| 
+| Parameters that are written in just small letters, need to be written the way they are written on this page. Writing them any other way will almost always result in an error message.
+
 Acquisition
 ---------
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
