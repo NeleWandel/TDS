@@ -6,7 +6,7 @@ This repository includes all data that was needed to write the tds.readthedocs.i
 It also includes the Python code in main.
 
 
-  The official read the docs GitBub template was used for creating this repository.
+  The official read the docs GitHub template was used for creating this repository.
   More info about that can be found here: https://docs.readthedocs.io/en/stable/tutorial/
 
 
