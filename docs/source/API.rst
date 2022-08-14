@@ -9,7 +9,7 @@ Acquisition
 ---------
 | With the commands of the acquisition group it is possible to set up the instruments signal aquisition as well as the way signals are processed into waveforms.
 
-.. method:: Acquisition(acquiremode, mode=None, samplesize=None, WFamount=None, stop=None, fast=None)
+.. method:: Acquisition(acquiremode, mode=None, samplesize=None, avg=None, env=None, stop=None, fast=None)
 | Sets all the options for the acquisition. While it is possible to change these parameters during an ongoing acquisition, it is adviced to change them before starting the acquisition. Starting and stopping an acquisition must be done by :meth:`StartAcquisition` and :meth:`StopAcquisition`.
 | 
 | All arguments, except ``acquiremode`` are optional. 
@@ -26,8 +26,10 @@ Acquisition
 | 
 | ``samplesize`` sets the amount of waveform database points that the oscilloscope acquires for a single sequence acquisition. Must be a whole number.
 | 
-| ``WFamount`` sets the amount of waveforms that will be acquired for averaging and enveloping. Must be a whole number.
-| If envelope mode is enabled, a waveform amount of :const:`0` corresponds to infinitely acquisations.
+| ``avg`` sets the amount of waveforms that will be acquired for averaging. Must be a whole number.
+| 
+| ``env`` sets the amount of waveforms that will be acquired for enveloping. Must be a whole number.
+| A waveform amount of :const:`0` corresponds to an infinite amount of acquisitions.
 |
 | ``stop`` defines whether the acquisition stops after a :const:`single` sequence or :const:`repeat` until stopped with :meth:`StopAcquisition`.
 | 
@@ -45,9 +47,13 @@ Calibration
 .. method:: Calibration()
 | Starts the auto calibration. 
 .. note:: In order for this command to properly work it is recommended to wait around 20 minutes after turning the oscilloscope on. It might take a long time for the oscilloscope to self-calibrate. No other commands will be executed during this time.
-.. method:: ProbeCalibration(channel=ch)
+.. method:: CalibrationStatus()
+| Returns the current status of all calibrations. 
+| The Signal Path Calibration has four different states it can return: :const:`PASS`, :const:`FAIL`, :const:`WARMUP` and :const:`RUNNING`
+| The Probe Calibration also has four different results it can return: :const:`-1` meaning the calibration failed, :const:`0` meaning the calibration passed, :const:`1` meaning the calibration is initialized and :const:`2` meaning the calibration is currently running.
+.. method:: ProbeCalibration(channel='1')
 | Starts the auto calibration of the probe defined by ``channel``. The calibration can take up to a minutet and no other commands will be executed during that time.
-| ``channel`` may range from :const:`1` through :const:`4`. If no channel is given, the system will use either the default channel 1 or the channel selected by :meth:`Channel` if that command had been used during the session.
+| ``channel`` may range from :const:`1` through :const:`4`. If no channel is given, the system will use the default channel 1.
 
 Hard Copy and Export
 --------------------
@@ -56,7 +62,7 @@ Hard Copy and Export
 .. method:: Export(filename=None, fileformat=None, inksaver=None, palette=None, fullscreen=None)
 | Copies a waveform to a file that can be specified by ``filename``.
 | 
-| All arguments are optional. Defining none of the arguments, exports with either the default settings or the settings used prior in that session.
+| All arguments are optional. Defining none of the arguments, results in the command using the last settings that were used.
 | If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
 | Valid formats for ``fileformat`` are:
@@ -81,7 +87,7 @@ Hard Copy and Export
 .. method:: Screenshot(filename=None, inksaver=None, palette=None, orientation=None, fullscreen=None)
 | Creates a hardcopy screenshot of everything that can currently be seen on the oscilloscopes screen.
 | The format is always BMP. Creation of a screenshot might take a few milliseconds, using a timer in between multiple screenshots is recommended.
-| All arguments are optional. Defining none of the arguments, takes a screenshot with either the default settings or the settings used prior in that session.
+| All arguments are optional. Defining none of the arguments, results in the oscilloscope taking a screenshot with the last used settings.
 | If ``filename`` is only the file name and not the directory the file will be saved in the default hard copy directory (usually ``C:\TekScope\Images\yourimage``)
 | If ``filename`` is not specified the file will be saved in the default directory with the default name.
 | 
@@ -120,7 +126,7 @@ Histogram
 | ``box`` defines the boundaries of the histogram has two valid arguments:
 - :const:`coordinates`
 - :const:`percent`
-| If ``box`` is used ``left``, ``top``, ``right`` and ``bottom`` must be defined by either the waveform coordinates or the percentage coordinates. 
+| If ``box`` is used ``left``, ``top``, ``right`` and ``bottom`` must be defined by either their waveform coordinates or the percentage coordinates. 
 .. warning::
    Changing the histogram box results in a reset of the histogram data. Make sure to retrieve all wanted data with the :meth:`HistogramData` function before executing changes of the box.
 
@@ -137,13 +143,13 @@ Horizontal
 .. method:: FastFrame(source=None, count=None, refframe=None, length=None, mode=None, multiframes=None, multisource=None, frameamount=None, start=None)
 | Sets up all FastFrame (also known as memory segmentation) parameters.
 | All arguments are optional. Not defining any of the arguments results in this command being useless.
-| ``source`` defines the reference source. Valid sources are :cosnt:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from 1 through 4.
+| ``source`` defines the reference source. Valid sources are :cosnt:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from :cosnt:`1` through :const:`4`.
 | ``count`` defines how many frames/segments the FastFrame mode acquires.
 | ``refframe`` defines the reference frame number which is then used to calculate the time differences for the frames.
 | ``length`` may range from :const:`500` through :const:`400000` and defines the record length to the number of data points in each frame.
 | ``mode`` can be either :const:`ALL` or :const:`LIVE`. In live mode adjusting a channel waveform leads to adjustment of all channel and math waveforms, as they get locked together. For example changing the reference frame from CH1 to frame 6 results in CH2, CH3, CH4, MATH1, MATH2, MATH3 and MATH 4 also using frame 6 as reference. All mode the same happens, but on top of that all REF waveforms also adjust to the selected frame.
 | ``multiframes`` if turned :const:`on` the oscilloscope displays multiple overlaid frames. Turning on multiframe mode gives access to ``multisource``, ``frameamount`` and ``start``.
-| ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible. Valid sources are :const:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from 1 through 4.
+| ``multisource`` defines the source for the multiframe mode. This needs to be given, in order for ``frameamount`` and ``start`` to be accessible when multiframe mode is turned on. Valid sources are :const:`CHx`, :const:`MATHx` and :const:`REFx` with x being an number ranging from 1 through 4.
 | ``frameamount`` defines the number of overlaying frames. 
 | ``start`` defines the starting frame.
 .. method:: FastFrameStart()
@@ -181,7 +187,7 @@ Mask
 | The mask function creates, deletes and changes the mask.
 | All arguments are optional.
 | 
-| ``start`` defines whether the mask starts the mask pass/fail testing.
+| ``start`` defines whether the mask starts the mask pass/fail testing. Valid states are :const:`True` and :const:`False`, with True signaling the oscilloscope to start the test.
 | 
 | ``mask`` allows input of a standard mask. A full list of all standard masks can be found on page 419 in the `Online Programmer Manual <https://download.tek.com/manual/PHP014070web.pdf>`_.
 | 
@@ -191,17 +197,17 @@ Mask
 | 
 | ``counting`` turns the mask hit count state to either :const:`ON` or :const:`OFF`. ``display`` must be :const:`ON` to activate the mask counting.
 | 
-| ``wfmamount`` sets the amount of waveforms to test during a pass/fail test. (Default is 20)
+| ``wfmamount`` sets the amount of waveforms to test during a pass/fail test.
 | 
 | ``highlights`` turns the highlighting of hits in a mask to either :const:`ON` or :const:`OFF`. If turned on, hits are highlighted in different colors than other waveform data.
 | 
-| ``inverted`` sets whether or not the mask is inverted. Valid states are :const:`OFF` (default) and :const:`ON`.
+| ``inverted`` sets whether or not the mask is inverted. Valid states are :const:`OFF` (not inverted) and :const:`ON` (inverted).
 | 
 | ``margin`` sets the mask margin in percent. Range is :const:`-50` to :const:`50` if no margin is set, it is turned off automatically.
 | 
 | ``polarity`` sets whether the pass/fail test tests :const:`positive` pulses, :const:`negative` pulses or :const:`both`. 
 | 
-| ``stoponfailure`` if turned :const:`ON` the oscilloscope stops acquiring data when a failure occurs during a pass/fail test. Turned :const:`OFF` is the default.
+| ``stoponfailure`` if turned :const:`ON` the oscilloscope stops acquiring data when a failure occurs during a pass/fail test. If turned :const:`OFF`the oscilloscope keeps acquiring data after the failure occured. 
 | 
 | ``failthreshold`` sets the number of failed tested waveforms needed for the pass/fail testing status to change from passing to failing. If WfmDB mode is turned on, it sets the minimum number of hits needed to change the status from passing to failing.
 | 
@@ -241,7 +247,7 @@ Mask
 | 
 | ``seg`` selects the segment that needs to be modified
 | 
-| ``points`` are X-Y coordinates that specify the user mask. Points always come in pairs with the horizontal (x) first and the vertical (y) afterwards seperated by commas. There need to be at least two pairs, that have to be listed counterclockwise. If only one pair is given, the segment is marked as undefined.
+| ``points`` only works if a segment is chosen by ``seg``. Points are X-Y coordinates that specify the user mask. Points always come in pairs with the horizontal (x) first and the vertical (y) afterwards seperated by commas. There need to be at least two pairs, that have to be listed counterclockwise. If only one pair is given, the segment is marked as undefined.
 | **Example:** UserMask(seg=2, points='–2.3e-9, 44e-3,-2.5e-9, 47e-3, 1.2e-9, 44e-3')
 | 
 | ``amp`` sets the nominal pulse amplitude in volts.
@@ -276,6 +282,7 @@ Math
 | Commands of the math group allow for the creation of math-based waveforms. Up to four math based waveforms can be stored and displayed at the same time. 
 
 .. method:: Math(math='1', equation=None, y=None, x=None)
+| ``math`` selects the wanted math channel. This can range from :const:`1` through :const:`4`.
 | ``equation`` Sets a math based waveform. The equation may consist of waveforms (those can be taken from a channel, a reference or another math equation), measurements, scalar sources, functions, operands and numerical constants. The equation may consist of more than 100 characters. 
 | Changes to any of the operands lead to changes of the output.
 | Examples:
@@ -289,19 +296,22 @@ Math
 | Viable ranges are from :const:`100.0E-36` through :const:`100.0E+36`.
 
 .. method:: MathVariable(varnumber, varvalue)
-| Defines a variable that can be used in :meth:`Math`.
+| Defines a variable that can be used in :meth:`Math` by typing VARx with x ranging from 1 through 8.
 | ``varnumber`` must be a number ranging from 1 through 8 and defines the storage place of the variable.
 | ``varvalue`` can be any value.
 
 Measurement
 -----------
 .. method:: CountMeas(m='1')
-| Returns the amount of values that have been obtained for the measurement defined by ``m`` since the last statistical reset. Values that generated an error are not counted.
+| Returns the amount of values that have been obtained for the measurement defined by ``m`` since the last :meth:`ResetStatistics`
+| Values that generated an error are not counted.
 .. method:: Maximum(m='1')
 | Returns the maximum value found for the measurement defined by ``m`` from :const:`1` to :const:`8`. The default is :const:`1`.
 .. method:: Mean(m='1')
 | Returns the mean value accumulated for the measurement defined by ``m`` from :const:`1` to :const:`8`. The default is :const:`1`.
 .. method:: Measure(meastype=None, method=None, m='MEAS1', statistics=None, weightvalue=None, state=None, source=None, source2=None, refmethod=None, high=None, low=None, mid=None, delay=None, edge1=None, edge2=None)
+| All arguments are optional. If a certain parameter is not defined the oscilloscope will use the values that have been used last.
+| 
 | ``m`` defines the measurement from :const:`MEAS1` to :const:`MEAS8` or :const:`IMMed` for immediate measurement. The default is :const:`MEAS1`.
 | 
 | ``method`` sets the method used to calculate the 0% and 100% reference level. The valid states are:
@@ -547,11 +557,11 @@ Save and Recall
 ---------------
 .. method:: Recall(storagelocation)
 | Sets all oscilloscope settings to a state that was saved via the :meth:`Save` command.
-| ``storagelocation`` must range from 1 through 10.
+| ``storagelocation`` must range from :const:`1` through :const:`10`.
 .. method:: RecallWaveform(filepath, ref='REF1')
 | Recalls a waveform from a directory specified by ``filepath`` to one of the four reference memory locations, ranging from :const:`REF1` through :const:`REF4`.
 .. method:: ResetToFactorySettings()
-| Resets the oscilloscope to the default settings. 
+| Resets the oscilloscope to all the default factory settings.
 .. method:: Save(storagelocation)
 | Saves the current settings of the oscilloscope to a storage location. These settings can be reapplied to the oscilloscope by using the :meth:`Recall` command.
 | ``storagelocation`` must range from 1 through 10.
@@ -572,13 +582,11 @@ Status and Error
 ----------------
 .. method:: Clear()
 | Clears the event queue, standard event status register and the status byte register. Does not affect the output queue. 
-.. method:: IsDone()
-| Returns :const:`1` when all operations are finished.
 .. method:: Wait()
-| The oscilloscope waits with the execution of further commands until all acquisitions are done.
+| Python waits with the execution of further commands until all single sequence acquisitions of the oscilloscope are done.
 Trigger
 -------
-.. method:: Trigger(triggertype=None, mode=None, holdhofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeout=None, timeouttime=None, deltatime=None, transition=None)
+.. method:: Trigger(triggertype=None, mode=None, holdofftime=None, triggerclass=None, CH1=None, CH2=None, CH3=None, CH4=None, function=None, triggerwhen=None, logicmin=None, logicmax=None, source=None, comm=None, bitrate=None, pulseform=None, eyetype=None, clock=None, clocksource=None, polarity=None, clockthreshold=None, setholdsource=None, threshold=None, settime=None, holdtime=None, width=None, low=None, high=None, edgecoupling=None, standard=None, level=None, CH1TH=None, CH2TH=None, CH3TH=None, CH4TH=None, dataformat=None, datapattern=None, timeouttime=None, deltatime=None)
 
 | Allows full controll of the trigger settings. All arguments are optional and not every argument is needed for every trigger type. All arguments ordered by ``triggertype`` can be found in the tabs below.
 .. tabs::
@@ -586,7 +594,7 @@ Trigger
    
       | Turns the trigger type to edge. In this state a trigger event is executed when a signal has a specified voltage level and direction.
       | 
-      | ``edgesource`` defines the source. This can be either :const:`CH1`, :const:`CH2`, :const:`CH3`, :const:`CH4`, :const:`AUX` or :const:`line`.
+      | ``source`` defines the source. This can be either :const:`CH1`, :const:`CH2`, :const:`CH3`, :const:`CH4`, :const:`AUX` or :const:`line`.
       | AUX specifies that an external trigger is used. This must be connected via the auxiliary trigger input connector on the back of the oscilloscope.
       | line specifies that an AC line voltage is used.
       | 
@@ -597,14 +605,14 @@ Trigger
       - :const:`LFRej` (Removes low frequency components of the AC signal)
       - :const:`NOISErej` (Low sensitivity DC coupling. This option needs a higher signal amplitude to minimise false triggers)
       | 
-      | ``edgeslope`` defines the slope. Valid states are:
+      | ``polarity`` defines the slope. Valid states are:
       - :const:`rise` (triggers on a rising/positive signal edge)
       - :const:`fall` (triggers on a falling/negative signal edge)
    .. tab:: logic
    
       | Turns the trigger type to logic. In this state the oscilloscope starts a trigger event in case a defined logical situation occurs.
       | 
-      | ``CH1``, ``CH2`` and ``CH3`` sets the logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`. This specifies the logic that will be used when the trigger detects the trigger threshold level.
+      | ``CH1``, ``CH2`` and ``CH3`` sets the logical input can be set to :const:`HIGH`, :const:`LOW` or :const:`x`. 
       - :const:`HIGH` specifies the logic high
       - :const:`LOW` specifies the logic low
       - :const:`x` specifies that it doesn't matter
@@ -659,6 +667,9 @@ Trigger
    
       | Turns the trigger type to pulse. In this state a trigger event is executed when a specified pulse is found.
       | 
+      | ``source`` defines the source. This can be either :const:`CH1`, :const:`CH2`, :const:`CH3` or :const:`CH4`.
+      |
+      | ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL` (-1.3V) or :const:`TTL` (1.4V).
       | ``triggerclass`` has five valid states each with their own set of arguments:
       .. tabs::
          .. tab:: glitch
@@ -734,7 +745,8 @@ Trigger
             | ``timeouttime`` in seconds, defines the time out period.
    .. tab:: comm
    
-      | Turns the trigger type to communitcation. In this state a trigger events is executed when a defined communication signal is found.
+      | Turns the trigger type to communication. In this state a trigger events is executed when a defined communication signal is found.
+      | ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL` (-1.3V) or :const:`TTL` (1.4V).
       | 
       | ``comm`` defines the communication type. Valid states are:
       - :const:`CMI`
@@ -771,6 +783,7 @@ Trigger
       | Turns the trigger type to serial. In this state a trigger event is executed when NRZ-encoded data providing a 32-bit serial word is found.
       | 
       | ``source`` sets the serial source. Source can be :const:`CH1` through :const:`CH4`.
+      | ``level`` in Volt, sets the trigger level. Valid options are either any Volt amount or the preset trigger levels of :const:`ECL` (-1.3V) or :const:`TTL` (1.4V).
       | 
       | ``standard`` sets the standard that identifies the code and bit rate. Following standards are valid:
       | :const:`OC1`, :const:`OC3`, :const:`OC12`, :const:`FC133`, :const:`FC266`, :const:`FC531`, :const:`FC1063`, :const:`FW139BS400B`, :const:`FW139BS800B`, :const:`ENET1250`, :const:`CUSTom`, :const:`RIO_500M`, :const:`RIO_750M`, :const:`RIO:1G`, :const:`RIO_SERIAL_1G`, :const:`VSROC192`
@@ -790,7 +803,7 @@ Trigger
       | ``polarity`` sets the polarity of the clock to either :const:`rise` or :const:`fall`.
 
 .. method:: TriggerB(state=None, source=None, count=None, time=None, level=None, slope=None)
-| Controlls the secondary trigger.
+| Controlls the secondary trigger. All arguments are optional.
 | 
 | ``state`` sets the trigger activity to either :const:`ON` or :const:`OFF`.
 | 
@@ -844,7 +857,7 @@ Miscellaneous
 | Automatically adjusts the vertical, horizontal and trigger controls in order to privide a stable display of the waveform on the oscilloscope.
 | These changes can be undone by using the :meth:`Undo` command.
 .. method:: Busy()
-| Returns :const:`0` if the oscilloscope is currently not running the :meth:`StartAcquisition` command. Returns :const:`1` if the oscilloscope is acquiring data. 
+| Returns :const:`0` if the oscilloscope is currently not running a single sequence acquisition. Returns :const:`1` if the oscilloscope is acquiring data. 
 .. method:: Channel(channelnumber)
 | Sets the standard channel for all future commands that have a ``channel`` argument. ``channelnumber`` may only be :const:`1`, :const:`2`, :const:`3` or :const:`4`.
 | Default value is :const:`1`.
@@ -862,8 +875,8 @@ Miscellaneous
 .. method:: Lock()
 | Disables all frontpanel buttons and knobs on the oscilloscope, including the touchscreen.
 | The command :meth:`Unlock` enables them again.
-.. method:: SetDate(day, month, year)
-| Changes the internal date of the oscilloscope. ``day`` and ``month`` must be two digits, ``year`` must be four digits.
+.. method:: SetDate(date='2022-01-01')
+| Changes the internal date of the oscilloscope. Date must be given in the format 'yyyy-mm-dd'.
 .. method:: SetTime(time='00:00:00')
 | Changes the internal time of the oscilloscope. Time must be given in the format hh:mm:ss.
 .. method:: Time()
@@ -871,6 +884,6 @@ Miscellaneous
 .. method:: Undo()
 | Reverses all changes done by :meth:`AutoSet`. This does affect any changes made after the automatic adjustment. 
 .. method:: Unlock()
-| Enables all frontpanel buttons and knobs on the oscilloscope, after they have been locked by :meth:`Lock`
+| Enables all frontpanel buttons and knobs on the oscilloscope after they have been locked by :meth:`Lock`
 .. method:: WaveformDisplay(source='CH1', arg='ON')
 | Turns the display and calculation of the waveform selected by :const:`source` either :const:`ON` or :const:`OFF`.
